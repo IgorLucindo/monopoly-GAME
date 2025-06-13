@@ -1,2 +1,2 @@
-# monopoly-like-game
+# Monopoly Like
 Multiplayer game like monopoly
