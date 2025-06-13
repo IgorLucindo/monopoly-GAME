@@ -1,2 +1,5 @@
-# Monopoly Like
-Multiplayer game like monopoly
+# Monopoly Like Game
+Multiplayer game like monopoly. Using firebase real time database.
+
+# Link
+https://igorlucindo.github.io/monopoly-like-GAME/

@@ -1,0 +1,48 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background-color: #f0f2f5;
+}
+
+.game-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(11, 60px);
+  grid-template-rows: repeat(11, 60px);
+  gap: 1px;
+  background-color: #000;
+}
+
+.tile {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  text-align: center;
+  padding: 2px;
+}
+
+.corner {
+  background-color: #f8d7da;
+  font-weight: bold;
+}
+
+.sidebar {
+  margin-left: 30px;
+  width: 200px;
+}
+
+.player-token {
+  font-size: 12px;
+  font-weight: bold;
+  color: red;
+}

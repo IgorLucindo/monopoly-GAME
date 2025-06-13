@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monopoly Game</title>
+  <link rel="stylesheet" href="../css/game.css"/>
+</head>
+
+<body>
+  <div class="game-container">
+    <div class="game-board" id="gameBoard">
+      <!-- Tiles will be dynamically injected here by JS -->
+    </div>
+    <div class="sidebar">
+      <div class="player-info">
+        <h2>Players</h2>
+        <ul id="playerList">
+          <!-- Player list goes here -->
+        </ul>
+      </div>
+      <div class="game-controls">
+        <button onclick="takeTurn()">Roll Dice</button>
+        <p id="diceResult">🎲 Roll to start</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="../src/classes/board.js"></script>
+  <script src="../src/classes/match.js"></script>
+  <script src="../src/classes/player.js"></script>
+  <script src="../src/utils/dice_utils.js"></script>
+  <script src="../src/index.js"></script>
+</body>
+</html>

@@ -1,1 +1,36 @@
-hello
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monopoly Game Lobby</title>
+  <link rel="stylesheet" href="website/css/lobby.css"/>
+</head>
+
+<body>
+  <div class="container">
+    <div class="tab-buttons">
+      <button class="tab-button active" onclick="showTab('host')">Host Room</button>
+      <button class="tab-button" onclick="showTab('join')">Join Room</button>
+    </div>
+
+    <div id="host" class="tab-content active">
+      <h2>Host a Room</h2>
+      <input type="text" placeholder="Enter your name" id="hostName" />
+      <button onclick="hostRoom()">Create Room</button>
+    </div>
+
+    <div id="join" class="tab-content">
+      <h2>Join Available Room</h2>
+      <input type="text" placeholder="Enter your name" id="joinName" />
+      <div id="roomList">
+        <!-- Room list will be populated here -->
+        <p>No rooms available yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="website/src/utils/lobby_utils.js"></script>
+</body>
+</html>
