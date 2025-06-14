@@ -3,6 +3,8 @@ class Player {
   constructor(name) {
     this.name = name;
     this.position = 0;
+    this.money = 1500;
+    this.properties = [];
     this.token = this.createToken();
     this.updatePosition();
   }
@@ -22,5 +24,13 @@ class Player {
   updatePosition() {
     const tile = board.tiles[this.position];
     tile.element.appendChild(this.token);
+  }
+
+  buyProperty(tile) {
+    if (tile.price && this.money >= tile.price && !tile.owner) {
+      this.money -= tile.price;
+      tile.owner = this;
+      this.properties.push(tile);
+    }
   }
 }

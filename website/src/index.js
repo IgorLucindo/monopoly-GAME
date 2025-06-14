@@ -1,8 +1,8 @@
 // Create board
 const board = new Board("gameBoard");
-
-// Create match
 const match = new Match();
+const dice = new Dice();
+const sidebar = new Sidebar();
 
 // Add players
 match.addPlayer("Alice");
@@ -12,4 +12,4 @@ match.addPlayer("Bob");
 match.start();
 
 // Button click triggers turn control
-window.takeTurn = () => match.nextTurn();
+window._takeAction = (action) => match.takeAction(action);

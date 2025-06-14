@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Monopoly Game</title>
   <link rel="stylesheet" href="../css/game.css"/>
+  <link rel="stylesheet" href="../css/board.css"/>
+  <link rel="stylesheet" href="../css/dice.css"/>
+  <link rel="stylesheet" href="../css/actionBar.css"/>
 </head>
 
 <body>
@@ -13,6 +16,18 @@
     <div class="game-board" id="gameBoard">
       <!-- Tiles will be dynamically injected here by JS -->
     </div>
+
+    <div class="dice-wrapper">
+      <div id="dice" class="dice-3d">
+        <div class="face one"><span class="dot center"></span></div>
+        <div class="face two"><span class="dot top-left"></span><span class="dot bottom-right"></span></div>
+        <div class="face three"><span class="dot top-left"></span><span class="dot center"></span><span class="dot bottom-right"></span></div>
+        <div class="face four"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div>
+        <div class="face five"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot center"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div>
+        <div class="face six"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot mid-left"></span><span class="dot mid-right"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div>
+      </div>
+    </div>
+
     <div class="sidebar">
       <div class="player-info">
         <h2>Players</h2>
@@ -20,17 +35,26 @@
           <!-- Player list goes here -->
         </ul>
       </div>
-      <div class="game-controls">
-        <button onclick="takeTurn()">Roll Dice</button>
-        <p id="diceResult">🎲 Roll to start</p>
+
+      <div class="turn-info">
+        <h2>Turn:</h2>
+        <h4 id="player-turn"></h4>
       </div>
+    </div>
+
+    <div class="action-bar" id="actionBar">
+      <p id="actionMessage"></p>
+      <button onclick="_takeAction(0)">Buy</button>
+      <button onclick="_takeAction(1)">Skip</button>
     </div>
   </div>
 
+  <script src="../data/tiles.js"></script>
   <script src="../src/classes/board.js"></script>
   <script src="../src/classes/match.js"></script>
   <script src="../src/classes/player.js"></script>
-  <script src="../src/utils/dice_utils.js"></script>
+  <script src="../src/classes/dice.js"></script>
+  <script src="../src/classes/sidebar.js"></script>
   <script src="../src/index.js"></script>
 </body>
 </html>
