@@ -32,16 +32,26 @@
   font-weight: bold;
 }
 
-.action-bar button:first-of-type {
+#buyBtn, #buildBtn, #unmortgageBtn {
   background-color: #28a745;
   color: white;
 }
 
-.action-bar button:last-of-type {
+#mortgageBtn, #sellBtn {
   background-color: #dc3545;
+  color: white;
+}
+
+#skipBtn {
+  background-color: #3572dc;
   color: white;
 }
 
 .action-bar button:hover {
   opacity: 0.9;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }

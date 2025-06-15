@@ -1,0 +1,88 @@
+.card-pile {
+  position: absolute;
+  width: 80px;
+  height: 50px;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background-color: var(--pile-color, #f9a825);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  border: 2px solid #333;
+  z-index: 10;
+}
+
+/* Fly-in Card Container */
+.fly-card {
+  position: fixed;
+  perspective: 1000px;
+  z-index: 9999;
+  transform: translate(-50%, -50%) scale(1);
+  transition: left 0.6s ease, top 0.6s ease, transform 0.6s ease;
+}
+
+/* Flip and move to center */
+.fly-card.flipping {
+  transform: translate(-50%, -50%) scale(2);
+}
+
+/* Flip Wrapper */
+.card-inner {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+/* Flip Wrapper */
+.fly-card .card-inner {
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+/* Trigger flip when this class is added */
+.fly-card.flipping .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Shared styles for front/back */
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  padding: 16px;
+}
+
+/* Card Front */
+.card-front {
+  font-size: 8px;
+  background: #fffbe6;
+  color: #333;
+  transform: rotateY(180deg);
+}
+
+/* Card Back — inherits pile style via --pile-color */
+.card-back {
+  background-color: var(--pile-color, #f9a825); /* fallback to chance yellow */
+  border: 2px solid #333;
+  color: white;
+  font-size: 18px;
+}
+
+/* Hidden fly card (initial or dismissed) */
+.fly-card.hidden {
+  display: none;
+}

@@ -23,29 +23,28 @@ class Match {
   rollDice() {
     if (this.state === "action") return;
 
-    // Get dice number
     this.diceNumber = Math.floor(Math.random() * 6) + 1;
-    
-    // Move player
     const player = this.players[this.currentPlayerIndex];
     player.move(this.diceNumber);
 
-    // Change match state
     this.state = "action";
 
     const tile = board.tiles[player.position];
-    const isBuyable = ["property", "railroad", "utility"].includes(tile.type);
 
-    // If can take action
-    if (isBuyable && !tile.owner) {
-      setTimeout(() => {
-        document.getElementById("actionBar").classList.add("visible");
-        document.getElementById("actionMessage").textContent = `Do you want to buy ${tile.label} for $${tile.price}?`;
-      }, dice.spinTime * 1000);
-    }
-    // If cannot take action
-    else this.takeAction(1);
-  };
+    // DEBUG!!!!!!!!!!!!!!!!
+    // board.groups[tile.color].forEach(_tile => {
+    //   _tile.owner = player
+    //   _tile.houses = 1
+    // });
+
+    // Take action
+    setTimeout(() => {
+      updateActionOptions(tile, player);
+
+      // For now only show property tile
+      if (tile.type === "property") deedDeck.showCard(tile);
+    }, dice.spinTime * 1000);
+  }
 
 
   takeAction(action) {
@@ -53,18 +52,22 @@ class Match {
 
     const player = this.players[this.currentPlayerIndex];
     const tile = board.tiles[player.position];
+
     this.resolveTile(tile, player, action);
-    
-    // Hide action bar
-    document.getElementById("actionBar").classList.remove("visible");
 
-    // Check game states
-    this.checkBankruptcy(player)
-    this.checkGameOver()
+    // Hide action bar for buy/skip
+    if (action <= 1) {
+      document.getElementById("actionBar").classList.remove("visible");
 
-    // End turn
-    this.endTurn(player)
-    sidebar.showTurn();
+      // Check game states
+      this.checkBankruptcy(player);
+      this.checkGameOver();
+
+      // End turn
+      this.endTurn(player);
+      sidebar.showTurn();
+    }
+
     sidebar.updatePlayerStatus();
   }
 
@@ -76,27 +79,32 @@ class Match {
       case "utility":
         // If there is no owner
         if (!tile.owner) {
-          if (action === 0) player.buyProperty(tile);
+          if (action === 0) player.buy(tile);
         }
         // If not the owner
-        else if (tile.owner !== player) {
-          const rent = tile.price * 0.1;
-          player.money -= rent;
-          tile.owner.money += rent;
-        }
+        else if (tile.owner !== player) player.payRent(tile);
         // If player is the owner
         else {
-          // -- Action to sell or build residence or hotel --
+          if (action === 2) player.build(tile); // Build
+          else if (action === 3) player.mortgage(tile);  // Mortgage
         }
         break;
 
       case "tax":
-        player.money -= tile.amount || 100;
+        player.money -= tile.price;
         break;
 
       case "goto-jail":
         player.position = 10; // Jail index
         player.updatePosition();
+        break;
+
+      case "chance":
+        chanceDeck.drawCard(player);
+        break;
+
+      case "community":
+        communityDeck.drawCard(player);
         break;
     }
   }

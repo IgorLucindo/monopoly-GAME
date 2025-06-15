@@ -1,7 +1,11 @@
-// Create board
-const board = new Board("gameBoard");
-const match = new Match();
+const DEBUG = true
+
+const chanceDeck = new Deck(chanceDeckData);
+const communityDeck = new Deck(communityDeckData);
 const dice = new Dice();
+const board = new Board(tileData);
+const deedDeck = new DeedDeck(board.tiles);
+const match = new Match();
 const sidebar = new Sidebar();
 
 // Add players

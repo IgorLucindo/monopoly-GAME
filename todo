@@ -1,0 +1,15 @@
+finish action taker
+
+sfx:
+    dice drag
+    dice throw
+    flip card
+    button click
+    gain money
+    lose money
+    lose game
+    win game
+
+auto throw dice
+
+drag houses to build, drag out to sell

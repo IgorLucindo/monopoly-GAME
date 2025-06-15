@@ -1,0 +1,47 @@
+const chanceDeckData = {
+  label: "Chance",
+  color: "#f9a825",
+  pos: { top: "20%", left: "20%" },
+  cards: [
+    {
+      text: "Advance to GO",
+      effect: (player) => {
+        player.position = 0;
+        player.updatePosition();
+        player.money += 200;
+      }
+    },
+    {
+      text: "Go to Jail",
+      effect: (player) => {
+        player.position = 10; // Jail
+        player.updatePosition();
+      }
+    },
+    {
+      text: "Advance to Boardwalk",
+      effect: (player) => {
+        player.position = 39;
+        player.updatePosition();
+      }
+    },
+    {
+      text: "Bank pays you dividend of $50",
+      effect: (player) => {
+        player.money += 50;
+      }
+    },
+    {
+      text: "Pay poor tax of $15",
+      effect: (player) => {
+        player.money -= 15;
+      }
+    },
+    {
+      text: "Your building loan matures. Collect $150",
+      effect: (player) => {
+        player.money += 150;
+      }
+    }
+  ]
+}

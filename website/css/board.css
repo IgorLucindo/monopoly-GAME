@@ -20,17 +20,57 @@
 
 .tile {
   background-color: #fff;
-  border: 1px solid #ccc;
+  color: #555;
   box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
+  font-family: 'Libre Franklin', sans-serif;
+  font-size: 11px;
+  font-weight: bold;
   text-align: center;
-  padding: 2px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
 }
 
 .corner {
   background-color: #f8d7da;
   font-weight: bold;
+}
+
+.color-stripe {
+  height: 20%;
+  width: 100%;
+  border: 1px solid black;
+}
+
+.tile-buildings {
+  display: flex;
+  gap: 2px;
+  flex-wrap: wrap;
+  margin-top: 2px;
+}
+
+.tile-price {
+  font-size: 9px;
+  margin-top: auto;
+  margin-bottom: 3px;
+}
+
+.building {
+  width: 10px;
+  height: 10px;
+  margin: 1px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+.house {
+  background-color: green;
+}
+
+.hotel {
+  background-color: red;
+  width: 16px;
+  height: 16px;
 }
