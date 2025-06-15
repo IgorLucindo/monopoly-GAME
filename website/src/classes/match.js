@@ -4,7 +4,6 @@ class Match {
     this.players = [];
     this.currentPlayerIndex = 0;
     this.state = "dice";
-    this.diceNumber = 0;
   }
 
 
@@ -20,12 +19,11 @@ class Match {
   }
 
 
-  rollDice() {
+  playDiceTurn(number) {
     if (this.state === "action") return;
 
-    this.diceNumber = Math.floor(Math.random() * 6) + 1;
     const player = this.players[this.currentPlayerIndex];
-    player.move(this.diceNumber);
+    player.move(number);
 
     this.state = "action";
 
@@ -43,7 +41,7 @@ class Match {
 
       // For now only show property tile
       if (tile.type === "property") deedDeck.showCard(tile);
-    }, dice.spinTime * 1000);
+    }, dices[0].spinTime * 1000);
   }
 
 

@@ -2,13 +2,14 @@
   display: grid;
   grid-template-columns: repeat(11, 1fr);
   grid-template-rows: repeat(11, 1fr);
-  gap: 1px;
-  width: 90vmin;            /* 90% of the smaller screen dimension */
+  user-select: none;
+  position: relative;
+  width: 90vmin;
   height: 90vmin;
   padding: 6px;
+  gap: 1px;
   border-radius: 6px;
   background-color: black;
-  position: relative;
 }
 
 .center-tile {

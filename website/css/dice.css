@@ -1,18 +1,16 @@
 .dice-wrapper {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  perspective: 600px;
   width: 60px;
   height: 60px;
   z-index: 999;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
   border-radius: 40%;
+  transition: transform 0.2s ease;
 }
 
 .dice-wrapper.lift {
-  transform: scale(1.3);
-  transition: transform 0.2s ease;
+  z-index: 998;
+  transform: scale(1.2);
 }
 
 @keyframes doubleBounce {
@@ -33,7 +31,6 @@
   width: 60px;
   height: 60px;
   transform-style: preserve-3d;
-  will-change: transform;
   cursor: grab;
   user-select: none;
 }

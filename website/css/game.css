@@ -1,14 +1,14 @@
-body {
+html, body {
+  height: 100%;
   margin: 0;
-  font-family: sans-serif;
-  background-color: #f0f2f5;
 }
 
-.game-container {
+body {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  padding: 20px;
+  align-items: center;
+  font-family: sans-serif;
+  background-color: #f0f2f5;
 }
 
 .sidebar {

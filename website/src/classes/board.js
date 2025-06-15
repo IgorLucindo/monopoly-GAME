@@ -1,6 +1,6 @@
 class Board {
   constructor(tileData) {
-    this.container = document.getElementById("gameBoard");
+    this.el = document.getElementById("gameBoard");
     this.size = 11;
     this.tiles = [];
     this.groups = {
@@ -22,19 +22,19 @@ class Board {
 
 
   createBoard(tileData) {
-    this.container.innerHTML = "";
+    this.el.innerHTML = "";
 
     // Create the center tile (middle area)
     const centerTile = document.createElement("div");
     centerTile.classList.add("center-tile");
     centerTile.style.gridRow = "2 / 11";
     centerTile.style.gridColumn = "2 / 11";
-    this.container.appendChild(centerTile);
+    this.el.appendChild(centerTile);
 
     // Loop through all tiles and create their DOM + data structure
     tileData.forEach(tileInfo => {
       const tile = this.createTile(tileInfo);
-      this.container.appendChild(tile);
+      this.el.appendChild(tile);
 
       // Create internal tile object
       const tileObject = {
@@ -53,8 +53,8 @@ class Board {
     });
 
     // Append decks elements
-    this.container.appendChild(chanceDeck.pileElement);
-    this.container.appendChild(communityDeck.pileElement);
+    this.el.appendChild(chanceDeck.pileElement);
+    this.el.appendChild(communityDeck.pileElement);
   }
 
 
