@@ -1,3 +1,5 @@
+drag houses to build, drag out to sell
+
 finish action taker
 
 sfx:
@@ -9,7 +11,8 @@ sfx:
     lose money
     lose game
     win game
+    
 
 auto throw dice
 
-drag houses to build, drag out to sell
+add rules options when click opens a tab with rules to select or unselect.
