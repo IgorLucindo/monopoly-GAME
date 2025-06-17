@@ -92,10 +92,15 @@
   }
 
   .tile {
-    font-size: 6px;
+    font-size: 5px;
+    gap: 0;
   }
 
   .tile-price {
-    font-size: 6px;
+    font-size: 5px;
+  }
+
+  .color-stripe {
+    height: 15%;
   }
 }
