@@ -2,14 +2,14 @@
   position: absolute;
   width: 60px;
   height: 60px;
-  z-index: 999;
+  z-index: 9;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
   border-radius: 40%;
   transition: transform 0.2s ease;
 }
 
 .dice-wrapper.lift {
-  z-index: 998;
+  z-index: 8;
   transform: scale(1.2);
 }
 
@@ -35,7 +35,7 @@
   user-select: none;
 }
 
-.dice-3d:active {
+.dice-wrapper.lift .dice-3d{
   cursor: grabbing;
 }
 

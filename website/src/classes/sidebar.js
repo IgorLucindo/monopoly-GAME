@@ -5,6 +5,12 @@ class Sidebar {
     this.playerTurn = document.getElementById("player-turn");
   }
 
+
+  update() {
+    this.updatePlayerStatus();
+    this.updateTurn();
+  }
+
   
   updatePlayerStatus() {
     this.playerList.innerHTML = "";
@@ -16,7 +22,7 @@ class Sidebar {
   }
 
 
-  showTurn() {
+  updateTurn() {
     const player = match.players[match.currentPlayerIndex];
     this.playerTurn.textContent = player.name;
   }

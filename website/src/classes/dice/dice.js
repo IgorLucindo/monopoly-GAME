@@ -5,6 +5,7 @@ class Dice {
 
     this.isDragging = false;
     this.animating = false;
+    this.number = 0;
     this.pos = {x: 0, y: 0};
     this.prevPos = {x: 0, y: 0};
     this.vel = {x: 0, y: 0};
@@ -79,6 +80,11 @@ class Dice {
   }
 
 
+  roll() {
+    this.number = Math.floor(Math.random() * 6) + 1;
+  }
+
+
   lift() {
     this.wrapper.classList.add("lift");
   }
@@ -112,8 +118,8 @@ class Dice {
   }
 
 
-  rollToFace(value) {
-    this.rot = this.baseRotations[value];
+  rollToFace() {
+    this.rot = this.baseRotations[this.number];
     const spins = {
       x: Math.round(Math.max(-1, Math.min(-this.vel.y/10, 1))),
       y: Math.round(Math.max(-1, Math.min(this.vel.x/10, 1)))

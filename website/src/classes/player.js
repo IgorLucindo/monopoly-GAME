@@ -4,6 +4,7 @@ class Player {
     this.name = name;
     this.position = 0;
     this.money = 1500;
+    this.arrested = false;
     this.properties = [];
     this.token = this.createToken();
     this.updatePosition();
@@ -107,5 +108,11 @@ class Player {
         tile.element.appendChild(house);
       }
     }
+  }
+
+
+  getArrested() {
+    this.arrested = true;
+    this.position = board.jailPos;
   }
 }

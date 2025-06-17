@@ -3,6 +3,7 @@ class Board {
     this.el = document.getElementById("gameBoard");
     this.size = 11;
     this.tiles = [];
+    this.jailPos = 0;
     this.groups = {
       "brown": [], "light-blue": [], "pink": [], "orange": [],
       "red": [], "yellow": [], "green": [], "dark-blue": []
@@ -42,11 +43,14 @@ class Board {
         element: tile,
         owner: null,
         houses: 0,
-        mortgaged: false
+        mortgaged: false,
+        mortgageCost: Math.floor(tileInfo.price / 2)
       };
 
       // Register property tiles into their color group
       if (tileInfo.type === "property") this.groups[tileInfo.color].push(tileObject);
+      // Register jail position
+      else if (tileInfo.type === "jail") this.jailPos = tileInfo.index;
       
       // Add to global tile list
       this.tiles.push(tileObject);

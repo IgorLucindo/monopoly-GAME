@@ -51,6 +51,7 @@ class Dices {
       ungrab();
 
       let index = 0;
+      const numbers = [];
       this.list.forEach((dice) => {
         if (!dice.isDragging) return;
         dice.isDragging = false;
@@ -58,15 +59,16 @@ class Dices {
         dice.unlift();
 
         // Roll face and begin animation
-        const number = Math.floor(Math.random() * 6) + 1;
-        dice.rollToFace(number);
+        dice.roll();
+        numbers.push(dice.number);
+        dice.rollToFace();
         dice.bounce();
         dice.twistVel(index);
         dice.startMotion();
         index += 1;
       });
 
-      if (this.draggingCount === this.list.length) match.playDiceTurn(number);
+      if (this.draggingCount === this.list.length) match.playDiceTurn(numbers);
       this.draggingCount = 0;
       this.prevDraggingCount = this.draggingCount;
     });

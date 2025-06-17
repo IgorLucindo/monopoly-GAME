@@ -16,3 +16,10 @@ sfx:
 auto throw dice
 
 add rules options when click opens a tab with rules to select or unselect.
+
+add animation effects to events in the game:
+    double dice numbers
+    jail
+    player game over
+    win game
+    lose game

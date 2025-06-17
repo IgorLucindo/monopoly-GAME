@@ -1,28 +1,21 @@
-#deedDeck {
-  position: relative;
-  z-index: 10;
-}
-
 .deed-card {
-  position: fixed;
-  width: 240px;
-  background: white;
-  border-radius: 6px;
-  font-family: 'Arial', sans-serif;
-  transform: translate(-50%, -50%) scale(0.3);
-  transition: left 0.6s ease, top 0.6s ease, transform 0.6s ease;
   display: none;
-  z-index: 9999;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  position: fixed;
+  font-family: 'Libre Franklin', sans-serif;
+  transform: translate(-50%, -50%) scale(0.3);
+  z-index: 99;
 }
 
 .deed-card.visible {
-  display: block;
+  display: flex;
 }
 
 .deed-inner {
-  font-family: 'Libre Franklin', sans-serif;
-  padding: 0;
+  width: 220px;
+  border-radius: 6px;
+  background: white;
+  padding: 3%;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
 .deed-header {
@@ -34,14 +27,12 @@
   letter-spacing: 3px;
   text-transform: uppercase;
   padding: 10px;
-  margin: 10px 10px 0 10px;
   border: 2px solid black;
   border-bottom: 0 solid black;
 }
 
 .deed-body {
   padding: 12px;
-  margin: 0 10px 10px 10px;
   font-size: 11px;
   color: #000;
   display: flex;

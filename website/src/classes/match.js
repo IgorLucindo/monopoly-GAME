@@ -4,44 +4,38 @@ class Match {
     this.players = [];
     this.currentPlayerIndex = 0;
     this.state = "dice";
+    this.extraTurn = 0;
   }
 
 
   addPlayer(name) {
     const player = new Player(name);
     this.players.push(player);
-    sidebar.updatePlayerStatus();
+    sidebar.update();
   }
 
 
-  start() {
-    sidebar.showTurn();
-  }
-
-
-  playDiceTurn(number) {
+  playDiceTurn(numbers) {
     if (this.state === "action") return;
 
     const player = this.players[this.currentPlayerIndex];
+    // const number = this.getNumber(player, numbers);
+    const number = 1
     player.move(number);
 
     this.state = "action";
 
     const tile = board.tiles[player.position];
 
-    // DEBUG!!!!!!!!!!!!!!!!
-    // board.groups[tile.color].forEach(_tile => {
-    //   _tile.owner = player
-    //   _tile.houses = 1
-    // });
-
-    // Take action
-    setTimeout(() => {
-      updateActionOptions(tile, player);
-
-      // For now only show property tile
-      if (tile.type === "property") deedDeck.showCard(tile);
-    }, dices[0].spinTime * 1000);
+    // Show action options
+    if (tile.type === "property") {
+      setTimeout(() => {
+        deedDeck.showCard(tile);
+        actionOptions.showDeedOptions(tile);
+      }, (dices.list[0].spinTime+0.3) * 1000);
+    }
+    // Otherwise pass turn
+    else this.takeAction(0);
   }
 
 
@@ -51,22 +45,39 @@ class Match {
     const player = this.players[this.currentPlayerIndex];
     const tile = board.tiles[player.position];
 
+    // Resolve action taken
     this.resolveTile(tile, player, action);
 
     // Hide action bar for buy/skip
-    if (action <= 1) {
-      document.getElementById("actionBar").classList.remove("visible");
-
-      // Check game states
-      this.checkBankruptcy(player);
-      this.checkGameOver();
-
-      // End turn
-      this.endTurn(player);
-      sidebar.showTurn();
+    if (action) {
+        deedDeck.hideCard(tile);
+        actionOptions.hideDeedOptions(tile);
     }
 
-    sidebar.updatePlayerStatus();
+    // Check game states
+    this.checkBankruptcy(player);
+    this.checkGameOver();
+
+    // End turn
+    this.endTurn(player);
+
+    // Update sidebar
+    sidebar.update();
+  }
+
+
+  getNumber(player, numbers) {
+    // Handle double numbers
+    if (numbers.every(el => el === numbers[0])) this.extraTurn += 1;
+    else this.extraTurn = 0;
+
+    // If double numbers three times, then go to jail
+    if (this.extraTurn === 3) {
+      this.extraTurn = 0;
+      player.getArrested();
+      return 0;
+    }
+    else return numbers.reduce((acc, curr) => acc + curr, 0)
   }
 
 
@@ -77,15 +88,10 @@ class Match {
       case "utility":
         // If there is no owner
         if (!tile.owner) {
-          if (action === 0) player.buy(tile);
+          if (action === 1) player.buy(tile);
         }
         // If not the owner
         else if (tile.owner !== player) player.payRent(tile);
-        // If player is the owner
-        else {
-          if (action === 2) player.build(tile); // Build
-          else if (action === 3) player.mortgage(tile);  // Mortgage
-        }
         break;
 
       case "tax":
@@ -93,8 +99,7 @@ class Match {
         break;
 
       case "goto-jail":
-        player.position = 10; // Jail index
-        player.updatePosition();
+        player.getArrested();
         break;
 
       case "chance":
@@ -105,6 +110,8 @@ class Match {
         communityDeck.drawCard(player);
         break;
     }
+
+    player.updatePosition();
   }
 
 
@@ -130,14 +137,16 @@ class Match {
 
   
   endTurn(player) {
+    this.state = "dice"
+
+    // If player as extra turns
+    if (this.extraTurn > 0) return;
+
     // Proceed to next player
     if (player.money < 0) {
       this.currentPlayerIndex %= this.players.length;
     } else {
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     }
-
-    // Change match state
-    this.state = "dice"
   }
 }

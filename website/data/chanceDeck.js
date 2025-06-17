@@ -7,22 +7,19 @@ const chanceDeckData = {
       text: "Advance to GO",
       effect: (player) => {
         player.position = 0;
-        player.updatePosition();
         player.money += 200;
       }
     },
     {
       text: "Go to Jail",
       effect: (player) => {
-        player.position = 10; // Jail
-        player.updatePosition();
+        player.getArrested();
       }
     },
     {
       text: "Advance to Boardwalk",
       effect: (player) => {
         player.position = 39;
-        player.updatePosition();
       }
     },
     {
