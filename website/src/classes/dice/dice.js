@@ -32,54 +32,69 @@ class Dice {
 
 
   initEvents() {
-    this.el.addEventListener("mousedown", (e) => {
+    // Mouse down event
+    const mousedown = (e) => {
       if (match.state !== "dice") return;
 
       this.isDragging = true;
       dices.draggingCount += 1;
       this.lift();
-      this.updatePos(e);
+      this.updateMovement(e);
       grab();
       dices.prevDraggingCount = dices.draggingCount;
-    });
+    }
 
-    this.el.addEventListener("mousemove", () => {
+    // Mouse move event
+    const mousemove = (e) => {
       if (!dices.draggingCount || this.isDragging) return;
+
+      // handle touch
+      if (e.touches) {
+        const touch = e.touches[0];
+        const target = document.elementFromPoint(touch.clientX, touch.clientY);
+        const newDiceEl = target?.closest('.dice-wrapper:not(.lift)');
+        if (!newDiceEl) return;
+      }
 
       this.isDragging = true;
       dices.draggingCount += 1;
       this.lift();
-    });
+    }
+
+    // Create events
+    this.el.addEventListener("mousedown", mousedown);
+    this.el.addEventListener("mousemove", mousemove);
+    this.el.addEventListener("touchstart", mousedown, { passive: false });
+    document.addEventListener("touchmove", mousemove, { passive: false });
   }
 
 
-  updatePos(e, index=0) {
-    this.vel.x = e.clientX - this.prevPos.x;
-    this.vel.y = e.clientY - this.prevPos.y;
+  updateMovement(e, index = 0) {
+    const point = e.touches?.[0] || e;
+
+    // Update velocity and position
+    this.vel.x = point.clientX - this.prevPos.x;
+    this.vel.y = point.clientY - this.prevPos.y;
     this.pos.x += this.vel.x;
     this.pos.y += this.vel.y;
-    this.prevPos.x = e.clientX;
-    this.prevPos.y = e.clientY;
+    this.prevPos.x = point.clientX;
+    this.prevPos.y = point.clientY;
 
-    this.updateMovement(e, index);
-  }
-
-
-  updateMovement(e, index) {
+    // Adjust layout for grouped dragging
     if (dices.prevDraggingCount !== dices.draggingCount) {
-      const gap = 35;
+      const gap = this.size * 0.7;
       const totalWidth = dices.draggingCount * this.size + (dices.draggingCount - 1) * gap;
       const offsetX = index * (this.size + gap);
-      this.pos.x = e.clientX + offsetX - totalWidth/2;
-      this.pos.y = e.clientY - this.halfSize;
+      this.pos.x = point.clientX + offsetX - totalWidth / 2;
+      this.pos.y = point.clientY - this.halfSize;
       this.vel.x = 0;
       this.vel.y = 0;
     }
 
+    // Apply position to element
     this.wrapper.style.left = `${this.pos.x}px`;
     this.wrapper.style.top = `${this.pos.y}px`;
   }
-
 
   roll() {
     this.number = Math.floor(Math.random() * 6) + 1;
@@ -98,8 +113,8 @@ class Dice {
 
   tilt() {
     const { x: rx, y: ry } = this.rot;
-    const tiltX = Math.max(Math.min(this.vel.y * this.tiltForce, this.tiltMaxAngle), -this.tiltMaxAngle);
-    const tiltY = Math.max(Math.min(this.vel.x * this.tiltForce, this.tiltMaxAngle), -this.tiltMaxAngle);
+    const tiltX = clamp(this.vel.y * this.tiltForce, this.tiltMaxAngle);
+    const tiltY = clamp(this.vel.x * this.tiltForce, this.tiltMaxAngle);
 
     let transform = "";
     if (rx === 180 && ry === 0) transform = `rotateX(${rx - tiltX}deg) rotateY(${ry - tiltY}deg)`;
@@ -122,8 +137,8 @@ class Dice {
   rollToFace() {
     this.rot = this.baseRotations[this.number];
     const spins = {
-      x: Math.round(Math.max(-1, Math.min(-this.vel.y/10, 1))),
-      y: Math.round(Math.max(-1, Math.min(this.vel.x/10, 1)))
+      x: Math.round(clamp(-this.vel.y/10, 1)),
+      y: Math.round(clamp(this.vel.x/10, 1))
     };
     const finalX = 360 * spins.x + this.rot.x;
     const finalY = 360 * spins.y + this.rot.y;
@@ -144,8 +159,8 @@ class Dice {
     const total = dices.draggingCount;
     const newIndex = index - Math.floor(total / 2) + (total % 2 === 0 && index >= total / 2 ? 1 : 0);
     const angleOffset = newIndex * 5 * Math.PI / 180;
-    const velx = this.vel.x;
-    const vely = this.vel.y;
+    const velx = clamp(this.vel.x, board.width/921*20);
+    const vely = clamp(this.vel.y, board.height/921*20);
     const cos = Math.cos(angleOffset);
     const sin = Math.sin(angleOffset);
     this.vel.x = Math.round(velx * cos - vely * sin);
@@ -157,13 +172,11 @@ class Dice {
     if (this.animating) return;
     this.animating = true;
 
-    const boardEl = document.getElementById("gameBoard");
-    const boardRect = boardEl.getBoundingClientRect();
     const offset = 10;
-    const minX = boardRect.left + offset;
-    const maxX = boardRect.right - this.size - offset;
-    const minY = boardRect.top + offset;
-    const maxY = boardRect.bottom - this.size - offset;
+    const minX = board.left + offset;
+    const maxX = board.left + board.width - this.size - offset;
+    const minY = board.top + offset;
+    const maxY = board.top + board.height - this.size - offset;
 
     // Get start time
     const startTime = performance.now();

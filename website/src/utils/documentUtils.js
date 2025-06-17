@@ -5,4 +5,4 @@ function grab() {
 
 function ungrab() {
     document.body.style.cursor = "";
-}   
+}

@@ -34,21 +34,23 @@ class Dices {
 
 
   initEvents() {
-    document.addEventListener("mousemove", (e) => {
+    // Mouse move event
+    const mousemove = (e) => {
       if (!this.draggingCount) return;
       
       let index = 0;
       this.list.forEach((dice) => {
         if (!dice.isDragging) return;
 
-        dice.updatePos(e, index);
+        dice.updateMovement(e, index);
         dice.tilt();
         index += 1;
       });
       this.prevDraggingCount = this.draggingCount;
-    });
+    }
 
-    document.addEventListener("mouseup", () => {
+    // Mouse up event
+    const mouseup = () => {
       if (!this.draggingCount) return;
       ungrab();
 
@@ -73,6 +75,13 @@ class Dices {
       if (this.draggingCount === this.list.length) match.playDiceTurn(numbers);
       this.draggingCount = 0;
       this.prevDraggingCount = this.draggingCount;
-    });
+    }
+
+
+    // Create events
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
+    document.addEventListener("touchmove", mousemove, { passive: false });
+    document.addEventListener("touchend", mouseup);
   }
 }
