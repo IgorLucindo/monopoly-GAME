@@ -17,15 +17,13 @@ class Match {
 
   playDiceTurn(numbers) {
     if (this.state === "action") return;
-
-    const player = this.players[this.currentPlayerIndex];
-    // const number = this.getNumber(player, numbers);
-    const number = 1
-    player.move(number);
-
     this.state = "action";
 
+    const player = this.players[this.currentPlayerIndex];
+    const number = this.getNumber(player, numbers);
     const tile = board.tiles[player.position];
+    
+    player.move(number);
 
     // Show action options
     if (tile.type === "property") {

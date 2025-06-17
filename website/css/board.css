@@ -20,7 +20,7 @@
 }
 
 .tile {
-  background-color: #fff;
+  background-color: white;
   color: #555;
   box-sizing: border-box;
   font-family: 'Libre Franklin', sans-serif;
@@ -32,6 +32,11 @@
   align-items: center;
   justify-content: flex-start;
   gap: 2px;
+}
+
+.tile:hover {
+  z-index: 1;
+  outline: 2px solid #666;
 }
 
 .corner {

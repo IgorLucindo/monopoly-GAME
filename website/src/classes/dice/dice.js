@@ -15,6 +15,7 @@ class Dice {
     this.spinTime = 1;
     this.tiltTime = 1;
     this.tiltForce = 15;
+    this.tiltMaxAngle = 20;
     this.friction = 0.025;
 
     this.baseRotations = {
@@ -97,8 +98,8 @@ class Dice {
 
   tilt() {
     const { x: rx, y: ry } = this.rot;
-    const tiltX = this.vel.y * this.tiltForce;
-    const tiltY = this.vel.x * this.tiltForce;
+    const tiltX = Math.max(Math.min(this.vel.y * this.tiltForce, this.tiltMaxAngle), -this.tiltMaxAngle);
+    const tiltY = Math.max(Math.min(this.vel.x * this.tiltForce, this.tiltMaxAngle), -this.tiltMaxAngle);
 
     let transform = "";
     if (rx === 180 && ry === 0) transform = `rotateX(${rx - tiltX}deg) rotateY(${ry - tiltY}deg)`;
