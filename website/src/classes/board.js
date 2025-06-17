@@ -1,9 +1,15 @@
 class Board {
   constructor(tileData) {
     this.el = document.getElementById("gameBoard");
+    this.top = 0;
+    this.left = 0;
+    this.width = 0;
+    this.height = 0;
+
     this.size = 11;
     this.tiles = [];
     this.jailPos = 0;
+
     this.groups = {
       "brown": [], "light-blue": [], "pink": [], "orange": [],
       "red": [], "yellow": [], "green": [], "dark-blue": []
@@ -18,7 +24,18 @@ class Board {
       "green": "#008000",
       "dark-blue": "#00008b"
     };
+    
+    this.getRect();
     this.createBoard(tileData);
+  }
+
+
+  getRect() {
+    const rect = this.el.getBoundingClientRect();
+    this.top = rect.top;
+    this.left = rect.left;
+    this.width = rect.width;
+    this.height = rect.height;
   }
 
 

@@ -1,7 +1,7 @@
 const chanceDeckData = {
   label: "Chance",
   color: "#f9a825",
-  pos: { top: "20%", left: "20%" },
+  pos: { top: "18%", left: "22%" },
   cards: [
     {
       text: "Advance to GO",

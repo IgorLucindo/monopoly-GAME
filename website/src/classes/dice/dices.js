@@ -23,10 +23,12 @@ class Dices {
 
 
   setInitialPos() {
-    const gap = 20;
+    const offsetX = board.left + board.width*0.4;
+    const offsetY = board.top + board.height*0.4;
+    const gap = this.list[0].size / 2;
     this.list.forEach((dice, index) => {
-      dice.wrapper.style.left = `calc(40% + ${index * (dice.size + gap)}px)`;
-      dice.wrapper.style.top = "40%";
+      dice.wrapper.style.left = `${offsetX + index*(dice.size + gap)}px`;
+      dice.wrapper.style.top = `${offsetY}px`;
     });
   }
 

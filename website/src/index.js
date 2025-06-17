@@ -2,8 +2,8 @@ const DEBUG = true
 
 const chanceDeck = new Deck(chanceDeckData);
 const communityDeck = new Deck(communityDeckData);
-const dices = new Dices(2);
 const board = new Board(tileData);
+const dices = new Dices(2);
 const deedDeck = new DeedDeck(board.tiles);
 const match = new Match();
 const sidebar = new Sidebar();

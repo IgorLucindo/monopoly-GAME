@@ -7,7 +7,7 @@
   aspect-ratio: 1 / 1;
   width: 100%;
   max-width: 90vmin;
-  padding: 6px;
+  padding: 0.5%;
   gap: 1px;
   border-radius: 6px;
   background-color: black;
@@ -84,6 +84,10 @@
 
 /* in mobile */
 @media screen and (max-width: 768px) {
+  .game-board {
+    max-width: 100vmin;
+  }
+
   .tile {
     font-size: 6px;
   }

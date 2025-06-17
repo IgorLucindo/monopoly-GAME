@@ -1,7 +1,9 @@
 .dice-wrapper {
+  --dice-size: 5.5vmin;
+  --half-size: calc(var(--dice-size) / 2);
   position: absolute;
-  width: 60px;
-  height: 60px;
+  width: var(--dice-size);
+  height: var(--dice-size);
   z-index: 9;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
   border-radius: 40%;
@@ -28,8 +30,8 @@
 
 .dice-3d {
   position: relative;
-  width: 60px;
-  height: 60px;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
   cursor: grab;
   user-select: none;
@@ -53,16 +55,16 @@
   justify-content: center;
 }
 
-.face.one   { transform: translateZ(30px); }
-.face.two   { transform: rotateX(90deg) translateZ(30px); }
-.face.three { transform: rotateY(90deg) translateZ(30px); }
-.face.four  { transform: rotateY(-90deg) translateZ(30px); }
-.face.five  { transform: rotateX(-90deg) translateZ(30px); }
-.face.six   { transform: rotateX(180deg) translateZ(30px); }
+.face.one   { transform: translateZ(var(--half-size)); }
+.face.two   { transform: rotateX(90deg) translateZ(var(--half-size)); }
+.face.three { transform: rotateY(90deg) translateZ(var(--half-size)); }
+.face.four  { transform: rotateY(-90deg) translateZ(var(--half-size)); }
+.face.five  { transform: rotateX(-90deg) translateZ(var(--half-size)); }
+.face.six   { transform: rotateX(180deg) translateZ(var(--half-size)); }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: 18%;
+  height: 18%;
   background: black;
   border-radius: 50%;
   position: absolute;
@@ -85,3 +87,10 @@
 .dot.bottom-right { bottom: 20%; right: 20%; }
 .dot.mid-left { top: 50%; left: 20%; transform: translateY(-50%); }
 .dot.mid-right { top: 50%; right: 20%; transform: translateY(-50%); }
+
+/* in mobile */
+@media screen and (max-width: 768px) {
+  .dice-wrapper {
+    --dice-size: 8vmin;
+  }
+}
