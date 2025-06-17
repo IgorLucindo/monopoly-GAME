@@ -4,8 +4,9 @@
   grid-template-rows: repeat(11, 1fr);
   user-select: none;
   position: relative;
-  width: 90vmin;
-  height: 90vmin;
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  max-width: 90vmin;
   padding: 6px;
   gap: 1px;
   border-radius: 6px;
@@ -79,4 +80,15 @@
   background-color: red;
   width: 16px;
   height: 16px;
+}
+
+/* in mobile */
+@media screen and (max-width: 768px) {
+  .tile {
+    font-size: 6px;
+  }
+
+  .tile-price {
+    font-size: 6px;
+  }
 }
