@@ -159,8 +159,8 @@ class Dice {
     const total = dices.draggingCount;
     const newIndex = index - Math.floor(total / 2) + (total % 2 === 0 && index >= total / 2 ? 1 : 0);
     const angleOffset = newIndex * 5 * Math.PI / 180;
-    const velx = clamp(this.vel.x, board.width/921*20);
-    const vely = clamp(this.vel.y, board.height/921*20);
+    const velx = this.vel.x * board.width/921;
+    const vely = this.vel.y * board.height/921;
     const cos = Math.cos(angleOffset);
     const sin = Math.sin(angleOffset);
     this.vel.x = Math.round(velx * cos - vely * sin);
