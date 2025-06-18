@@ -5,6 +5,7 @@ class Match {
     this.currentPlayerIndex = 0;
     this.state = "dice";
     this.extraTurn = 0;
+    this.showCardDelay = dices.list[0].spinTime + 0.3;
   }
 
 
@@ -32,7 +33,7 @@ class Match {
         showOverlay();
         deedDeck.showCard(tile);
         actionOptions.showDeedOptions(tile);
-      }, (dices.list[0].spinTime+0.3) * 1000);
+      }, this.showCardDelay * 1000);
     }
     // Otherwise pass turn
     else this.takeAction(0);

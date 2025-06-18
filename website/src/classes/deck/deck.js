@@ -5,9 +5,9 @@ class Deck {
     this.imgSrc = deckData.imgSrc;
     this.color = deckData.color;
     this.pos = deckData.pos;
-    
+
     this.index = 0;
-    this.showCardTime = 3;
+    this.showCardDuration = 3;
 
     this.pileEl = this.createPileElement();
     this.cardEl = this.createCardElement();
@@ -71,9 +71,13 @@ class Deck {
   
   drawCard(player) {
     const card = this.cards[this.index];
-    this.showCard(card);
     card.effect(player);
     this.index = (this.index + 1) % this.cards.length;
+
+    // Show card
+    setTimeout(() => {
+      this.showCard(card);
+    }, match.showCardDelay * 1000);
   }
 
 
@@ -103,6 +107,6 @@ class Deck {
       this.cardEl.style.top = this.pos.top;
       this.cardEl.style.left = this.pos.left;
       this.cardEl.classList.remove("visible");
-    }, this.showCardTime * 1000);
+    }, this.showCardDuration * 1000);
   }
 }
