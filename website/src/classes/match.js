@@ -20,8 +20,7 @@ class Match {
     this.state = "action";
 
     const player = this.players[this.currentPlayerIndex];
-    // const number = this.getNumber(player, numbers);
-    const number = 26;
+    const number = this.getNumber(player, numbers);
     
     player.move(number);
 
