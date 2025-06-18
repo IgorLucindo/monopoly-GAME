@@ -72,10 +72,6 @@ class Board {
       // Add to global tile list
       this.tiles.push(tileObject);
     });
-
-    // Append decks elements
-    this.el.appendChild(chanceDeck.pileElement);
-    this.el.appendChild(communityDeck.pileElement);
   }
 
 

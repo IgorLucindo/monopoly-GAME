@@ -1,8 +1,10 @@
 const DEBUG = true
 
+const isMobile = window.matchMedia("(max-width: 768px)").matches;
+
+const board = new Board(tileData);
 const chanceDeck = new Deck(chanceDeckData);
 const communityDeck = new Deck(communityDeckData);
-const board = new Board(tileData);
 const dices = new Dices(2);
 const deedDeck = new DeedDeck(board.tiles);
 const match = new Match();

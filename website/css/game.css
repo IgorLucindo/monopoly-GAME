@@ -38,8 +38,8 @@ body {
   transition: opacity 0.6s ease, visibility 0.6s ease;
 }
 
-#overlay.active {
-  visibility: visible; 
+#overlay.visible {
+  visibility: visible;
   opacity: 0.3;
 }
 

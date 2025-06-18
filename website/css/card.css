@@ -1,102 +1,84 @@
+.card-pile, .card-wrapper {
+  position: absolute;
+  width: 10%;
+  height: 16%;
+  transform: rotate(45deg);
+}
+
+.card-pile, .card-front, .card-back {
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  border: 2px solid #333;
+}
+
 .card-pile {
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
   z-index: 5;
-  width: 10%;
-  height: 16%;
-  background-color: var(--pile-color, #f9a825);
-  border-radius: 8px;
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
-  border: 2px solid #333;
-  transform: rotate(45deg);
+  border-width: 2px 5px 5px 2px;
 }
 
-.card-pile img {
-  height: 80%;
+.card-wrapper {
+  z-index: 4;
+  visibility: hidden;
+  transition: left 0.6s ease, top 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
 }
 
-/* Fly-in Card Container */
-.fly-card {
-  position: fixed;
-  perspective: 1000px;
+.card-wrapper.visible {
   z-index: 99;
-  transform: translate(-50%, -50%) scale(1) rotate(45deg);
-  transition: left 0.6s ease, top 0.6s ease, transform 0.6s ease;
-}
-
-/* Flip and move to center */
-.fly-card.flipping {
+  visibility: visible;
   transform: translate(-50%, -50%) scale(2);
 }
 
-/* Flip Wrapper */
-.card-inner {
-  top: 2%;
-  left: 20%;
-  width: 40%;
-  height: 70%;
+.card-pile img, .card-back img {
+  height: 80%;
+}
+
+.card-3d {
   position: relative;
-  transition: transform 0.6s ease;
+  width: 100%;
+  height: 100%;
   transform-style: preserve-3d;
+  transition: transform 0.6s ease;
 }
 
-/* Flip Wrapper */
-.fly-card .card-inner {
-  transition: transform 0.6s ease;
-  transform-style: preserve-3d;
-}
-
-/* Trigger flip when this class is added */
-.fly-card.flipping .card-inner {
+.card-wrapper.visible .card-3d {
   transform: rotateY(180deg);
 }
 
-/* Shared styles for front/back */
-.card-front,
-.card-back {
+.card-front, .card-back {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  border-radius: 12px;
+  border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  justify-content: center;
-  font-size: 14px;
-  font-weight: bold;
-  padding: 16px;
 }
 
-/* Card Front */
 .card-front {
   font-size: 8px;
+  font-weight: bold;
   background: #fffbe6;
   color: #333;
   transform: rotateY(180deg);
 }
 
-/* Card Back — inherits pile style via --pile-color */
-.card-back {
-  background-color: var(--pile-color, #f9a825); /* fallback to chance yellow */
-  border: 2px solid #333;
-}
-
-.card-back img {
-  width: 200%;
-}
-
-/* Hidden fly card (initial or dismissed) */
-.fly-card.hidden {
-  display: none;
+.card-front p {
+  padding: 10%;
 }
 
 /* in mobile */
 @media screen and (max-width: 768px) {
-  .card-back img {
-    width: 250%;
+  .card-front {
+    font-size: 4px;
+  }
+
+  .card-wrapper.visible {
+    transform: translate(-50%, -50%) scale(4);
   }
 }

@@ -77,11 +77,14 @@ class Dices {
       this.prevDraggingCount = this.draggingCount;
     }
 
-
     // Create events
-    document.addEventListener("mousemove", mousemove);
-    document.addEventListener("mouseup", mouseup);
-    document.addEventListener("touchmove", mousemove, { passive: false });
-    document.addEventListener("touchend", mouseup);
+    if (!isMobile){
+      document.addEventListener("mousemove", mousemove);
+      document.addEventListener("mouseup", mouseup);
+    }
+    else {
+      document.addEventListener("touchmove", mousemove, { passive: false });
+      document.addEventListener("touchend", mouseup);
+    }
   }
 }

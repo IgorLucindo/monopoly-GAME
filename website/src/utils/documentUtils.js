@@ -1,10 +1,10 @@
 function showOverlay() {
-    document.getElementById("overlay").classList.add("active");
+    document.getElementById("overlay").classList.add("visible");
 }
 
 
 function hideOverlay() {
-    document.getElementById("overlay").classList.remove("active");
+    document.getElementById("overlay").classList.remove("visible");
 }
 
 

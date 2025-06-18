@@ -39,7 +39,8 @@ class DeedDeck {
             </div>
           </div>
         `;
-        card.style.transition = `left ${this.animationTime}s ease, top ${this.animationTime}s ease, transform ${this.animationTime}s ease`;
+        card.style.transition = `left ${this.animationTime}s ease, top ${this.animationTime}s ease`;
+        // card.style.transition = `left ${this.animationTime}s ease, top ${this.animationTime}s ease, transform ${this.animationTime}s ease`;
 
         this.el.appendChild(card);
         this.cards[tile.index] = card;
@@ -56,18 +57,16 @@ class DeedDeck {
 
     // Position over tile
     const rect = tile.element.getBoundingClientRect();
-    card.style.left = `${rect.left + rect.width / 2}px`;
-    card.style.top = `${rect.top + rect.height / 2}px`;
-    card.style.transform = "translate(-50%, -50%) scale(0.2)";
+    card.style.left = `${rect.left + rect.width/2}px`;
+    card.style.top = `${rect.top + rect.height/2}px`;
     card.classList.add("visible");
 
     // Force reflow for animation
     void card.offsetWidth;
 
     // Animate over center
-    card.style.left = "50%";
-    card.style.top = "50%";
-    card.style.transform = "translate(-50%, -50%) scale(1.5)";
+    card.style.left = isMobile ? "50%" : `${board.left + board.width/2}px`;
+    card.style.top = isMobile ? "50%" : `${board.top + board.height/2}px`;
   }
 
 

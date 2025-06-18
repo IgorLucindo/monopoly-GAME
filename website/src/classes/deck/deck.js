@@ -2,12 +2,62 @@ class Deck {
   constructor(deckData) {
     this.original = deckData.cards;
     this.cards = [...deckData.cards];
-    this.index = 0;
     this.imgSrc = deckData.imgSrc;
     this.color = deckData.color;
     this.pos = deckData.pos;
-    this.pileElement = this.createPileElement();
+    
+    this.index = 0;
+    this.showCardTime = 3;
+
+    this.pileEl = this.createPileElement();
+    this.cardEl = this.createCardElement();
+    
     this.shuffle();
+  }
+
+
+  createPileElement() {
+    const el = document.createElement("div");
+    el.classList.add("card-pile");
+    el.style.background = this.color;
+    el.innerHTML = `<img src="${this.imgSrc}">`;
+
+    // Set position
+    el.style.top = this.pos.top;
+    el.style.left = this.pos.left;
+    
+    // Append to board
+    board.el.appendChild(el);
+
+    // DEGUB
+    if (DEBUG) el.onclick = () => {this.drawCard(match.players[match.currentPlayerIndex]);};
+
+    return el;
+  }
+
+
+  createCardElement() {
+    const el = document.createElement("div");
+    el.classList.add("card-wrapper");
+    el.innerHTML = `
+      <div class="card-3d">
+        <div class="card-back" style="background-color: ${this.color}">
+          <img src="${this.imgSrc}">
+        </div>
+        <div class="card-front">
+          <p>Card text goes here</p>
+        </div>
+      </div>
+    `
+    
+    // Set position
+    el.style.top = this.pos.top;
+    el.style.left = this.pos.left;
+
+    // Append to deck
+    board.el.appendChild(el);
+
+    return el;
   }
 
 
@@ -35,51 +85,24 @@ class Deck {
 
 
   showCard(card) {
-    const flyCard = document.getElementById("flyCard");
-    const titleEl = document.getElementById("flyCardTitle");
-    const textEl = document.getElementById("flyCardText");
-    const backEl = flyCard.querySelector(".card-back");
+    const textEl = this.cardEl.querySelector('.card-front p');
 
-    // Apply pile color and image to card back
-    flyCard.style.setProperty("--pile-color", this.color);
-    backEl.innerHTML = `<img src="${this.imgSrc}">`;
-    titleEl.textContent = card.type;
+    // Set content
     textEl.textContent = card.text;
 
-    const rect = this.pileElement.getBoundingClientRect();
-    flyCard.style.left = `${rect.left + rect.width / 2}px`;
-    flyCard.style.top = `${rect.top + rect.height / 2}px`;
-    flyCard.style.width = `${rect.width}px`;
-    flyCard.style.height = `${rect.height}px`;
-    flyCard.classList.remove("hidden", "flipping");
+    // Force reflow for animation
+    void this.cardEl.offsetWidth;
 
-    void flyCard.offsetWidth;
-
-    // Move to center and flip
-    setTimeout(() => {
-      flyCard.style.left = "50%";
-      flyCard.style.top = "50%";
-      flyCard.classList.add("flipping");
-    }, 50);
+    // Animate over center and flip
+    this.cardEl.style.left = isMobile ? "50%" : `${board.left + board.width/2}px`;
+    this.cardEl.style.top = isMobile ? "50%" : `${board.top + board.height/2}px`;
+    this.cardEl.classList.add("visible");
 
     // Hide after delay
-    setTimeout(() => {flyCard.classList.add("hidden");}, 3000);
-  }
-
-
-  createPileElement() {
-    const pile = document.createElement("div");
-    pile.classList.add("card-pile");
-    pile.style.setProperty("--pile-color", this.color);
-    pile.innerHTML = `<img src="${this.imgSrc}">`;
-
-    // Use absolute positioning instead of grid
-    pile.style.top = this.pos.top;
-    pile.style.left = this.pos.left;
-    
-    // DEGUB
-    if (DEBUG) pile.onclick = () => {this.drawCard(match.players[match.currentPlayerIndex]);};
-
-    return pile;
+    setTimeout(() => {
+      this.cardEl.style.top = this.pos.top;
+      this.cardEl.style.left = this.pos.left;
+      this.cardEl.classList.remove("visible");
+    }, this.showCardTime * 1000);
   }
 }
