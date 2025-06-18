@@ -20,7 +20,7 @@ class Board {
       "pink": "#ff69b4",
       "orange": "#ffa500",
       "red": "#ff0000",
-      "yellow": "#ffff00",
+      "yellow": "#f1d500",
       "green": "#008000",
       "dark-blue": "#00008b"
     };

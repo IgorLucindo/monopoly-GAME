@@ -20,14 +20,15 @@ class Match {
     this.state = "action";
 
     const player = this.players[this.currentPlayerIndex];
-    const number = this.getNumber(player, numbers);
+    // const number = this.getNumber(player, numbers);
+    const number = 26;
     
     player.move(number);
 
     const tile = board.tiles[player.position];
 
     // Show action options
-    if (tile.type === "property") {
+    if (!tile.owner && tile.type === "property") {
       setTimeout(() => {
         showOverlay();
         deedDeck.showCard(tile);
