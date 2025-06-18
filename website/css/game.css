@@ -27,6 +27,22 @@ body {
   color: red;
 }
 
+#overlay {
+  position: absolute;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  background-color: black;
+  transition: opacity 0.2s ease;
+}
+
+#overlay.active {
+  visibility: visible; 
+  opacity: 0.3;
+}
+
 /* in mobile */
 @media screen and (max-width: 768px) {
   body {

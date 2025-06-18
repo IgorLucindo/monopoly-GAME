@@ -21,13 +21,15 @@ class Match {
 
     const player = this.players[this.currentPlayerIndex];
     const number = this.getNumber(player, numbers);
-    const tile = board.tiles[player.position];
     
     player.move(number);
+
+    const tile = board.tiles[player.position];
 
     // Show action options
     if (tile.type === "property") {
       setTimeout(() => {
+        showOverlay();
         deedDeck.showCard(tile);
         actionOptions.showDeedOptions(tile);
       }, (dices.list[0].spinTime+0.3) * 1000);
@@ -46,10 +48,11 @@ class Match {
     // Resolve action taken
     this.resolveTile(tile, player, action);
 
-    // Hide action bar for buy/skip
+    // Hide action bar for buy/auction
     if (action) {
-        deedDeck.hideCard(tile);
-        actionOptions.hideDeedOptions(tile);
+      hideOverlay();
+      deedDeck.hideCard(tile);
+      actionOptions.hideDeedOptions(tile);
     }
 
     // Check game states
