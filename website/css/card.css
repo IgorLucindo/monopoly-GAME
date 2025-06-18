@@ -23,6 +23,7 @@
   z-index: 4;
   visibility: hidden;
   transition: left 0.6s ease, top 0.6s ease, visibility 0.6s ease, transform 0.6s ease;
+  will-change: transform;
 }
 
 .card-wrapper.visible {

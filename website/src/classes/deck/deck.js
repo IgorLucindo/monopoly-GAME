@@ -30,7 +30,7 @@ class Deck {
     board.el.appendChild(el);
 
     // DEGUB
-    if (DEBUG) el.onclick = () => {this.drawCard(match.players[match.currentPlayerIndex]);};
+    if (DEBUG) el.onclick = () => {this.showCard(this.cards[this.index]);}
 
     return el;
   }
