@@ -3,7 +3,7 @@ class Deck {
     this.original = deckData.cards;
     this.cards = [...deckData.cards];
     this.index = 0;
-    this.label = deckData.label;
+    this.imgSrc = deckData.imgSrc;
     this.color = deckData.color;
     this.pos = deckData.pos;
     this.pileElement = this.createPileElement();
@@ -40,10 +40,10 @@ class Deck {
     const textEl = document.getElementById("flyCardText");
     const backEl = flyCard.querySelector(".card-back");
 
-    // Apply pile color and label to card back
+    // Apply pile color and image to card back
     flyCard.style.setProperty("--pile-color", this.color);
-    backEl.textContent = this.label;
-    titleEl.textContent = card.type || this.label;
+    backEl.innerHTML = `<img src="${this.imgSrc}">`;
+    titleEl.textContent = card.type;
     textEl.textContent = card.text;
 
     const rect = this.pileElement.getBoundingClientRect();
@@ -71,7 +71,7 @@ class Deck {
     const pile = document.createElement("div");
     pile.classList.add("card-pile");
     pile.style.setProperty("--pile-color", this.color);
-    pile.textContent = this.label;
+    pile.innerHTML = `<img src="${this.imgSrc}">`;
 
     // Use absolute positioning instead of grid
     pile.style.top = this.pos.top;

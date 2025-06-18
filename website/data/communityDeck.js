@@ -1,7 +1,7 @@
 const communityDeckData = {
-  label: "Community",
+  imgSrc: "../assets/images/icons/chest_white.svg",
   color: "#2196f3",
-  pos: { top: "65%", left: "68%" },
+  pos: { top: "18%", left: "22%" },
   cards: [
     {
       text: "Doctor's fees. Pay $50",

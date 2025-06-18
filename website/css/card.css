@@ -6,14 +6,15 @@
   z-index: 5;
   width: 10%;
   height: 16%;
-  font-size: 12px;
-  font-weight: bold;
-  color: white;
   background-color: var(--pile-color, #f9a825);
   border-radius: 8px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
   border: 2px solid #333;
   transform: rotate(45deg);
+}
+
+.card-pile img {
+  height: 80%;
 }
 
 /* Fly-in Card Container */
@@ -55,15 +56,15 @@
 /* Shared styles for front/back */
 .card-front,
 .card-back {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   position: absolute;
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
   border-radius: 12px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
   font-size: 14px;
   font-weight: bold;
@@ -82,11 +83,20 @@
 .card-back {
   background-color: var(--pile-color, #f9a825); /* fallback to chance yellow */
   border: 2px solid #333;
-  color: white;
-  font-size: 18px;
+}
+
+.card-back img {
+  width: 200%;
 }
 
 /* Hidden fly card (initial or dismissed) */
 .fly-card.hidden {
   display: none;
+}
+
+/* in mobile */
+@media screen and (max-width: 768px) {
+  .card-back img {
+    width: 250%;
+  }
 }
