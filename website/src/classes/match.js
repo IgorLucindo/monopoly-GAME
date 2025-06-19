@@ -30,6 +30,9 @@ class Match {
     player.move(number);
     this.checkPassGO(player);
 
+    // Update sidebar
+    sidebar.update();
+
     const tile = board.tiles[player.position];
 
     // Show action options
