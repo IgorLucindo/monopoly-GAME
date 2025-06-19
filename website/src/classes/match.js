@@ -4,6 +4,7 @@ class Match {
     this.players = [];
     this.currentPlayerIndex = 0;
     this.state = "dice";
+    this.doubles = false;
     this.extraTurn = 0;
     this.showCardDelay = dices.list[0].spinTime + 0.3;
   }
@@ -20,9 +21,12 @@ class Match {
     if (this.state === "action") return;
     this.state = "action";
 
+    this.setDoubles(numbers);
+
     const player = this.players[this.currentPlayerIndex];
     const number = this.getNumber(player, numbers);
-    
+
+    this.handleJail(player);
     player.move(number);
 
     const tile = board.tiles[player.position];
@@ -68,9 +72,14 @@ class Match {
   }
 
 
+  setDoubles(numbers) {
+    this.doubles = numbers.every(el => el === numbers[0]);
+  }
+
+
   getNumber(player, numbers) {
     // Handle double numbers
-    if (numbers.every(el => el === numbers[0])) this.extraTurn += 1;
+    if (this.doubles) this.extraTurn += 1;
     else this.extraTurn = 0;
 
     // If double numbers three times, then go to jail
@@ -80,6 +89,21 @@ class Match {
       return 0;
     }
     else return numbers.reduce((acc, curr) => acc + curr, 0)
+  }
+
+
+  handleJail(player) {
+    if (!player.turnsArrested) return;
+
+    // Exit jail if hit doubles
+    if (this.doubles) {
+      player.turnsArrested = 0;
+      this.extraTurn = 0;
+    }
+    else player.turnsArrested += 1;
+
+    // Exit jail after 3 turns
+    if (player.turnsArrested === 4) player.exitJail();
   }
 
 

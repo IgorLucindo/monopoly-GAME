@@ -4,8 +4,10 @@ class Player {
     this.name = name;
     this.position = 0;
     this.money = 1500;
-    this.arrested = false;
+    this.turnsArrested = 0;
+    this.exitJailCard = false;
     this.properties = [];
+    
     this.token = this.createToken();
     this.updatePosition();
   }
@@ -20,6 +22,8 @@ class Player {
 
 
   move(number) {
+    if (this.turnsArrested) return;
+
     this.position = (this.position + number) % board.tiles.length;
     this.updatePosition();
   }
@@ -112,7 +116,13 @@ class Player {
 
 
   getArrested() {
-    this.arrested = true;
+    this.turnsArrested = 1;
     this.position = board.jailPos;
+  }
+
+
+  exitJail() {
+    if (!this.exitJailCard) this.money -= 50;
+    this.turnsArrested = 0;
   }
 }
