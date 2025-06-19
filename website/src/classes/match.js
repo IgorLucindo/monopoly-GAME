@@ -113,7 +113,7 @@ class Match {
 
 
   checkPassGO(player) {
-    if (player.position - player.prevPosition < 0) player.money += 200;
+    if (!player.turnsArrested && player.position - player.prevPosition < 0) player.money += 200;
     player.prevPosition = player.position; 
   }
 
