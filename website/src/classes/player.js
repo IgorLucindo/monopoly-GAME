@@ -3,13 +3,14 @@ class Player {
   constructor(name) {
     this.name = name;
     this.position = 0;
+    this.prevPosition = 0;
     this.money = 1500;
     this.turnsArrested = 0;
     this.exitJailCard = false;
     this.properties = [];
     
     this.token = this.createToken();
-    this.updatePosition();
+    this.renderPosition();
   }
 
 
@@ -25,11 +26,11 @@ class Player {
     if (this.turnsArrested) return;
 
     this.position = (this.position + number) % board.tiles.length;
-    this.updatePosition();
+    this.renderPosition();
   }
 
 
-  updatePosition() {
+  renderPosition() {
     const tile = board.tiles[this.position];
     tile.element.appendChild(this.token);
   }

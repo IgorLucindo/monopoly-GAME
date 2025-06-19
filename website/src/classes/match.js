@@ -28,6 +28,7 @@ class Match {
 
     this.handleJail(player);
     player.move(number);
+    this.checkPassGO(player);
 
     const tile = board.tiles[player.position];
 
@@ -107,6 +108,12 @@ class Match {
   }
 
 
+  checkPassGO(player) {
+    if (player.position - player.prevPosition < 0) player.money += 200;
+    player.prevPosition = player.position; 
+  }
+
+
   resolveTile(tile, player, action) {
     switch (tile.type) {
       case "property":
@@ -137,7 +144,8 @@ class Match {
         break;
     }
 
-    player.updatePosition();
+    this.checkPassGO(player);
+    player.renderPosition();
   }
 
 
