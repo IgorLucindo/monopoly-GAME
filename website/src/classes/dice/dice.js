@@ -49,7 +49,7 @@ class Dice {
       if (!dices.draggingCount || this.isDragging) return;
 
       // handle touch
-      if (isMobile) {
+      if (isTouch) {
         const touch = e.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
         const newDiceEl = target?.closest('.dice-wrapper:not(.lift)');
@@ -62,7 +62,7 @@ class Dice {
     }
 
     // Create events
-    if (!isMobile) {
+    if (!isTouch) {
       this.el.addEventListener("mousedown", mousedown);
       this.el.addEventListener("mousemove", mousemove);
     }
@@ -74,7 +74,7 @@ class Dice {
 
 
   updateMovement(e, index = 0) {
-    const point = isMobile ? e.touches[0] : e;
+    const point = isTouch ? e.touches[0] : e;
 
     // Update velocity and position
     this.vel.x = point.clientX - this.prevPos.x;

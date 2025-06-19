@@ -78,7 +78,7 @@ class Dices {
     }
 
     // Create events
-    if (!isMobile){
+    if (!isTouch){
       document.addEventListener("mousemove", mousemove);
       document.addEventListener("mouseup", mouseup);
     }
