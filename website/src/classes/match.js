@@ -26,6 +26,7 @@ class Match {
     const player = this.players[this.currentPlayerIndex];
     const number = this.getNumber(player, numbers);
 
+    // Handle movement
     this.handleJail(player);
     player.move(number);
     this.checkPassGO(player);
