@@ -16,6 +16,7 @@ class Dice {
     this.tiltTime = 1;
     this.tiltForce = 15;
     this.tiltMaxAngle = 20;
+    this.maxThrowVel = isMobile ? 10 : 20;
     this.friction = 0.025;
 
     this.baseRotations = {
@@ -164,10 +165,11 @@ class Dice {
     const total = dices.draggingCount;
     const newIndex = index - Math.floor(total / 2) + (total % 2 === 0 && index >= total / 2 ? 1 : 0);
     const angleOffset = newIndex * 5 * Math.PI / 180;
-    const velx = this.vel.x * board.width/921;
-    const vely = this.vel.y * board.height/921;
+    const scale = board.width/921;
+    const velx = clamp(this.vel.x * scale, this.maxThrowVel);
+    const vely = clamp(this.vel.y * scale, this.maxThrowVel);
     console.log(velx, vely)
-    alert(velx, vely)
+    // alert(velx, vely)
     const cos = Math.cos(angleOffset);
     const sin = Math.sin(angleOffset);
     this.vel.x = Math.round(velx * cos - vely * sin);
