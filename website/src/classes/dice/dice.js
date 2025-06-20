@@ -100,6 +100,7 @@ class Dice {
     this.wrapper.style.top = `${this.pos.y}px`;
   }
 
+
   roll() {
     this.number = Math.floor(Math.random() * 6) + 1;
   }
@@ -165,6 +166,8 @@ class Dice {
     const angleOffset = newIndex * 5 * Math.PI / 180;
     const velx = this.vel.x * board.width/921;
     const vely = this.vel.y * board.height/921;
+    console.log(velx, vely)
+    alert(velx, vely)
     const cos = Math.cos(angleOffset);
     const sin = Math.sin(angleOffset);
     this.vel.x = Math.round(velx * cos - vely * sin);
