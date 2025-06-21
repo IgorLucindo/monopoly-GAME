@@ -8,9 +8,11 @@ const chanceDeck = new Deck(chanceDeckData);
 const communityDeck = new Deck(communityDeckData);
 const dices = new Dices(2);
 const deedDeck = new DeedDeck(board.tiles);
-const match = new Match();
-const sidebar = new Sidebar();
+const houses = new Buildings(housesData);
+const hotels = new Buildings(hotelsData);
 const actions = new Actions();
+const sidebar = new Sidebar();
+const match = new Match();
 
 // Add players
 match.addPlayers(["Alice", "Bob"]);

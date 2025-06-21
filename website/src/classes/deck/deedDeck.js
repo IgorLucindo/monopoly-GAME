@@ -45,6 +45,9 @@ class DeedDeck {
               <button onclick="_takeAction(1)">Buy</button>
               <button onclick="_takeAction(2)">Auction</button>
             </div>
+            <div class="deed-owner">
+              *Owner: <span></span>
+            </div>
           <div>
         `;
       }
@@ -68,6 +71,9 @@ class DeedDeck {
               <button onclick="_takeAction(1)">Buy</button>
               <button onclick="_takeAction(2)">Auction</button>
             </div>
+            <div class="deed-owner">
+              *Owner: <span></span>
+            </div>
           </div>
         `;
       }
@@ -88,6 +94,9 @@ class DeedDeck {
             <div class="deed-actions">
               <button onclick="_takeAction(1)">Buy</button>
               <button onclick="_takeAction(2)">Auction</button>
+            </div>
+            <div class="deed-owner">
+              *Owner: <span></span>
             </div>
           </div>
         `;
@@ -114,8 +123,17 @@ class DeedDeck {
 
     // Hide all others
     Object.values(this.cards).forEach(card => card.classList.remove("visible"));
+
     card.classList.add("visible");
     card.classList.add("float-idle");
+    if (tile.owner) {
+      const deedOwner = card.querySelector(".deed-owner");
+      const OwnerSpan = deedOwner.querySelector("span");
+      OwnerSpan.innerHTML = tile.owner.name;
+      setTimeout(() => {
+        deedOwner.classList.add("visible");
+      }, (this.animationTime+0.1) * 1000)
+    }
   }
 
 
@@ -126,6 +144,10 @@ class DeedDeck {
     card.classList.remove("float-idle");
     void card.offsetWidth;
     card.classList.remove("visible");
+    if (tile.owner) {
+      const deedOwner = card.querySelector(".deed-owner");
+      deedOwner.classList.remove("visible"); 
+    }
 
     tile.element.style.zIndex = 12;
     setTimeout(() => {tile.element.style.zIndex = null;}, this.animationTime * 1000);

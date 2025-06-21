@@ -10,11 +10,6 @@ body {
   background-color: #f0f2f5;
 }
 
-.sidebar {
-  margin-left: 30px;
-  width: 200px;
-}
-
 .turn-info {
   display: flex;
   align-items: center;

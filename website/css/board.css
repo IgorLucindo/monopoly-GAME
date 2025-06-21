@@ -5,13 +5,13 @@
   user-select: none;
   position: relative;
   aspect-ratio: 1 / 1;
-  width: 100%;
   max-width: 90vmin;
   margin: 20px;
   padding: 1vmin;
   gap: 1px;
   border-radius: 6px;
   background-color: black;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .center-tile {
@@ -106,24 +106,6 @@
 
 .tile-timer.hidden {
   opacity: 0;
-}
-
-.building {
-  width: 10px;
-  height: 10px;
-  margin: 1px;
-  border-radius: 2px;
-  display: inline-block;
-}
-
-.house {
-  background-color: green;
-}
-
-.hotel {
-  background-color: red;
-  width: 16px;
-  height: 16px;
 }
 
 /* in mobile */
