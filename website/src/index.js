@@ -10,7 +10,7 @@ const dices = new Dices(2);
 const deedDeck = new DeedDeck(board.tiles);
 const match = new Match();
 const sidebar = new Sidebar();
-const actionOptions = new ActionOptions();
+const actions = new Actions();
 
 // Add players
 match.addPlayers(["Alice", "Bob"]);

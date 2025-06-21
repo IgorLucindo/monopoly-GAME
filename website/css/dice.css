@@ -4,14 +4,14 @@
   position: absolute;
   width: var(--dice-size);
   height: var(--dice-size);
-  z-index: 9;
+  z-index: 8;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.9);
   border-radius: 40%;
   transition: transform 0.2s ease;
 }
 
 .dice-wrapper.lift {
-  z-index: 8;
+  z-index: 7;
   transform: scale(1.2);
 }
 

@@ -94,6 +94,7 @@ class Board {
           <div class="tile-buildings"></div>
           <div class="tile-price" style="margin-top: auto;">$${tileInfo.price}</div>
           <div class="tile-players"></div>
+          <div class="tile-timer"></div>
         </div>
       `;
     }
@@ -104,6 +105,7 @@ class Board {
           <img style="width: 70%" src="../assets/images/tiles/${tileInfo.type}.png">
           <div class="tile-price">$${tileInfo.price}</div>
           <div class="tile-players"></div>
+          <div class="tile-timer"></div>
         </div>
       `;
     }
@@ -114,6 +116,7 @@ class Board {
           <img style="width: ${tileInfo.label === "Water Works" ? 90 : 65}%" src="../assets/images/tiles/${tileInfo.label}.svg">
           <div class="tile-price">$${tileInfo.price}</div>
           <div class="tile-players"></div>
+          <div class="tile-timer"></div>
         </div>
       `;
     }
@@ -160,40 +163,78 @@ class Board {
 
 
   createTileHover() {
+    // Create timer
+    const hoverTimer = new TileHoverTimer(this.showDeed);
+
+    let currentTile = null;
+
     // Mouse over event
     const mouseover = (e) => {
       if (match.state === "action" || dices.draggingCount > 0) return;
 
       const tileEl = e.target.closest(".tile");
       const tile = this.getTileFromElement(tileEl);
-      const currentTile = deedDeck.showing;
 
-      if (currentTile !== tile) {
-        // Mouse out tile
-        if (currentTile) {
-          hideOverlay();
-          if (isTouch) currentTile.element.style.zIndex = "";
-          deedDeck.hideCard(currentTile);
-          currentTile.element.classList.remove("highlight");
-        }
+      if (!tile || !["property", "railroad", "utility"].includes(tile.type)) return;
 
-        if (!tile || !["property", "railroad", "utility"].includes(tile.type)) return;
+      hoverTimer.attachToTile(tile);
+    };
 
-        // Mouse over tile
-        showOverlay();
-        if (isTouch) tile.element.style.zIndex = 99;
-        deedDeck.showCard(tile);
-        tile.element.classList.add("highlight");
+    // Touch start event
+    const touchstart = (e) => {
+      if (match.state === "action" || dices.draggingCount > 0) return;
+
+      const tileEl = e.target.closest(".tile");
+      const tile = this.getTileFromElement(tileEl);
+
+      if (currentTile && tile !== currentTile) {
+        this.hideDeed(currentTile);
+        currentTile = null;
+        return;
       }
+      if (!tile || !["property", "railroad", "utility"].includes(tile.type)) return;
+
+      currentTile = tile
+
+      this.showDeed(tile);
+    }
+
+    // Mouse out event
+    const mouseout = (e) => {
+      const tileEl = e.target.closest(".tile");
+      const tile = this.getTileFromElement(tileEl);
+
+      if (!tile || !["property", "railroad", "utility"].includes(tile.type)) return;
+
+      if (hoverTimer.completed) this.hideDeed(tile);
+      hoverTimer.reset();
     };
 
     // Create events
-    document.addEventListener( isTouch ? "touchstart" : "mouseover", mouseover, { passive: true });
+    if (!isTouch) {
+      document.addEventListener("mouseover", mouseover);
+      document.addEventListener("mouseout", mouseout);
+    }
+    else document.addEventListener("touchstart", touchstart, { passive: true });
   }
 
 
   getTileFromElement(el) {
     return this.tiles.find(tile => tile.element === el) || null;
+  }
+
+
+  showDeed(tile) {
+    showOverlay();
+    deedDeck.showCard(tile);
+    tile.element.classList.add("highlight");
+  }
+
+
+  hideDeed(tile) {
+    hideOverlay();
+    deedDeck.hideCard(tile);
+    tile.element.classList.remove("highlight");
   }
 
 

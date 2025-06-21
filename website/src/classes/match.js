@@ -39,11 +39,11 @@ class Match {
     const tile = board.tiles[player.position];
 
     // Show action options
-    if (!tile.owner && tile.type === "property") {
+    if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
       setTimeout(() => {
         showOverlay();
         deedDeck.showCard(tile);
-        actionOptions.showDeedOptions(tile);
+        actions.showDeedOptions(tile);
       }, this.showCardDelay * 1000);
     }
     // Otherwise pass turn
@@ -64,7 +64,7 @@ class Match {
     if (action) {
       hideOverlay();
       deedDeck.hideCard(tile);
-      actionOptions.hideDeedOptions(tile);
+      actions.hideDeedOptions(tile);
     }
 
     // Check game states

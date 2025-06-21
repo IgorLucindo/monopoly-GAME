@@ -1,26 +1,25 @@
-.action-options {
+.deed-actions {
   display: flex;
   justify-content: center;
   align-items: center;
   position: absolute;
-  top: 100%;
   left: 50%;
-  transform: translate(-50%, -101%);
   width: 60%;
   height: 10%;
   gap: 8%;
   background-color: #111;
   border-radius: 0 0 8px 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transform: translate(-50%, -101%);
   transition: transform 0.4s ease;
   z-index: -1;
 }
 
-.action-options.visible {
-  transform: translate(-50%, 0);
+.deed-actions.visible {
+  transform: translate(-50%, 10px);
 }
 
-.action-options button {
+.deed-actions button {
   background: white;
   border: none;
   padding: 0.3em 0.9em;
@@ -32,18 +31,18 @@
   transition: background 0.2s ease;
 }
 
-.action-options button:nth-child(1) {
+.deed-actions button:nth-child(1) {
   background: #28a745;
 }
 
-.action-options button:nth-child(2) {
+.deed-actions button:nth-child(2) {
   background: #007bff;
 }
 
-.action-options button:nth-child(1):hover {
+.deed-actions button:nth-child(1):hover {
   background: #218838;
 }
 
-.action-options button:nth-child(2):hover {
+.deed-actions button:nth-child(2):hover {
   background: #0069d9;
 }
