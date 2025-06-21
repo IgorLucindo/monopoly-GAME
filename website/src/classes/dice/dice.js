@@ -68,8 +68,8 @@ class Dice {
       this.el.addEventListener("mousemove", mousemove);
     }
     else {
-      this.el.addEventListener("touchstart", mousedown, { passive: false });
-      document.addEventListener("touchmove", mousemove, { passive: false });
+      this.el.addEventListener("touchstart", mousedown, { passive: true });
+      document.addEventListener("touchmove", mousemove, { passive: true });
     }
   }
 
@@ -168,8 +168,6 @@ class Dice {
     const scale = board.width/921;
     const velx = clamp(this.vel.x * scale, this.maxThrowVel);
     const vely = clamp(this.vel.y * scale, this.maxThrowVel);
-    console.log(velx, vely)
-    // alert(velx, vely)
     const cos = Math.cos(angleOffset);
     const sin = Math.sin(angleOffset);
     this.vel.x = Math.round(velx * cos - vely * sin);

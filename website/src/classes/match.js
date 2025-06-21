@@ -10,10 +10,12 @@ class Match {
   }
 
 
-  addPlayer(name) {
-    const player = new Player(name);
-    this.players.push(player);
-    sidebar.update();
+  addPlayers(names) {
+    names.forEach((name) => {
+      const player = new Player(name);
+      this.players.push(player);
+      sidebar.update();
+    });
   }
 
 

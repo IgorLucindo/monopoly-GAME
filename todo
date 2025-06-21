@@ -1,7 +1,5 @@
-in dice.twistVel, put a max vel for touch (use clamp)
+put owner in showdeed
 
-mouse:hover tile => show deed
-show inventory with deed
 put monopoly icon in cards (guy with money, guy losing money)
 
 drag houses to build, drag out to sell

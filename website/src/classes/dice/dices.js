@@ -83,7 +83,7 @@ class Dices {
       document.addEventListener("mouseup", mouseup);
     }
     else {
-      document.addEventListener("touchmove", mousemove, { passive: false });
+      document.addEventListener("touchmove", mousemove, { passive: true });
       document.addEventListener("touchend", mouseup);
     }
   }

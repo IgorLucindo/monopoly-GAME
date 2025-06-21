@@ -25,14 +25,14 @@ class Player {
   move(number) {
     if (this.turnsArrested) return;
 
-    this.position = (this.position + number) % board.tiles.length;
+    this.position = (this.position + number) % board.numOfTiles;
     this.renderPosition();
   }
 
 
   renderPosition() {
-    const tile = board.tiles[this.position];
-    tile.element.appendChild(this.token);
+    const tilePlayersEl = board.tiles[this.position].element.querySelector(".tile-players");
+    tilePlayersEl.appendChild(this.token);
   }
 
 
@@ -52,9 +52,6 @@ class Player {
 
     this.money -= tile.buildCost;
     tile.houses += 1;
-
-    updateActionBar(tile, this)
-    this.updateBuildings(tile);
   }
 
 
@@ -81,8 +78,6 @@ class Player {
 
     tile.mortgaged = true;
     this.money += value = Math.floor(tile.price / 2);
-
-    updateActionBar(tile, this);
   }
 
 
@@ -94,25 +89,6 @@ class Player {
 
     tile.mortgaged = false;
     this.money -= cost;
-
-    updateActionBar(tile, this);
-  }
-
-
-  updateBuildings(tile) {
-    tile.element.querySelectorAll(".building").forEach(e => e.remove());
-
-    if (tile.houses === 5) {
-      const hotel = document.createElement("div");
-      hotel.classList.add("building", "hotel");
-      tile.element.appendChild(hotel);
-    } else {
-      for (let i = 0; i < tile.houses; i++) {
-        const house = document.createElement("div");
-        house.classList.add("building", "house");
-        tile.element.appendChild(house);
-      }
-    }
   }
 
 

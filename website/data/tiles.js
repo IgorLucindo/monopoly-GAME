@@ -52,6 +52,7 @@ const tileData = [
     index: 5, label: "Reading Railroad",
     type: "railroad",
     price: 200,
+    rent: 25,
     row: 11,
     col: 6,
     corner: false
@@ -76,7 +77,6 @@ const tileData = [
     row: 11,
     col: 4,
     corner: false
-
   },
   {
     index: 8,
@@ -163,6 +163,7 @@ const tileData = [
     label: "Pennsylvania Railroad",
     type: "railroad",
     price: 200,
+    rent: 25,
     row: 6,
     col: 1,
     corner: false
@@ -271,6 +272,7 @@ const tileData = [
     label: "B&O Railroad",
     type: "railroad",
     price: 200,
+    rent: 25,
     row: 1,
     col: 6,
     corner: false
@@ -345,7 +347,7 @@ const tileData = [
   },
   {
     index: 32,
-    label: "North Carolina Avenue",
+    label: "N. Carolina Avenue",
     type: "property",
     price: 300,
     color: "green",
@@ -380,6 +382,7 @@ const tileData = [
     label: "Short Line",
     type: "railroad",
     price: 200,
+    rent: 25,
     row: 6,
     col: 11,
     corner: false

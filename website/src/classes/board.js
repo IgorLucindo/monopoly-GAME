@@ -6,9 +6,9 @@ class Board {
     this.width = 0;
     this.height = 0;
 
-    this.size = 11;
     this.tiles = [];
     this.jailPos = 0;
+    this.numOfTiles = tileData.length;
 
     this.groups = {
       "brown": [], "light-blue": [], "pink": [], "orange": [],
@@ -40,17 +40,11 @@ class Board {
 
 
   createBoard(tileData) {
-    this.el.innerHTML = "";
-
     // Create the center tile (middle area)
-    const centerTile = document.createElement("div");
-    centerTile.classList.add("center-tile");
-    centerTile.style.gridRow = "2 / 11";
-    centerTile.style.gridColumn = "2 / 11";
-    this.el.appendChild(centerTile);
+    this.el.innerHTML = `<div class="center-tile" style="grid-row: 2 / 11; grid-column: 2 / 11;"></div>`;
 
     // Loop through all tiles and create their DOM + data structure
-    tileData.forEach(tileInfo => {
+    tileData.forEach((tileInfo) => {
       const tile = this.createTile(tileInfo);
       this.el.appendChild(tile);
 
@@ -58,6 +52,7 @@ class Board {
       const tileObject = {
         ...tileInfo,
         element: tile,
+        rotation: 0,
         owner: null,
         houses: 0,
         mortgaged: false,
@@ -72,6 +67,12 @@ class Board {
       // Add to global tile list
       this.tiles.push(tileObject);
     });
+
+    // Rotate tiles
+    this.rotateTiles();
+
+    // Create hover event
+    this.createTileHover();
   }
 
 
@@ -80,39 +81,140 @@ class Board {
     tile.classList.add("tile");
     if (tileInfo.corner) tile.classList.add("corner");
 
+    // Set position
     tile.style.gridRow = tileInfo.row;
     tile.style.gridColumn = tileInfo.col;
 
-    // Property color stripe
-    if (tileInfo.type === "property" && tileInfo.color) {
-      const stripe = document.createElement("div");
-      stripe.classList.add("color-stripe");
-      stripe.style.backgroundColor = this.colorMap[tileInfo.color];
-      tile.appendChild(stripe);
-    }
-
-    // Base label
-    const label = document.createElement("div");
-    label.classList.add("tile-label");
-    label.textContent = tileInfo.label;
-    tile.appendChild(label);
-
-    // Building container
+    // Create inner html
     if (tileInfo.type === "property") {
-      const buildingContainer = document.createElement("div");
-      buildingContainer.classList.add("tile-buildings");
-      tile.buildingContainer = buildingContainer; // store reference
-      tile.appendChild(buildingContainer);
+      tile.innerHTML = `
+        <div class="tile-content">
+          <div class="color-stripe" style="background-color: ${this.colorMap[tileInfo.color]}"></div>
+          <div class="tile-label">${tileInfo.label}</div>
+          <div class="tile-buildings"></div>
+          <div class="tile-price" style="margin-top: auto;">$${tileInfo.price}</div>
+          <div class="tile-players"></div>
+        </div>
+      `;
     }
-
-    // Price label
-    if (tileInfo.price) {
-      const price = document.createElement("div");
-      price.classList.add("tile-price");
-      price.textContent = `$${tileInfo.price}`;
-      tile.appendChild(price);
+    else if (tileInfo.type === "railroad") {
+      tile.innerHTML = `
+        <div class="tile-content">
+          <div class="tile-label">${tileInfo.label}</div>
+          <img style="width: 70%" src="../assets/images/tiles/${tileInfo.type}.png">
+          <div class="tile-price">$${tileInfo.price}</div>
+          <div class="tile-players"></div>
+        </div>
+      `;
+    }
+    else if (tileInfo.type === "utility") {
+      tile.innerHTML = `
+        <div class="tile-content">
+          <div class="tile-label">${tileInfo.label}</div>
+          <img style="width: ${tileInfo.label === "Water Works" ? 90 : 65}%" src="../assets/images/tiles/${tileInfo.label}.svg">
+          <div class="tile-price">$${tileInfo.price}</div>
+          <div class="tile-players"></div>
+        </div>
+      `;
+    }
+    else if (tileInfo.type === "chance" || tileInfo.type === "community") {
+      tile.innerHTML = `
+        <div class="tile-content">
+          <img style="width: ${tileInfo.type === "chance" ? 140 : 110}%" src="../assets/images/tiles/${tileInfo.type}.svg">
+          <div class="tile-players"></div>
+        </div>
+        `;
+    }
+    else {
+      tile.innerHTML = `
+        <div class="tile-content">
+          <div class="tile-label">${tileInfo.label}</div>
+          <div class="tile-players"></div>
+        </div>
+      `;
     }
 
     return tile;
+  }
+
+
+  rotateTiles() {
+    this.tiles.forEach((tile, index) => {
+      // Get rotation
+      tile.rotation = Math.floor(index / this.numOfTiles * 4) * 90;
+      if (tile.rotation === 270) tile.rotation = -90;
+
+      if (!tile.corner) {
+        const tileChild = tile.element.firstElementChild;
+
+        // Rotate
+        if (tile.rotation) tileChild.classList.add(`rotate-${tile.rotation}`);
+        
+        // Fix sizes
+        const rect = tileChild.getBoundingClientRect();
+        tileChild.style.width = rect.width + "px";
+        tileChild.style.height = rect.height + "px";
+      }
+    });
+  }
+
+
+  createTileHover() {
+    // Mouse over event
+    const mouseover = (e) => {
+      if (match.state === "action" || dices.draggingCount > 0) return;
+
+      const tileEl = e.target.closest(".tile");
+      const tile = this.getTileFromElement(tileEl);
+      const currentTile = deedDeck.showing;
+
+      if (currentTile !== tile) {
+        // Mouse out tile
+        if (currentTile) {
+          hideOverlay();
+          if (isTouch) currentTile.element.style.zIndex = "";
+          deedDeck.hideCard(currentTile);
+          currentTile.element.classList.remove("highlight");
+        }
+
+        if (!tile || !["property", "railroad", "utility"].includes(tile.type)) return;
+
+        // Mouse over tile
+        showOverlay();
+        if (isTouch) tile.element.style.zIndex = 99;
+        deedDeck.showCard(tile);
+        tile.element.classList.add("highlight");
+      }
+    };
+
+    // Create events
+    document.addEventListener( isTouch ? "touchstart" : "mouseover", mouseover, { passive: true });
+  }
+
+
+  getTileFromElement(el) {
+    return this.tiles.find(tile => tile.element === el) || null;
+  }
+
+
+  updateBuilding(tile) {
+    const buildingEl = tile.element.querySelector(".tile-buildings");
+
+    buildingEl.innerHTML = "";
+    
+    // Create houses
+    if (tile.houses < 5) {
+      for (let i = 0; i < tile.houses; i++) {
+        const house = document.createElement("div");
+        house.classList.add("building", "house");
+        buildingEl.appendChild(house);
+      }
+    }
+    // Create hotel
+    else {
+      const hotel = document.createElement("div");
+      hotel.classList.add("building", "hotel");
+      buildingEl.appendChild(hotel);
+    }
   }
 }

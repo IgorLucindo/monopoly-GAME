@@ -13,8 +13,7 @@ const sidebar = new Sidebar();
 const actionOptions = new ActionOptions();
 
 // Add players
-match.addPlayer("Alice");
-match.addPlayer("Bob");
+match.addPlayers(["Alice", "Bob"]);
 
 // Button click triggers turn control
 window._takeAction = (action) => match.takeAction(action);

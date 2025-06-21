@@ -2,7 +2,7 @@ class Deck {
   constructor(deckData) {
     this.original = deckData.cards;
     this.cards = [...deckData.cards];
-    this.imgSrc = deckData.imgSrc;
+    this.imgSrc = `../assets/images/icons/${deckData.type}.svg`;
     this.color = deckData.color;
     this.pos = deckData.pos;
 
@@ -92,7 +92,7 @@ class Deck {
     const textEl = this.cardEl.querySelector('.card-front p');
 
     // Set content
-    textEl.textContent = card.text;
+    textEl.innerHTML = card.text;
 
     // Force reflow for animation
     void this.cardEl.offsetWidth;
