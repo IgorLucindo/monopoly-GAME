@@ -8,6 +8,7 @@
 }
 
 .buildings {
+  position: relative;
   width: 10vmin;
   height: 20%;
   padding: 16px;
@@ -15,7 +16,17 @@
   background-color: white;
   border: 2px dashed  black;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
-  font-family: sans-serif;
+}
+
+.building {
+  --width: 3vmin;
+  position: absolute;
+  width: var(--width);
+  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.building.lift {
+  position: absolute;
 }
 
 /* in mobile */

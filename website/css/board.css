@@ -100,7 +100,7 @@
   width: 100%;
   height: 0;
   background-color: black;
-  opacity: 0.1;
+  opacity: 0.05;
   pointer-events: none;
 }
 

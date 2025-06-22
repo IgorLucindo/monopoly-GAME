@@ -1,5 +1,5 @@
 const hotelsData = {
   type: "hotel",
-  number: 10,
-  imgSrc: ""
+  number: 12,
+  imgSrc: "../assets/images/buildings/hotel.svg"
 }
