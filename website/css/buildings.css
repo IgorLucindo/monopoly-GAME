@@ -13,20 +13,28 @@
   height: 20%;
   padding: 16px;
   border-radius: 8px;
+  cursor: grab;
+  user-select: none;
   background-color: white;
   border: 2px dashed  black;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 .building {
+  --top: 0;
+  --left: 0;
   --width: 3vmin;
   position: absolute;
+  top: var(--top);
+  left: var(--left);
   width: var(--width);
-  filter: drop-shadow(4px 4px 6px rgba(0, 0, 0, 0.1));
+  -webkit-user-drag: none;
+  filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.1));
 }
 
 .building.lift {
-  position: absolute;
+  z-index: 9;
+  cursor: grabbing;
 }
 
 /* in mobile */

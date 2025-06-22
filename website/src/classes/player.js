@@ -37,19 +37,13 @@ class Player {
 
 
   buy(tile) {
-    if (tile.price && this.money >= tile.price && !tile.owner) {
-      this.money -= tile.price;
-      tile.owner = this;
-      this.properties.push(tile);
-    }
+    this.money -= tile.price;
+    tile.owner = this;
+    this.properties.push(tile);
   }
 
   
   build(tile) {
-    if (tile.owner !== this || tile.houses >= 5) return;
-
-    if (this.money < tile.buildCost) return;
-
     this.money -= tile.buildCost;
     tile.houses += 1;
   }
@@ -60,11 +54,7 @@ class Player {
 
     let rent = tile.rent[tile.houses]
 
-    if (
-      tile.type === "property" &&
-      tile.houses === 0 &&
-      board.groups[tile.color]?.every(t => t.owner === tile.owner)
-    ) {
+    if (tile.type === "property" && tile.houses === 0 && match.checkMonopoly(tile.color, tile.owner)) {
       rent *= 2;
     }
 

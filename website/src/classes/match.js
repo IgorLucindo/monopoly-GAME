@@ -189,4 +189,9 @@ class Match {
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     }
   }
+
+
+  checkMonopoly(color, player) {
+    return player && board.groups[color]?.every(t => t.owner === player)
+  }
 }

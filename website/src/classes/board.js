@@ -26,7 +26,7 @@ class Board {
     };
     
     this.getRect();
-    this.createBoard(tileData);
+    this.create(tileData);
   }
 
 
@@ -39,7 +39,7 @@ class Board {
   }
 
 
-  createBoard(tileData) {
+  create(tileData) {
     // Create the center tile (middle area)
     this.el.innerHTML = `<div class="center-tile" style="grid-row: 2 / 11; grid-column: 2 / 11;"></div>`;
 

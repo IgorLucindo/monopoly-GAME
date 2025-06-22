@@ -14,8 +14,10 @@ const actions = new Actions();
 const sidebar = new Sidebar();
 const match = new Match();
 
+const localPlayers = ["Alice", "Bob"];
+
 // Add players
-match.addPlayers(["Alice", "Bob"]);
+match.addPlayers(localPlayers);
 
 // Button click triggers turn control
 window._takeAction = (action) => match.takeAction(action);
