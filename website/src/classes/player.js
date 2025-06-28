@@ -49,6 +49,12 @@ class Player {
   }
 
 
+  sell(tile) {
+    this.money += tile.buildCost / 2;
+    tile.houses -= 1;
+  }
+
+
   payRent(tile) {
     if (tile.mortgaged) return;
 

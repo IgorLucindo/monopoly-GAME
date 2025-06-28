@@ -5,6 +5,7 @@ function showTab(tabId) {
   document.querySelector(`.tab-button[onclick="showTab('${tabId}')"]`).classList.add('active');
 };
 
+
 function hostRoom() {
   const name = document.getElementById("hostName").value.trim();
   if (name) {

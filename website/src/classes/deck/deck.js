@@ -13,6 +13,9 @@ class Deck {
     this.cardEl = this.createCardElement();
     
     this.shuffle();
+
+    // DEGUB
+    debug.showCardOnClick(this);
   }
 
 
@@ -28,9 +31,6 @@ class Deck {
     
     // Append to board
     board.el.appendChild(el);
-
-    // DEGUB
-    if (DEBUG) el.onclick = () => {this.showCard(this.cards[this.index]);}
 
     return el;
   }

@@ -28,6 +28,7 @@
   top: var(--top);
   left: var(--left);
   width: var(--width);
+  cursor: grab;
   -webkit-user-drag: none;
   filter: drop-shadow(3px 3px 4px rgba(0, 0, 0, 0.1));
 }

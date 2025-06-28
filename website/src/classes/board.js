@@ -91,7 +91,6 @@ class Board {
         <div class="tile-content">
           <div class="color-stripe" style="background-color: ${this.colorMap[tileInfo.color]}"></div>
           <div class="tile-label">${tileInfo.label}</div>
-          <div class="tile-buildings"></div>
           <div class="tile-price" style="margin-top: auto;">$${tileInfo.price}</div>
           <div class="tile-players"></div>
           <div class="tile-timer"></div>
@@ -235,27 +234,5 @@ class Board {
     hideOverlay();
     deedDeck.hideCard(tile);
     tile.element.classList.remove("highlight");
-  }
-
-
-  updateBuilding(tile) {
-    const buildingEl = tile.element.querySelector(".tile-buildings");
-
-    buildingEl.innerHTML = "";
-    
-    // Create houses
-    if (tile.houses < 5) {
-      for (let i = 0; i < tile.houses; i++) {
-        const house = document.createElement("div");
-        house.classList.add("building", "house");
-        buildingEl.appendChild(house);
-      }
-    }
-    // Create hotel
-    else {
-      const hotel = document.createElement("div");
-      hotel.classList.add("building", "hotel");
-      buildingEl.appendChild(hotel);
-    }
   }
 }

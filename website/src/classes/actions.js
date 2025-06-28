@@ -1,5 +1,7 @@
 class Actions {
   constructor() {
+    // Button click triggers turn control
+    window._takeAction = (action) => match.takeAction(action);
   }
 
 

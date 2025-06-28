@@ -1,7 +1,7 @@
-const DEBUG = true
-
 const isMobile = window.matchMedia("(max-width: 768px)").matches;
 const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+const debug = new Debug(true);
 
 const board = new Board(tileData);
 const chanceDeck = new Deck(chanceDeckData);
@@ -18,6 +18,3 @@ const localPlayers = ["Alice", "Bob"];
 
 // Add players
 match.addPlayers(localPlayers);
-
-// Button click triggers turn control
-window._takeAction = (action) => match.takeAction(action);

@@ -82,13 +82,6 @@
   margin-top: 2px;
 }
 
-.tile-buildings {
-  display: flex;
-  gap: 2px;
-  flex-wrap: wrap;
-  margin-top: 2px;
-}
-
 .tile-price {
   margin: 8px 0 3px 0;
   font-size: 11px;
