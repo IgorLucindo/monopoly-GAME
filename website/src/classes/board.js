@@ -55,6 +55,7 @@ class Board {
         rotation: 0,
         owner: null,
         houses: 0,
+        buildings: [],
         mortgaged: false,
         mortgageCost: Math.floor(tileInfo.price / 2)
       };

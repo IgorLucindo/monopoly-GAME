@@ -6,9 +6,8 @@ class Buildings {
     this.buildingSize = this.type === "house" ? 2.5 : 3.5; // Size in vmin
 
     this.list = [];
-    this.buildingEl = null
-    this.sellingEl = null
-    this.prevBuildPos = {top: 0, left: 0}
+    this.buildingEl = null;
+    this.sellingEl = null;
     
     this.el = this.create();
     this.createBuildings();
@@ -77,16 +76,8 @@ class Buildings {
     const mousedown = (e) => {
       if (!this.list.length) return;
 
-      // Get last building
       const building = this.list.at(-1);
-
-      // Move building
-      building.style.position = "fixed";
-      building.style.top = `${e.clientY}px`;
-      building.style.left = `${e.clientX}px`;
-      building.style.transform = "translate(-50%, -50%) scale(1.1)";
-      building.classList.add("lift");
-
+      this.liftBuilding(building, e.clientX, e.clientY);
       this.buildingEl = building;
     }
 
@@ -106,14 +97,7 @@ class Buildings {
       if (!this.buildingEl) return;
 
       const building = this.buildingEl;
-
-      // Reset positon
-      building.style.position = null;
-      building.style.top = null;
-      building.style.left = null;
-      building.style.transform = null;
-      building.classList.remove("lift");
-
+      this.unLiftBuilding(building);
       this.buildingEl = null;
 
       // Get closest tile
@@ -126,14 +110,21 @@ class Buildings {
       // check if can build
       if (this.isBuildable(tile)) {
         tile.owner.build(tile);
+        if (this.type === "hotel") {
+          while (tile.buildings.length > 0) {
+            const b = tile.buildings.pop();
+            houses.unLiftBuilding(b);
+            houses.list.push(b);
+            houses.el.appendChild(b);
+            houses.setInitialBuildingPosition(b, houses.list.length - 1);
+            houses.removeSellEvent(b);
+          }
+        }
         this.list.pop();
+        tile.buildings.push(building);
         board.el.appendChild(building);
 
-        // Move building
-        building.style.position = "fixed";
-        building.style.top = `${e.clientY}px`;
-        building.style.left = `${e.clientX}px`;
-        building.style.transform = "translate(-50%, -50%)";
+        this.moveBuilding(building, e.clientX, e.clientY);
         
         // Create event for selling
         this.createSellEvent(tile, building);
@@ -154,15 +145,9 @@ class Buildings {
     const mousedown = (e) => {
       if (!localPlayers.includes(tile.owner.name)) return;
       
-      // Move building
-      building.style.top = `${e.clientY}px`;
-      building.style.left = `${e.clientX}px`;
-      building.style.transform = "translate(-50%, -50%) scale(1.1)";
-      building.classList.add("lift");
-
+      this.liftBuilding(building, e.clientX, e.clientY);
       this.sellingEl = building;
-      this.prevBuildPos.top = e.clientY;
-      this.prevBuildPos.left = e.clientX;
+      building._pos = {x: e.clientX, y: e.clientY};
     }
 
     // Mouse move event
@@ -180,12 +165,7 @@ class Buildings {
       if (!localPlayers.includes(tile.owner.name)) return;
       if (!this.sellingEl || this.sellingEl !== building) return;
 
-      // Reset position
-      building.style.position = null;
-      building.style.top = null;
-      building.style.left = null;
-      building.style.transform = null;
-      building.classList.remove("lift");
+      this.unLiftBuilding(building);
       
       // Get closest tile
       const closestEl = document.elementFromPoint(e.clientX, e.clientY)
@@ -198,25 +178,33 @@ class Buildings {
       if (closestEl === this.el && this.isSellable(tile)) {
         tile.owner.sell(tile);
         this.list.push(building);
+        tile.buildings.pop();
         this.el.appendChild(building);
         this.setInitialBuildingPosition(building, this.list.length-1);
-        this.removeSellEvent(building, mousedown, mousemove, mouseup);
+        this.removeSellEvent(building);
+
+        // If hotel, move houses back to houses container
+        if (this.type === "hotel") {
+          for (let i = 0; i < 4 && houses.list.length > 0; i++) {
+            const b = houses.list.pop();
+            tile.buildings.push(b);
+            board.el.appendChild(b);
+            this.createSellEvent(tile, b);
+          };
+          this.resetBuildingsPosInTile(tile);
+
+          const numOfSell = 4 - houses.list.length;
+          for (let i = 0; i < numOfSell; i++) tile.owner.sell(tile);
+        }
       }
       // Go back to tile if outside
-      else if (newTile !== tile) {
-        building.style.position = "fixed";
-        building.style.top = `${this.prevBuildPos.top}px`;
-        building.style.left = `${this.prevBuildPos.left}px`;
-        building.style.transform = "translate(-50%, -50%)";
-      }
+      else if (newTile !== tile) this.moveBuilding(building, building._pos.x, building._pos.y); 
       // Move if inside own tile
-      else {
-        building.style.position = "fixed";
-        building.style.top = `${e.clientY}px`;
-        building.style.left = `${e.clientX}px`;
-        building.style.transform = "translate(-50%, -50%)";
-      }
+      else this.moveBuilding(building, e.clientX, e.clientY);
     }
+
+    // Store handlers on the element to be accessed later
+    building._sellHandlers = {mousedown, mousemove, mouseup};
 
     // Create events
     if (!isTouch) {
@@ -227,13 +215,46 @@ class Buildings {
   }
 
 
-  removeSellEvent(building, mousedown, mousemove, mouseup) {
+  removeSellEvent(building) {
+    if (!building._sellHandlers) return;
+
+    const {mousedown, mousemove, mouseup} = building._sellHandlers;
+
     // Create events
     if (!isTouch) {
       building.removeEventListener("mousedown", mousedown);
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     }
+
+    // Clean up the stored handlers
+    delete building._sellHandlers;
+  }
+
+
+  moveBuilding(building, posX, posY) {
+    building.style.position = "fixed";
+    building.style.top = `${posY}px`;
+    building.style.left = `${posX}px`;
+    building.style.transform = "translate(-50%, -50%)";
+  }
+
+
+  liftBuilding(building, posX, posY) {
+    building.style.position = "fixed";
+    building.style.top = `${posY}px`;
+    building.style.left = `${posX}px`;
+    building.style.transform = "translate(-50%, -50%) scale(1.1)";
+    building.classList.add("lift");
+  }
+
+
+  unLiftBuilding(building) {
+    building.style.position = null;
+    building.style.top = null;
+    building.style.left = null;
+    building.style.transform = null;
+    building.classList.remove("lift");
   }
 
 
@@ -255,5 +276,22 @@ class Buildings {
     const isBalanced = tile.houses === Math.max(...board.groups[tile.color].map(t => t.houses));
 
     return isBalanced;
+  }
+
+  
+  resetBuildingsPosInTile(tile) {
+    // Get all buildings currently on the tile (including the one being placed)
+    const buildings = tile.buildings;
+    const buildingRect = buildings[0].getBoundingClientRect();
+    const tileRect = tile.element.getBoundingClientRect();
+
+    // Set position for each building
+    buildings.forEach((b, index) => {
+      const col = index % 2;
+      const row = Math.floor(index / 2);
+      const posX = tileRect.left + buildingRect.width/2 + buildingRect.width*0.1 + col * buildingRect.width;
+      const posY = tileRect.top + buildingRect.height/2 + buildingRect.height*0.1 + row * buildingRect.height;
+      this.moveBuilding(b, posX, posY);
+    });
   }
 }
