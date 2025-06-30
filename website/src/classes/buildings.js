@@ -77,19 +77,24 @@ class Buildings {
       if (!this.list.length) return;
 
       const building = this.list.at(-1);
-      this.liftBuilding(building, e.clientX, e.clientY);
+      this.liftBuilding(building, e);
       this.buildingEl = building;
+
+      if (isMobile) {
+        screen.zoomIn(e);
+      }
     }
 
     // Mouse move event
     const mousemove = (e) => {
       if (!this.buildingEl) return;
-
-      const building = this.buildingEl;
       
-      // Move building
-      building.style.top = `${e.clientY}px`;
-      building.style.left = `${e.clientX}px`;
+      const building = this.buildingEl;
+      this.moveBuildingToEvent(building, e);
+
+      if (isMobile) {
+        screen.zoomMove(e);
+      }
     }
 
     // Mouse up event
@@ -101,11 +106,9 @@ class Buildings {
       this.buildingEl = null;
 
       // Get closest tile
-      const tileEl = document.elementFromPoint(e.clientX, e.clientY).closest(".tile");
+      const point = isTouch ? e.changedTouches[0] : e;
+      const tileEl = document.elementFromPoint(point.clientX, point.clientY).closest(".tile");
       const tile = board.getTileFromElement(tileEl);
-
-      // DEBUG
-      debug.setMonopoly(match.players[0], tile.color);
 
       // check if can build
       if (this.isBuildable(tile)) {
@@ -124,10 +127,15 @@ class Buildings {
         tile.buildings.push(building);
         board.el.appendChild(building);
 
-        this.moveBuilding(building, e.clientX, e.clientY);
+        const point = isTouch ? e.changedTouches[0] : e;
+        this.moveBuilding(building, point.clientX, point.clientY);
         
         // Create event for selling
         this.createSellEvent(tile, building);
+      }
+
+      if (isMobile) {
+        screen.zoomOut();
       }
     }
 
@@ -137,6 +145,11 @@ class Buildings {
       document.addEventListener("mousemove", mousemove);
       document.addEventListener("mouseup", mouseup);
     }
+    else {
+      this.el.addEventListener("touchstart", mousedown, { passive: true });
+      document.addEventListener("touchmove", mousemove, { passive: true });
+      document.addEventListener("touchend", mouseup);
+    }
   }
 
 
@@ -145,9 +158,10 @@ class Buildings {
     const mousedown = (e) => {
       if (!localPlayers.includes(tile.owner.name)) return;
       
-      this.liftBuilding(building, e.clientX, e.clientY);
+      this.liftBuilding(building, e);
       this.sellingEl = building;
-      building._pos = {x: e.clientX, y: e.clientY};
+      const point = isTouch ? e.touches[0] : e;
+      building._pos = {x: point.clientX, y: point.clientY};
     }
 
     // Mouse move event
@@ -155,9 +169,7 @@ class Buildings {
       if (!localPlayers.includes(tile.owner.name)) return;
       if (!this.sellingEl || this.sellingEl !== building) return;
       
-      // Move building
-      building.style.top = `${e.clientY}px`;
-      building.style.left = `${e.clientX}px`;
+      this.moveBuildingToEvent(building, e);
     }
 
     // Mouse up event
@@ -168,7 +180,8 @@ class Buildings {
       this.unLiftBuilding(building);
       
       // Get closest tile
-      const closestEl = document.elementFromPoint(e.clientX, e.clientY)
+      const point = isTouch ? e.changedTouches[0] : e;
+      const closestEl = document.elementFromPoint(point.clientX, point.clientY)
       const newTileEl = closestEl.closest(".tile");
       const newTile = board.getTileFromElement(newTileEl);
 
@@ -200,7 +213,10 @@ class Buildings {
       // Go back to tile if outside
       else if (newTile !== tile) this.moveBuilding(building, building._pos.x, building._pos.y); 
       // Move if inside own tile
-      else this.moveBuilding(building, e.clientX, e.clientY);
+      else {
+        const point = isTouch ? e.changedTouches[0] : e;
+        this.moveBuilding(building, point.clientX, point.clientY);
+      }
     }
 
     // Store handlers on the element to be accessed later
@@ -211,6 +227,11 @@ class Buildings {
       building.addEventListener("mousedown", mousedown);
       document.addEventListener("mousemove", mousemove);
       document.addEventListener("mouseup", mouseup);
+    }
+    else {
+      building.addEventListener("touchstart", mousedown, { passive: true });
+      document.addEventListener("touchmove", mousemove, { passive: true });
+      document.addEventListener("touchend", mouseup);
     }
   }
 
@@ -231,6 +252,12 @@ class Buildings {
     delete building._sellHandlers;
   }
 
+  moveBuildingToEvent(building, e) {
+    const point = isTouch ? e.touches[0] : e;
+    building.style.top = `${point.clientY}px`;
+    building.style.left = `${point.clientX}px`;
+  }
+
 
   moveBuilding(building, posX, posY) {
     building.style.position = "fixed";
@@ -240,10 +267,11 @@ class Buildings {
   }
 
 
-  liftBuilding(building, posX, posY) {
+  liftBuilding(building, e) {
+    const point = isTouch ? e.touches[0] : e;
     building.style.position = "fixed";
-    building.style.top = `${posY}px`;
-    building.style.left = `${posX}px`;
+    building.style.top = `${point.clientY}px`;
+    building.style.left = `${point.clientX}px`;
     building.style.transform = "translate(-50%, -50%) scale(1.1)";
     building.classList.add("lift");
   }

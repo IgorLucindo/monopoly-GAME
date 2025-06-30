@@ -16,7 +16,7 @@ class Dices {
       const wrapper = document.createElement("div");
       wrapper.className = "dice-wrapper";
       wrapper.innerHTML = `<div class="dice-3d"><div class="face one"><span class="dot center"></span></div><div class="face two"><span class="dot top-left"></span><span class="dot bottom-right"></span></div><div class="face three"><span class="dot top-left"></span><span class="dot center"></span><span class="dot bottom-right"></span></div><div class="face four"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div><div class="face five"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot center"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div><div class="face six"><span class="dot top-left"></span><span class="dot top-right"></span><span class="dot mid-left"></span><span class="dot mid-right"></span><span class="dot bottom-left"></span><span class="dot bottom-right"></span></div></div>`;
-      document.body.appendChild(wrapper);
+      board.el.appendChild(wrapper);
       this.list.push(new Dice(wrapper));
     }
   }
@@ -52,7 +52,7 @@ class Dices {
     // Mouse up event
     const mouseup = () => {
       if (!this.draggingCount) return;
-      ungrab();
+      screen.ungrab();
 
       let index = 0;
       const numbers = [];

@@ -225,14 +225,14 @@ class Board {
 
 
   showDeed(tile) {
-    showOverlay();
+    screen.showOverlay();
     deedDeck.showCard(tile);
     tile.element.classList.add("highlight");
   }
 
 
   hideDeed(tile) {
-    hideOverlay();
+    screen.hideOverlay();
     deedDeck.hideCard(tile);
     tile.element.classList.remove("highlight");
   }

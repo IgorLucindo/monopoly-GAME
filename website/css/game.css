@@ -1,12 +1,19 @@
 html, body {
   overscroll-behavior: none;
+  overflow: hidden;
   height: 100%;
   margin: 0;
 }
 
 body {
-  display: flex;
+  overflow: hidden;
   font-family: sans-serif;
+}
+
+#game-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
   background-color: #f0f2f5;
 }
 
@@ -18,6 +25,7 @@ body {
 
 #overlay {
   position: absolute;
+  top: 0;
   width: 100%;
   height: 100%;
   z-index: 9;
@@ -35,7 +43,7 @@ body {
 
 /* in mobile */
 @media screen and (max-width: 768px) {
-  body {
+  #game-container {
     flex-direction: column;
   }
 }

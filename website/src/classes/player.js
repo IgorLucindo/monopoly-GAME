@@ -4,13 +4,23 @@ class Player {
     this.name = name;
     this.position = 0;
     this.prevPosition = 0;
-    this.money = 1500;
+    this._money = 1500;
     this.turnsArrested = 0;
     this.exitJailCard = false;
     this.properties = [];
     
     this.token = this.createToken();
     this.renderPosition();
+  }
+
+
+  // Defining setter and getter
+  set money(value) {
+    this._money = value;
+    sidebar.update();
+  }
+  get money() {
+    return this._money;
   }
 
 

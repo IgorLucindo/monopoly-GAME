@@ -2,11 +2,21 @@
 class Match {
   constructor() {
     this.players = [];
-    this.currentPlayerIndex = 0;
+    this._currentPlayerIndex = 0;
     this.state = "dice";
     this.doubles = false;
     this.extraTurn = 0;
     this.showCardDelay = dices.list[0].spinTime + 0.3;
+  }
+
+  
+  // Defining setter and getter
+  set currentPlayerIndex(value) {
+    this._currentPlayerIndex = value;
+    sidebar.update();
+  }
+  get currentPlayerIndex() {
+    return this._currentPlayerIndex;
   }
 
 
@@ -33,15 +43,12 @@ class Match {
     player.move(number);
     this.checkPassGO(player);
 
-    // Update sidebar
-    sidebar.update();
-
     const tile = board.tiles[player.position];
 
     // Show action options
     if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
       setTimeout(() => {
-        showOverlay();
+        screen.showOverlay();
         deedDeck.showCard(tile);
         actions.showDeedOptions(tile);
       }, this.showCardDelay * 1000);
@@ -62,7 +69,7 @@ class Match {
 
     // Hide action bar for buy/auction
     if (action) {
-      hideOverlay();
+      screen.hideOverlay();
       deedDeck.hideCard(tile);
       actions.hideDeedOptions(tile);
     }
@@ -73,9 +80,6 @@ class Match {
 
     // End turn
     this.endTurn(player);
-
-    // Update sidebar
-    sidebar.update();
   }
 
 

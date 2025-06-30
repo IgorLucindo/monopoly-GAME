@@ -41,7 +41,7 @@ class Dice {
       dices.draggingCount += 1;
       this.lift();
       this.updateMovement(e);
-      grab();
+      screen.grab();
       dices.prevDraggingCount = dices.draggingCount;
     }
 
@@ -74,7 +74,7 @@ class Dice {
   }
 
 
-  updateMovement(e, index = 0) {
+  updateMovement(e, index=0) {
     const point = isTouch ? e.touches[0] : e;
 
     // Update velocity and position

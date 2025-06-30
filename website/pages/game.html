@@ -19,22 +19,24 @@
 </head>
 
 <body>
-  <!-- Game board -->
-  <div class="game-board" id="gameBoard"></div>
+  <div id="game-container">
+    <!-- Game board -->
+    <div class="game-board" id="gameBoard"></div>
 
-  <!-- Buildings container -->
-  <div class="buildings-container"></div>
-  
-  <!-- Side bar -->
-  <div class="sidebar">
-    <div class="player-info">
-      <h2>Players</h2>
-      <ul id="playerList"></ul>
-    </div>
+    <!-- Buildings container -->
+    <div class="buildings-container"></div>
+    
+    <!-- Side bar -->
+    <div class="sidebar">
+      <div class="player-info">
+        <h2>Players</h2>
+        <ul id="playerList"></ul>
+      </div>
 
-    <div class="turn-info">
-      <h2>Turn:</h2>
-      <h4 id="player-turn"></h4>
+      <div class="turn-info">
+        <h2>Turn:</h2>
+        <h4 id="player-turn"></h4>
+      </div>
     </div>
   </div>
 
@@ -58,8 +60,8 @@
   <script src="../src/classes/actions.js"></script>
   <script src="../src/classes/sidebar.js"></script>
   <script src="../src/classes/match.js"></script>
+  <script src="../src/classes/screen.js"></script>
   <script src="../src/classes/debug.js"></script>
-  <script src="../src/utils/documentUtils.js"></script>
   <script src="../src/utils/calculationUtils.js"></script>
   <script src="../src/index.js"></script>
 </body>

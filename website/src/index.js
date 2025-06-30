@@ -13,6 +13,7 @@ const hotels = new Buildings(hotelsData);
 const actions = new Actions();
 const sidebar = new Sidebar();
 const match = new Match();
+const screen = new Screen();
 
 const localPlayers = ["Alice", "Bob"];
 

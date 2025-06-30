@@ -1,6 +1,7 @@
 .sidebar {
-  margin-left: auto;
   width: 200px;
+  margin-left: auto;
+  user-select: none;
 }
 
 /* in mobile */
