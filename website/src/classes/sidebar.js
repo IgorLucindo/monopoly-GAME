@@ -5,6 +5,7 @@ class Sidebar {
     this.playerTurn = document.getElementById("player-turn");
 
     this.playerContainers = {};
+    this.chatBubbleTime = 3;
   }
 
 
@@ -20,9 +21,7 @@ class Sidebar {
         <span class="player-name">${p.name}</span>
         <span class="player-money">$${p.money}</span>
         <div class="message-wrapper">
-          <div class="message">
-            <p>Hello</p>
-          </div>
+          <div class="message"></div>
         </div>
       `;
 
@@ -63,5 +62,27 @@ class Sidebar {
   updateTurn() {
     const player = match.players[match.currentPlayerIndex];
     this.playerTurn.textContent = player.name;
+  }
+
+
+  chat(player, message) {
+    const playerContainer = this.playerContainers[player.name];
+    const messageWrapper = playerContainer.querySelector(".message-wrapper");
+    const messageElement = messageWrapper.querySelector(".message");
+
+    messageElement.textContent = message;
+    messageWrapper.classList.add("visible");
+
+    setTimeout(() => {
+      messageWrapper.classList.remove("visible");
+    }, this.chatBubbleTime * 1000);
+  }
+
+
+  updateTimer(seconds) {
+    const timerElement = document.getElementById("timer");
+    const secondsStr = String(Math.floor(seconds)).padStart(2, '0');
+    const deciseconds = (seconds*10) % 10;
+    timerElement.textContent = `${secondsStr}:${deciseconds}0`;
   }
 }

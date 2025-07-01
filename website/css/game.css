@@ -17,12 +17,6 @@ body {
   background-color: #f0f2f5;
 }
 
-.turn-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 #overlay {
   position: absolute;
   top: 0;

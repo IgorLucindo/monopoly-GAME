@@ -148,7 +148,7 @@ class Buildings {
   createSellEvent(tile, building) {
     // Mouse down event
     const mousedown = (e) => {
-      if (!localPlayers.includes(tile.owner.name)) return;
+      if (localPlayer.name !== tile.owner.name) return;
       
       this.liftBuilding(building, e);
       if (isMobile) screen.zoomIn(e);
@@ -160,7 +160,7 @@ class Buildings {
 
     // Mouse move event
     const mousemove = (e) => {
-      if (!localPlayers.includes(tile.owner.name)) return;
+      if (localPlayer.name !== tile.owner.name) return;
       if (!this.sellingEl || this.sellingEl !== building) return;
       
       this.moveBuildingToEvent(building, e);
@@ -169,7 +169,7 @@ class Buildings {
 
     // Mouse up event
     const mouseup = (e) => {
-      if (!localPlayers.includes(tile.owner.name)) return;
+      if (localPlayer.name !== tile.owner.name) return;
       if (!this.sellingEl || this.sellingEl !== building) return;
 
       this.unLiftBuilding(building);
@@ -286,7 +286,7 @@ class Buildings {
     if(!tile || !tile.owner) return false;
 
     const isProperty = tile.type === "property";
-    const isOwner = localPlayers.includes(tile.owner.name);
+    const isOwner = localPlayer.name === tile.owner.name;
     const isMonopoly = match.checkMonopoly(tile.color, tile.owner);
     const hasSpace = this.type === "house" ? tile.houses < 4 : tile.houses === 4;
     const isBalanced = tile.houses === Math.min(...board.groups[tile.color].map(t => t.houses));

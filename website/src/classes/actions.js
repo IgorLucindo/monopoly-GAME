@@ -2,8 +2,8 @@ class Actions {
   constructor() {
     // Button click triggers turn control
     window._takeAction = (action) => match.takeAction(action);
-    window._auction = () => this.showAuctionOptions();
-    window._bid = () => match.players[match.currentPlayerIndex].takeBid();
+    window._auction = () => match.startAuction();
+    window._bid = () => localPlayer.takeBid();
   }
 
 
@@ -35,18 +35,20 @@ class Actions {
     const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
 
     deedActions.innerHTML = `
-      <input type="number" name="quantity">
+      <input type="number" name="quantity" value="${match.smallBlind}">
       <button onclick="_bid()">Bid</button>
-    `
+    `;
   }
 
 
-  hideAuctionOptions(tile) {
+  hideAuctionOptions() {
+    const player = match.players[match.currentPlayerIndex];
+    const tile = board.tiles[player.position];
     const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
     
     deedActions.innerHTML = `
       <button onclick="_takeAction(1)">Buy</button>
       <button onclick="_auction()">Auction</button>
-    `
+    `;
   }
 }

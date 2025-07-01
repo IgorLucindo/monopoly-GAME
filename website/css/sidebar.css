@@ -1,16 +1,21 @@
 .sidebar {
   width: 200px;
+  z-index: 10;
   margin-left: auto;
   user-select: none;
   background-color: #bbb;
 }
 
+#player-list {
+  background-color: #ddd;
+}
+
 .player-container {
   position: relative;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
-  padding-top: 10%;
+  padding: 5px 0;
 }
 
 .player-money {
@@ -26,6 +31,18 @@
 .player-money.decreased {
   color: red;
   transform: scale(1.2);
+}
+
+.turn-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.timer-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
 

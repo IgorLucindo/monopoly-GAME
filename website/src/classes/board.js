@@ -123,7 +123,8 @@ class Board {
     else if (tileInfo.type === "chance" || tileInfo.type === "community") {
       tile.innerHTML = `
         <div class="tile-content">
-          <img style="width: ${tileInfo.type === "chance" ? 140 : 110}%" src="../assets/images/tiles/${tileInfo.type}.svg">
+          <div class="tile-label">${tileInfo.label}</div>
+          <img style="width: ${tileInfo.type === "chance" ? 120 : 90}%" src="../assets/images/tiles/${tileInfo.type}.svg">
           <div class="tile-players"></div>
         </div>
         `;

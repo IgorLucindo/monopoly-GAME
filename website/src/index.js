@@ -2,7 +2,6 @@ const isMobile = window.matchMedia("(max-width: 768px)").matches;
 const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
 const debug = new Debug(true);
-
 const board = new Board(tileData);
 const chanceDeck = new Deck(chanceDeckData);
 const communityDeck = new Deck(communityDeckData);
@@ -12,10 +11,12 @@ const houses = new Buildings(housesData);
 const hotels = new Buildings(hotelsData);
 const actions = new Actions();
 const sidebar = new Sidebar();
+const auctionTimer = new Timer(() => {match.endAuction();}, 30000);
 const match = new Match();
 const screen = new Screen();
 
-const localPlayers = ["Alice", "Bob"];
+const playerNames = ["Alice", "Bob"];
+match.addPlayers(playerNames);
 
-// Add players
-match.addPlayers(localPlayers);
+const localPlayerIndex = 0;
+const localPlayer = match.players[localPlayerIndex];

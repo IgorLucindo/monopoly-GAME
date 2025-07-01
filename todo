@@ -1,6 +1,3 @@
-bidding shows message in bubble chat
-auction for deeds and last house
-
 trade menu
 
 put monopoly icon in cards (guy with money, guy losing money)
@@ -15,12 +12,13 @@ sfx:
     lose game
     win game
     
-
 auto throw dice
 
 add animation effects to events in the game:
     player game over
     win game
     lose game
+
+add auction for last house
     
 add rules options when click opens a tab with rules to select or unselect.

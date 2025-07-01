@@ -6,9 +6,11 @@ class Match {
     this.state = "dice";
     this.doubles = false;
     this.extraTurn = 0;
+    this.showingCard = false;
 
     this.smallBlind = 10;
-    this.bid = this.smallBlind;
+    this.bid = this.smallBlind - 1;
+    this.bidder = null;
 
     this.showCardDelay = dices.list[0].spinTime + 0.3;
   }
@@ -40,7 +42,8 @@ class Match {
     this.setDoubles(numbers);
 
     const player = this.players[this.currentPlayerIndex];
-    const number = this.getNumber(player, numbers);
+    // const number = this.getNumber(player, numbers);
+    const number = 1
 
     // Handle movement
     this.handleJail(player);
@@ -52,6 +55,7 @@ class Match {
     // Show action options
     if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
       setTimeout(() => {
+        this.showingCard = true;
         screen.showOverlay();
         deedDeck.showCard(tile);
         actions.showDeedOptions(tile);
@@ -72,7 +76,8 @@ class Match {
     this.resolveTile(tile, player, action);
 
     // Hide action bar for buy/auction
-    if (action) {
+    if (this.showingCard) {
+      this.showingCard = false;
       screen.hideOverlay();
       deedDeck.hideCard(tile);
       actions.hideDeedOptions(tile);
@@ -103,7 +108,7 @@ class Match {
       player.getArrested();
       return 0;
     }
-    else return numbers.reduce((acc, curr) => acc + curr, 0)
+    else return numbers.reduce((acc, curr) => acc + curr, 0);
   }
 
 
@@ -136,7 +141,7 @@ class Match {
         // If there is no owner
         if (!tile.owner) {
           if (action === 1) player.buy(tile);
-          else if (action === 2) this.auction(tile);
+          else if (action === 2) this.bidder.buyAuction(tile, this.bid);
         }
         // If not the owner
         else if (tile.owner !== player) player.payRent(tile);
@@ -193,7 +198,8 @@ class Match {
     // Proceed to next player
     if (player.money < 0) {
       this.currentPlayerIndex %= this.players.length;
-    } else {
+    }
+    else {
       this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
     }
   }
@@ -201,5 +207,21 @@ class Match {
 
   checkMonopoly(color, player) {
     return player && board.groups[color]?.every(t => t.owner === player)
+  }
+
+
+  startAuction() {
+    this.bidder = null;
+    this.bid = this.smallBlind - 1;
+
+    auctionTimer.start();
+    actions.showAuctionOptions();
+  }
+
+
+  endAuction() {
+    actions.hideAuctionOptions();
+    if (this.bidder) this.takeAction(2);
+    else this.takeAction(0);
   }
 }

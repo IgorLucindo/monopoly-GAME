@@ -60,6 +60,13 @@ class Player {
     this.properties.push(tile);
   }
 
+
+  buyAuction(tile, bid) {
+    this.money -= bid;
+    tile.owner = this;
+    this.properties.push(tile);
+  }
+
   
   build(tile) {
     this.money -= tile.buildCost;
@@ -129,6 +136,11 @@ class Player {
       return;
     }
 
-    match.bid = Math.max(match.bid, inputValue);
+    match.bid = inputValue;
+    match.bidder = this;
+
+    sidebar.chat(this, `I bid $${inputValue}.`);
+
+    auctionTimer.restart();
   }
 }
