@@ -2,7 +2,32 @@
   width: 200px;
   margin-left: auto;
   user-select: none;
+  background-color: #bbb;
 }
+
+.player-container {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10%;
+}
+
+.player-money {
+  text-align: right;
+  transition: color 0.3s, transform 0.3s;
+}
+
+.player-money.increased {
+  color: green;
+  transform: scale(1.2);
+}
+
+.player-money.decreased {
+  color: red;
+  transform: scale(1.2);
+}
+
 
 /* in mobile */
 @media screen and (max-width: 768px) {

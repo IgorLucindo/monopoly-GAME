@@ -43,7 +43,7 @@ class DeedDeck {
             </div>
             <div class="deed-actions">
               <button onclick="_takeAction(1)">Buy</button>
-              <button onclick="_takeAction(2)">Auction</button>
+              <button onclick="_auction()">Auction</button>
             </div>
             <div class="deed-owner">
               *Owner: <span></span>
@@ -69,7 +69,7 @@ class DeedDeck {
             </div>
             <div class="deed-actions">
               <button onclick="_takeAction(1)">Buy</button>
-              <button onclick="_takeAction(2)">Auction</button>
+              <button onclick="_auction()">Auction</button>
             </div>
             <div class="deed-owner">
               *Owner: <span></span>
@@ -93,7 +93,7 @@ class DeedDeck {
             </div>
             <div class="deed-actions">
               <button onclick="_takeAction(1)">Buy</button>
-              <button onclick="_takeAction(2)">Auction</button>
+              <button onclick="_auction()">Auction</button>
             </div>
             <div class="deed-owner">
               *Owner: <span></span>

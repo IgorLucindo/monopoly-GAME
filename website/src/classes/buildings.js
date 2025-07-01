@@ -78,11 +78,8 @@ class Buildings {
 
       const building = this.list.at(-1);
       this.liftBuilding(building, e);
+      if (isMobile) screen.zoomIn(e);
       this.buildingEl = building;
-
-      if (isMobile) {
-        screen.zoomIn(e);
-      }
     }
 
     // Mouse move event
@@ -91,10 +88,7 @@ class Buildings {
       
       const building = this.buildingEl;
       this.moveBuildingToEvent(building, e);
-
-      if (isMobile) {
-        screen.zoomMove(e);
-      }
+      if (isMobile) screen.zoomMove(e);
     }
 
     // Mouse up event
@@ -103,6 +97,7 @@ class Buildings {
 
       const building = this.buildingEl;
       this.unLiftBuilding(building);
+      if (isMobile) screen.zoomOut();
       this.buildingEl = null;
 
       // Get closest tile
@@ -134,9 +129,6 @@ class Buildings {
         this.createSellEvent(tile, building);
       }
 
-      if (isMobile) {
-        screen.zoomOut();
-      }
     }
 
     // Create events
@@ -159,7 +151,9 @@ class Buildings {
       if (!localPlayers.includes(tile.owner.name)) return;
       
       this.liftBuilding(building, e);
+      if (isMobile) screen.zoomIn(e);
       this.sellingEl = building;
+
       const point = isTouch ? e.touches[0] : e;
       building._pos = {x: point.clientX, y: point.clientY};
     }
@@ -170,6 +164,7 @@ class Buildings {
       if (!this.sellingEl || this.sellingEl !== building) return;
       
       this.moveBuildingToEvent(building, e);
+      if (isMobile) screen.zoomMove(e);
     }
 
     // Mouse up event
@@ -178,6 +173,7 @@ class Buildings {
       if (!this.sellingEl || this.sellingEl !== building) return;
 
       this.unLiftBuilding(building);
+      if (isMobile) screen.zoomOut();
       
       // Get closest tile
       const point = isTouch ? e.changedTouches[0] : e;

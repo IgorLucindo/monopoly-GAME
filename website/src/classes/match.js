@@ -6,6 +6,10 @@ class Match {
     this.state = "dice";
     this.doubles = false;
     this.extraTurn = 0;
+
+    this.smallBlind = 10;
+    this.bid = this.smallBlind;
+
     this.showCardDelay = dices.list[0].spinTime + 0.3;
   }
 
@@ -13,7 +17,7 @@ class Match {
   // Defining setter and getter
   set currentPlayerIndex(value) {
     this._currentPlayerIndex = value;
-    sidebar.update();
+    sidebar.updateTurn();
   }
   get currentPlayerIndex() {
     return this._currentPlayerIndex;
@@ -24,7 +28,7 @@ class Match {
     names.forEach((name) => {
       const player = new Player(name);
       this.players.push(player);
-      sidebar.update();
+      sidebar.create();
     });
   }
 
@@ -132,6 +136,7 @@ class Match {
         // If there is no owner
         if (!tile.owner) {
           if (action === 1) player.buy(tile);
+          else if (action === 2) this.auction(tile);
         }
         // If not the owner
         else if (tile.owner !== player) player.payRent(tile);
@@ -155,7 +160,6 @@ class Match {
     }
 
     this.checkPassGO(player);
-    player.renderPosition();
   }
 
 

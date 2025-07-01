@@ -37,10 +37,10 @@ class Screen {
     this.scale = 1.5;
     const point = isTouch ? e.touches[0] : e;
     const offset = (this.scale-1) * 0.5;
-    this.pan.x = this.width*offset - point.clientX*(this.scale-1);
-    this.pan.y = this.height*offset - point.clientY*(this.scale-1);
+    this.pan.x = (this.width- point.clientX*2) * offset;
+    this.pan.y = (this.height- point.clientY*2) * offset;
 
-    this.el.style.transition = "transform 0.4s ease";
+    this.el.style.transition = "transform 0.3s ease";
     this.transform();
   }
 
@@ -48,8 +48,8 @@ class Screen {
   zoomMove(e) {
     const point = isTouch ? e.touches[0] : e;
     const offset = (this.scale-1) * 0.5;
-    this.pan.x = this.width*offset - point.clientX*(this.scale-1);
-    this.pan.y = this.height*offset - point.clientY*(this.scale-1);
+    this.pan.x = (this.width- point.clientX*2) * offset;
+    this.pan.y = (this.height- point.clientY*2) * offset;
 
     this.el.style.transition = null;
     this.transform();

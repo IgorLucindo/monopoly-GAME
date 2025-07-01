@@ -1,10 +1,9 @@
-gray out buy button if player doesn't have enough money
+bidding shows message in bubble chat
+auction for deeds and last house
+
+trade menu
 
 put monopoly icon in cards (guy with money, guy losing money)
-
-drag houses to build, drag out to sell
-
-finish action taker
 
 sfx:
     dice drag
@@ -19,11 +18,9 @@ sfx:
 
 auto throw dice
 
-add rules options when click opens a tab with rules to select or unselect.
-
 add animation effects to events in the game:
-    double dice numbers
-    jail
     player game over
     win game
     lose game
+    
+add rules options when click opens a tab with rules to select or unselect.

@@ -2,9 +2,10 @@
 class Player {
   constructor(name) {
     this.name = name;
-    this.position = 0;
+    this._position = 0;
     this.prevPosition = 0;
     this._money = 1500;
+    this.prevMoney = this.money;
     this.turnsArrested = 0;
     this.exitJailCard = false;
     this.properties = [];
@@ -17,10 +18,18 @@ class Player {
   // Defining setter and getter
   set money(value) {
     this._money = value;
-    sidebar.update();
+    sidebar.update(this);
+    this.prevMoney = value;
   }
   get money() {
     return this._money;
+  }
+  set position(value) {
+    this._position = value;
+    this.renderPosition();
+  }
+  get position() {
+    return this._position;
   }
 
 
@@ -36,7 +45,6 @@ class Player {
     if (this.turnsArrested) return;
 
     this.position = (this.position + number) % board.numOfTiles;
-    this.renderPosition();
   }
 
 
@@ -107,5 +115,20 @@ class Player {
   exitJail() {
     if (!this.exitJailCard) this.money -= 50;
     this.turnsArrested = 0;
+  }
+
+
+  takeBid() {
+    const currentPlayer = match.players[match.currentPlayerIndex];
+    const tile = board.tiles[currentPlayer.position];
+    const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const inputValue = deedActions.querySelector("input[name='quantity']").value;
+
+    if (!inputValue || isNaN(inputValue) || inputValue <= match.bid) {
+      alert("Not a valid bid amount.");
+      return;
+    }
+
+    match.bid = Math.max(match.bid, inputValue);
   }
 }

@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="../css/buildings.css"/>
   <link rel="stylesheet" href="../css/actions.css"/>
   <link rel="stylesheet" href="../css/sidebar.css"/>
+  <link rel="stylesheet" href="../css/bubbleChat.css"/>
 </head>
 
 <body>
@@ -30,7 +31,7 @@
     <div class="sidebar">
       <div class="player-info">
         <h2>Players</h2>
-        <ul id="playerList"></ul>
+        <ul id="player-list"></ul>
       </div>
 
       <div class="turn-info">
@@ -38,10 +39,11 @@
         <h4 id="player-turn"></h4>
       </div>
     </div>
+
+    <!-- Overlay -->
+    <div id="overlay"></div>
   </div>
 
-  <!-- Overlay -->
-  <div id="overlay"></div>
 
   <!-- Scripts -->
   <script src="../data/tiles.js"></script>

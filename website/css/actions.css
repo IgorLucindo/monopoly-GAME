@@ -46,3 +46,15 @@
 .deed-actions button:nth-child(2):hover {
   background: #0069d9;
 }
+
+.deed-actions button.disabled, .deed-actions button.disabled:hover {
+  pointer-events: none;
+  background: #ccc;
+}
+
+
+.deed-actions input {
+  width: 30%;
+  padding: 4px;
+  border-radius: 8px;
+}

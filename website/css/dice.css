@@ -1,7 +1,7 @@
 .dice-wrapper {
   --dice-size: 5.5vmin;
   --half-size: calc(var(--dice-size) / 2);
-  position: absolute;
+  position: fixed;
   width: var(--dice-size);
   height: var(--dice-size);
   z-index: 8;
