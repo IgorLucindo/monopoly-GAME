@@ -1,4 +1,4 @@
-const communityDeckData = {
+export const communityDeckData = {
   type: "community",
   color: "#2196f3",
   pos: { top: "18%", left: "22%" },

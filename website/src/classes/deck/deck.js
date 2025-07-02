@@ -1,4 +1,4 @@
-class Deck {
+export class Deck {
   constructor(deckData) {
     this.original = deckData.cards;
     this.cards = [...deckData.cards];
@@ -9,13 +9,26 @@ class Deck {
     this.index = 0;
     this.showCardDuration = 3;
 
+    this.pileEl = null;
+    this.cardEl = null;
+  }
+
+
+  init(variables) {
+    this.getVariables(variables);
     this.pileEl = this.createPileElement();
     this.cardEl = this.createCardElement();
     
     this.shuffle();
 
-    // DEGUB
-    debug.showCardOnClick(this);
+    this.debug.showCardOnClick(this);
+  }
+
+
+  getVariables(variables) {
+    this.debug = variables.debug;
+    this.board = variables.board;
+    this.match = variables.match;
   }
 
 
@@ -30,7 +43,7 @@ class Deck {
     el.style.left = this.pos.left;
     
     // Append to board
-    board.el.appendChild(el);
+    this.board.el.appendChild(el);
 
     return el;
   }
@@ -55,7 +68,7 @@ class Deck {
     el.style.left = this.pos.left;
 
     // Append to deck
-    board.el.appendChild(el);
+    this.board.el.appendChild(el);
 
     return el;
   }
@@ -77,7 +90,7 @@ class Deck {
     // Show card
     setTimeout(() => {
       this.showCard(card);
-    }, match.showCardDelay * 1000);
+    }, this.match.showCardDelay * 1000);
   }
 
 
@@ -98,8 +111,8 @@ class Deck {
     void this.cardEl.offsetWidth;
 
     // Animate over center and flip
-    this.cardEl.style.left = isMobile ? "50%" : `${board.left + board.width/2}px`;
-    this.cardEl.style.top = isMobile ? "50%" : `${board.top + board.height/2}px`;
+    this.cardEl.style.left = isMobile ? "50%" : `${this.board.left + this.board.width/2}px`;
+    this.cardEl.style.top = isMobile ? "50%" : `${this.board.top + this.board.height/2}px`;
     this.cardEl.classList.add("visible");
 
     // Hide after delay

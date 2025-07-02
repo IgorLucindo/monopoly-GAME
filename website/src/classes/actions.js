@@ -1,30 +1,41 @@
-class Actions {
+export class Actions {
   constructor() {
     this.state = null;
+  }
 
-    // Button click triggers turn control
-    window._takeAction = (action) => match.takeAction(action);
-    window._auction = () => match.startAuction();
-    window._bid = () => localPlayer.takeBid();
-    window._mortgage = () => match.startMortgage();
+
+  init(variables) {
+    this.getVariables(variables);
+    window._takeAction = (action) => this.match.takeAction(action);
+    window._auction = () => this.match.startAuction();
+    window._bid = () => this.match.localPlayer.takeBid();
+    window._mortgage = () => this.match.startMortgage();
+  }
+
+
+  getVariables(variables) {
+    this.cfg = variables.cfg;
+    this.board = variables.board;
+    this.deedDeck = variables.deedDeck;
+    this.match = variables.match;
   }
 
 
   showDeedOptions(tile) {
-    const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
     const buyBtn = deedActions.querySelector("button");
-    const player = match.players[match.currentPlayerIndex];
+    const player = this.match.players[this.match.currentPlayerIndex];
 
     if (player.money < tile.price) buyBtn.classList.add("disabled");
 
     setTimeout(() => {
       deedActions.classList.add("visible");
-    }, (deedDeck.animationTime+0.1) * 1000)
+    }, (this.deedDeck.animationTime+0.1) * 1000)
   }
 
 
   hideDeedOptions(tile) {
-    const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
     const buyBtn = deedActions.querySelector("button");
 
     deedActions.classList.remove("visible");
@@ -33,21 +44,21 @@ class Actions {
 
 
   showAuctionOptions() {
-    const player = match.players[match.currentPlayerIndex];
-    const tile = board.tiles[player.position];
-    const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const player = this.match.players[this.match.currentPlayerIndex];
+    const tile = this.board.tiles[player.position];
+    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
 
     deedActions.innerHTML = `
-      <input type="number" name="quantity" value="${match.smallBlind}">
+      <input type="number" name="quantity" value="${this.match.smallBlind}">
       <button onclick="_bid()">Bid</button>
     `;
   }
 
 
   hideAuctionOptions() {
-    const player = match.players[match.currentPlayerIndex];
-    const tile = board.tiles[player.position];
-    const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const player = this.match.players[this.match.currentPlayerIndex];
+    const tile = this.board.tiles[player.position];
+    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
     
     deedActions.innerHTML = `
       <button onclick="_takeAction(1)">Buy</button>
@@ -62,14 +73,14 @@ class Actions {
     // Click event
     const click = (e) => {
       const tileEl = e.target.closest(".tile");
-      const tile = board.getTileFromElement(tileEl);
+      const tile = this.board.getTileFromElement(tileEl);
 
-      match.handleMortgage(tile);
-      match.endMortgage(click);
+      this.match.handleMortgage(tile);
+      this.match.endMortgage(click);
     };
 
     // Create event
-    if (!isTouch) document.addEventListener("mousedown", click);
+    if (!this.cfg.touch) document.addEventListener("mousedown", click);
     else document.addEventListener("touchstart", click);
   }
 
@@ -78,7 +89,7 @@ class Actions {
     this.state = null;
 
     // Remove event
-    if (!isTouch) document.removeEventListener("mousedown", click);
+    if (!this.cfg.touch) document.removeEventListener("mousedown", click);
     else document.removeEventListener("touchstart", click);
   }
 }

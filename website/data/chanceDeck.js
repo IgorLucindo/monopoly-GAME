@@ -1,4 +1,4 @@
-const chanceDeckData = {
+export const chanceDeckData = {
   type: "chance",
   color: "#f9a825",
   pos: { top: "65%", left: "68%" },

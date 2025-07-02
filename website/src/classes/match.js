@@ -1,37 +1,60 @@
-// Class for controlling match
-class Match {
+import { Player } from "./player.js";
+
+
+export class Match {
   constructor() {
     this.players = [];
+    this.localPlayer = null;
     this._currentPlayerIndex = 0;
     this.state = "dice";
     this.doubles = false;
     this.extraTurn = 0;
     this.showingCard = false;
+    this.showCardTime = 0;
 
     this.smallBlind = 10;
     this.bid = this.smallBlind - 1;
     this.bidder = null;
-
-    this.showCardDelay = dices.list[0].spinTime + 0.3;
   }
 
   
   // Defining setter and getter
   set currentPlayerIndex(value) {
     this._currentPlayerIndex = value;
-    sidebar.updateTurn();
+    this.sidebar.updateTurn();
   }
   get currentPlayerIndex() {
     return this._currentPlayerIndex;
   }
 
 
-  addPlayers(names) {
+  init(variables, names) {
+    this.getVariables(variables);
+    this.showCardTime = this.dices.list[0].spinTime + 0.3;
+    this.addPlayers(variables, names);
+  }
+
+
+  getVariables(variables) {
+    this.dices = variables.dices;
+    this.chanceDeck = variables.chanceDeck;
+    this.communityDeck = variables.communityDeck;
+    this.board = variables.board;
+    this.deedDeck = variables.deedDeck;
+    this.actions = variables.actions;
+    this.sidebar = variables.sidebar;
+    this.screen = variables.screen;
+    this.auctionTimer = variables.auctionTimer;
+  }
+
+
+  addPlayers(variables, names) {
     names.forEach((name) => {
       const player = new Player(name);
+      player.init(variables)
       this.players.push(player);
-      sidebar.create();
     });
+    this.localPlayer = this.players[0];
   }
 
 
@@ -49,16 +72,16 @@ class Match {
     player.move(number);
     this.checkPassGO(player);
 
-    const tile = board.tiles[player.position];
+    const tile = this.board.tiles[player.position];
 
     // Show action options
     if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
       setTimeout(() => {
         this.showingCard = true;
-        screen.showOverlay();
-        deedDeck.showCard(tile);
-        actions.showDeedOptions(tile);
-      }, this.showCardDelay * 1000);
+        this.screen.showOverlay();
+        this.deedDeck.showCard(tile);
+        this.actions.showDeedOptions(tile);
+      }, this.showCardTime * 1000);
     }
     // Otherwise pass turn
     else this.takeAction(0);
@@ -69,7 +92,7 @@ class Match {
     if (this.state === "dice") return;
 
     const player = this.players[this.currentPlayerIndex];
-    const tile = board.tiles[player.position];
+    const tile = this.board.tiles[player.position];
 
     // Resolve action taken
     this.resolveTile(tile, player, action);
@@ -77,9 +100,9 @@ class Match {
     // Hide action bar for buy/auction
     if (this.showingCard) {
       this.showingCard = false;
-      screen.hideOverlay();
-      deedDeck.hideCard(tile);
-      actions.hideDeedOptions(tile);
+      this.screen.hideOverlay();
+      this.deedDeck.hideCard(tile);
+      this.actions.hideDeedOptions(tile);
     }
 
     // Check game states
@@ -155,11 +178,11 @@ class Match {
         break;
 
       case "chance":
-        chanceDeck.drawCard(player);
+        this.chanceDeck.drawCard(player);
         break;
 
       case "community":
-        communityDeck.drawCard(player);
+        this.communityDeck.drawCard(player);
         break;
     }
 
@@ -205,7 +228,7 @@ class Match {
 
 
   checkMonopoly(color, player) {
-    return player && board.groups[color]?.every(t => t.owner === player)
+    return player && this.board.groups[color]?.every(t => t.owner === player)
   }
 
 
@@ -213,36 +236,36 @@ class Match {
     this.bidder = null;
     this.bid = this.smallBlind - 1;
 
-    auctionTimer.start();
-    actions.showAuctionOptions();
+    this.auctionTimer.start();
+    this.actions.showAuctionOptions();
   }
 
 
   endAuction() {
-    actions.hideAuctionOptions();
+    this.actions.hideAuctionOptions();
     if (this.bidder) this.takeAction(2);
     else this.takeAction(0);
   }
 
 
   startMortgage() {
-    if (actions.state === "mortgage") return;
+    if (this.actions.state === "mortgage") return;
 
-    screen.showOverlay();
-    board.highlightOwnedTiles();
-    actions.createMortgageEvent();
+    this.screen.showOverlay();
+    this.board.highlightOwnedTiles();
+    this.actions.createMortgageEvent();
   }
 
 
   endMortgage(click) {
-    screen.hideOverlay();
-    board.unhighlightOwnedTiles();
-    actions.removeMortgageEvent(click);
+    this.screen.hideOverlay();
+    this.board.unhighlightOwnedTiles();
+    this.actions.removeMortgageEvent(click);
   }
 
 
   handleMortgage(tile) {
-    if (!tile || !tile.owner || localPlayer.name !== tile.owner.name) return;
+    if (!tile || !tile.owner || this.localPlayer.name !== tile.owner.name) return;
     
     if (tile.mortgaged && tile.owner.money >= tile.unmortgageValue) {
       tile.owner.unmortgage(tile);

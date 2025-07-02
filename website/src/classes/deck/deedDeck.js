@@ -1,24 +1,33 @@
-class DeedDeck {
-  constructor(tiles) {
-    this.tiles = tiles.filter(t => ["property", "railroad", "utility"].includes(t.type));
+export class DeedDeck {
+  constructor() {
     this.cards = {};
     this.animationTime = 0.4;
     this.showing = null;
+    this.el = null;
+  }
 
-    this.el = this.create();
+
+  init(variables) {
+    this.getVariables(variables);
+    this.create();
     this.createAllCards();
+  }
+
+
+  getVariables(variables) {
+    this.board = variables.board;
   }
 
 
   create() {
     const el = document.createElement("div");
-    board.el.appendChild(el);
-    return el;
+    this.board.el.appendChild(el);
+    this.el = el;
   }
 
 
   createAllCards() {
-    this.tiles.forEach((tile) => {
+    this.board.tiles.forEach((tile) => {
       if (!tile || !["property", "railroad", "utility"].includes(tile.type)) return;
       const card = document.createElement("div");
       card.className = "deed-card";
@@ -27,7 +36,7 @@ class DeedDeck {
         card.innerHTML = `
           <div class="deed-wrapper">
             <div class="deed-inner">
-              <div class="deed-header1" style="background-color: ${board.colorMap[tile.color]}">${tile.label}</div>
+              <div class="deed-header1" style="background-color: ${this.board.colorMap[tile.color]}">${tile.label}</div>
               <div class="deed-body1">
                 <p>Rent: <span>$${tile.rent[0]}</span></p>
                 <p>With 1 House: <span>$${tile.rent[1]}</span></p>

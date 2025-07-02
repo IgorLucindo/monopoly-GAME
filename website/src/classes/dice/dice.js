@@ -1,4 +1,7 @@
-class Dice {
+import { clamp } from "../../utils/calculationUtils.js";
+
+
+export class Dice {
   constructor(wrapper) {
     this.wrapper = wrapper;
     this.el = this.wrapper.firstElementChild;
@@ -16,7 +19,7 @@ class Dice {
     this.tiltTime = 1;
     this.tiltForce = 15;
     this.tiltMaxAngle = 20;
-    this.maxThrowVel = isMobile ? 10 : 20;
+    this.maxThrowVel = 20;
     this.friction = 0.025;
 
     this.baseRotations = {
@@ -27,30 +30,44 @@ class Dice {
       5: { x: 90, y: 0 },
       6: { x: 180, y: 0 }
     };
-
-    this.initEvents();
   }
 
 
-  initEvents() {
+  init(variables) {
+    this.getVariables(variables);
+    this.maxThrowVel *= this.cfg.mobile ? 0.5 : 1;
+    this.createEvents();
+  }
+
+
+  getVariables(variables) {
+    this.cfg = variables.cfg;
+    this.board = variables.board;
+    this.dices = variables.dices;
+    this.match = variables.match;
+    this.screen = variables.screen;
+  }
+
+
+  createEvents() {
     // Mouse down event
     const mousedown = (e) => {
-      if (match.state !== "dice") return;
+      if (this.match.state !== "dice") return;
 
       this.isDragging = true;
-      dices.draggingCount += 1;
+      this.dices.draggingCount += 1;
       this.lift();
       this.updateMovement(e);
-      screen.grab();
-      dices.prevDraggingCount = dices.draggingCount;
+      this.screen.grab();
+      this.dices.prevDraggingCount = this.dices.draggingCount;
     }
 
     // Mouse move event
     const mousemove = (e) => {
-      if (!dices.draggingCount || this.isDragging) return;
+      if (!this.dices.draggingCount || this.isDragging) return;
 
       // handle touch
-      if (isTouch) {
+      if (this.cfg.touch) {
         const touch = e.touches[0];
         const target = document.elementFromPoint(touch.clientX, touch.clientY);
         const newDiceEl = target?.closest('.dice-wrapper:not(.lift)');
@@ -58,12 +75,12 @@ class Dice {
       }
 
       this.isDragging = true;
-      dices.draggingCount += 1;
+      this.dices.draggingCount += 1;
       this.lift();
     }
 
     // Create events
-    if (!isTouch) {
+    if (!this.cfg.touch) {
       this.el.addEventListener("mousedown", mousedown);
       this.el.addEventListener("mousemove", mousemove);
     }
@@ -75,7 +92,7 @@ class Dice {
 
 
   updateMovement(e, index=0) {
-    const point = isTouch ? e.touches[0] : e;
+    const point = this.cfg.touch ? e.touches[0] : e;
 
     // Update velocity and position
     this.vel.x = point.clientX - this.prevPos.x;
@@ -86,9 +103,9 @@ class Dice {
     this.prevPos.y = point.clientY;
 
     // Adjust layout for grouped dragging
-    if (dices.prevDraggingCount !== dices.draggingCount) {
+    if (this.dices.prevDraggingCount !== this.dices.draggingCount) {
       const gap = this.size * 0.7;
-      const totalWidth = dices.draggingCount * this.size + (dices.draggingCount - 1) * gap;
+      const totalWidth = this.dices.draggingCount * this.size + (this.dices.draggingCount - 1) * gap;
       const offsetX = index * (this.size + gap);
       this.pos.x = point.clientX + offsetX - totalWidth / 2;
       this.pos.y = point.clientY - this.halfSize;
@@ -162,10 +179,10 @@ class Dice {
 
 
   twistVel(index) {
-    const total = dices.draggingCount;
+    const total = this.dices.draggingCount;
     const newIndex = index - Math.floor(total / 2) + (total % 2 === 0 && index >= total / 2 ? 1 : 0);
     const angleOffset = newIndex * 5 * Math.PI / 180;
-    const scale = board.width/921;
+    const scale = this.board.width/921;
     const velx = clamp(this.vel.x * scale, this.maxThrowVel);
     const vely = clamp(this.vel.y * scale, this.maxThrowVel);
     const cos = Math.cos(angleOffset);
@@ -180,10 +197,10 @@ class Dice {
     this.animating = true;
 
     const offset = 10;
-    const minX = board.left + offset;
-    const maxX = board.left + board.width - this.size - offset;
-    const minY = board.top + offset;
-    const maxY = board.top + board.height - this.size - offset;
+    const minX = this.board.left + offset;
+    const maxX = this.board.left + this.board.width - this.size - offset;
+    const minY = this.board.top + offset;
+    const maxY = this.board.top + this.board.height - this.size - offset;
 
     // Get start time
     const startTime = performance.now();

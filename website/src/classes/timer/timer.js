@@ -1,4 +1,4 @@
-class Timer {
+export class Timer {
   constructor(effect, duration) {
     this.effect = effect;
     this.duration = duration;
@@ -10,6 +10,16 @@ class Timer {
   }
 
 
+  init(variables) {
+    this.getVariables(variables);
+  }
+
+  
+  getVariables(variables) {
+    this.sidebar = variables.sidebar;
+  }
+
+
   start() {
     this.startTime = Date.now();
 
@@ -18,7 +28,7 @@ class Timer {
 
       const remaining = this.duration - this.elapsed;
       const remainingRounded = Math.ceil(remaining/100) / 10;
-      sidebar.updateTimer(remainingRounded);
+      this.sidebar.updateTimer(remainingRounded);
       
       if (this.elapsed >= this.duration) {
         this.effect();

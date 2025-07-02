@@ -1,5 +1,4 @@
-// Class for controlling match
-class Sidebar {
+export class Sidebar {
   constructor() {
     this.playerList = document.getElementById("player-list");
     this.playerTurn = document.getElementById("player-turn");
@@ -9,10 +8,21 @@ class Sidebar {
   }
 
 
+  init(variables) {
+    this.getVariables(variables);
+    this.create();
+  }
+
+
+  getVariables(variables) {
+    this.match = variables.match;
+  }
+
+
   create() {
     this.playerList.innerHTML = "";
 
-    match.players.forEach((p) => {
+    this.match.players.forEach((p) => {
       // Create container for each player
       const playerContainer = document.createElement("div");
       playerContainer.className = "player-container";
@@ -60,7 +70,7 @@ class Sidebar {
 
 
   updateTurn() {
-    const player = match.players[match.currentPlayerIndex];
+    const player = this.match.players[this.match.currentPlayerIndex];
     this.playerTurn.textContent = player.name;
   }
 

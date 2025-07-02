@@ -1,5 +1,4 @@
-// Player class
-class Player {
+export class Player {
   constructor(name) {
     this.name = name;
     this._position = 0;
@@ -9,16 +8,14 @@ class Player {
     this.turnsArrested = 0;
     this.exitJailCard = false;
     this.properties = [];
-    
-    this.token = this.createToken();
-    this.renderPosition();
+    this.token = null;
   }
 
 
   // Defining setter and getter
   set money(value) {
     this._money = value;
-    sidebar.update(this);
+    this.sidebar.update(this);
     this.prevMoney = value;
   }
   get money() {
@@ -33,23 +30,39 @@ class Player {
   }
 
 
+  init(variables) {
+    this.getVariables(variables);
+    this.createToken();
+    this.renderPosition();
+  }
+
+
+  getVariables(variables) {
+    this.board = variables.board;
+    this.deedDeck = variables.deedDeck;
+    this.match = variables.match;
+    this.sidebar = variables.sidebar;
+    this.auctionTimer = variables.auctionTimer;
+  }
+
+
   createToken() {
     const token = document.createElement("div");
     token.classList.add("player-token");
     token.textContent = this.name.charAt(0);
-    return token;
+    this.token = token;
   }
 
 
   move(number) {
     if (this.turnsArrested) return;
 
-    this.position = (this.position + number) % board.numOfTiles;
+    this.position = (this.position + number) % this.board.numOfTiles;
   }
 
 
   renderPosition() {
-    const tilePlayersEl = board.tiles[this.position].element.querySelector(".tile-players");
+    const tilePlayersEl = this.board.tiles[this.position].element.querySelector(".tile-players");
     tilePlayersEl.appendChild(this.token);
   }
 
@@ -85,7 +98,7 @@ class Player {
 
     let rent = tile.rent[tile.houses]
 
-    if (tile.type === "property" && tile.houses === 0 && match.checkMonopoly(tile.color, tile.owner)) {
+    if (tile.type === "property" && tile.houses === 0 && this.match.checkMonopoly(tile.color, tile.owner)) {
       rent *= 2;
     }
 
@@ -108,7 +121,7 @@ class Player {
 
   getArrested() {
     this.turnsArrested = 1;
-    this.position = board.jailPos;
+    this.position = this.board.jailPos;
   }
 
 
@@ -119,21 +132,21 @@ class Player {
 
 
   takeBid() {
-    const currentPlayer = match.players[match.currentPlayerIndex];
-    const tile = board.tiles[currentPlayer.position];
-    const deedActions = deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const currentPlayer = this.match.players[this.match.currentPlayerIndex];
+    const tile = this.board.tiles[currentPlayer.position];
+    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
     const inputValue = deedActions.querySelector("input[name='quantity']").value;
 
-    if (!inputValue || isNaN(inputValue) || inputValue <= match.bid) {
+    if (!inputValue || isNaN(inputValue) || inputValue <= this.match.bid) {
       alert("Not a valid bid amount.");
       return;
     }
 
-    match.bid = inputValue;
-    match.bidder = this;
+    this.match.bid = inputValue;
+    this.match.bidder = this;
 
-    sidebar.chat(this, `I bid $${inputValue}.`);
+    this.sidebar.chat(this, `I bid $${inputValue}.`);
 
-    auctionTimer.restart();
+    this.auctionTimer.restart();
   }
 }

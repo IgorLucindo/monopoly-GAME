@@ -1,4 +1,4 @@
-const tileData = [
+export const tileData = [
   {
     index: 0,
     label: "GO",

@@ -1,4 +1,4 @@
-class TileHoverTimer {
+export class TileHoverTimer {
   constructor(onComplete) {
     this.duration = 1;
     this.onComplete = onComplete;
@@ -11,7 +11,6 @@ class TileHoverTimer {
 
 
   attachToTile(tile) {
-
     if (!tile || !tile.element) return;
 
     this.timerElement = tile.element.querySelector(".tile-timer");

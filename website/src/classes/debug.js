@@ -1,6 +1,16 @@
-class Debug {
+export class Debug {
   constructor(active) {
     this.active = active;
+  }
+
+
+  init(variables) {
+    this.getVariables(variables);
+  }
+
+
+  getVariables(variables) {
+    this.board = variables.board;
   }
 
 
@@ -14,6 +24,6 @@ class Debug {
   setMonopoly(player, color) {
     if (!this.active) return;
 
-    board.groups[color].forEach(t => t.owner = player);
+    this.board.groups[color].forEach(t => t.owner = player);
   }
 }

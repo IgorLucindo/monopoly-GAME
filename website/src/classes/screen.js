@@ -1,5 +1,4 @@
-// Class for controlling match
-class Screen {
+export class Screen {
   constructor() {
     this.el = document.getElementById("game-container");
     this.overlayEl = document.getElementById("overlay");
@@ -10,6 +9,16 @@ class Screen {
 
     this.scale = 1;
     this.pan = {x: 0, y: 0};
+  }
+
+
+  init(variables) {
+    this.getVariables(variables);
+  }
+
+
+  getVariables(variables) {
+    this.cfg = variables.cfg;
   }
 
 
@@ -35,7 +44,7 @@ class Screen {
 
   zoomIn(e) {
     this.scale = 1.5;
-    const point = isTouch ? e.touches[0] : e;
+    const point = this.cfg.touch ? e.touches[0] : e;
     const offset = (this.scale-1) * 0.5;
     this.pan.x = (this.width- point.clientX*2) * offset;
     this.pan.y = (this.height- point.clientY*2) * offset;
@@ -46,7 +55,7 @@ class Screen {
 
 
   zoomMove(e) {
-    const point = isTouch ? e.touches[0] : e;
+    const point = this.cfg.touch ? e.touches[0] : e;
     const offset = (this.scale-1) * 0.5;
     this.pan.x = (this.width- point.clientX*2) * offset;
     this.pan.y = (this.height- point.clientY*2) * offset;

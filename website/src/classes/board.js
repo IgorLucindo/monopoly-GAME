@@ -1,5 +1,8 @@
-class Board {
-  constructor(tileData) {
+import { TileHoverTimer } from "./timer/hoverTimer.js";
+
+
+export class Board {
+  constructor() {
     this.el = document.getElementById("gameBoard");
     this.top = 0;
     this.left = 0;
@@ -8,7 +11,7 @@ class Board {
 
     this.tiles = [];
     this.jailPos = 0;
-    this.numOfTiles = tileData.length;
+    this.numOfTiles = 0;
 
     this.groups = {
       "brown": [], "light-blue": [], "pink": [], "orange": [],
@@ -24,9 +27,23 @@ class Board {
       "green": "#008000",
       "dark-blue": "#00008b"
     };
-    
+  }
+
+
+  init(variables, tileData) {
+    this.getVariables(variables);
     this.getRect();
     this.create(tileData);
+  }
+
+
+  getVariables(variables) {
+    this.cfg = variables.cfg;
+    this.dices = variables.dices;
+    this.deedDeck = variables.deedDeck;
+    this.actions = variables.actions;
+    this.match = variables.match;
+    this.screen = variables.screen;
   }
 
 
@@ -40,6 +57,8 @@ class Board {
 
 
   create(tileData) {
+    this.numOfTiles = tileData.length;
+
     // Create the center tile (middle area)
     this.el.innerHTML = `<div class="center-tile" style="grid-row: 2 / 11; grid-column: 2 / 11;"></div>`;
 
@@ -178,13 +197,13 @@ class Board {
 
   createTileHover() {
     // Create timer
-    const hoverTimer = new TileHoverTimer(this.showDeed);
+    const hoverTimer = new TileHoverTimer(this.showDeed.bind(this));
 
     let currentTile = null;
 
     // Mouse over event
     const mouseover = (e) => {
-      if (match.state === "action" || dices.draggingCount > 0 || actions.state === "mortgage") return;
+      if (this.match.state === "action" || this.dices.draggingCount > 0 || this.actions.state === "mortgage") return;
 
       const tileEl = e.target.closest(".tile");
       const tile = this.getTileFromElement(tileEl);
@@ -196,7 +215,7 @@ class Board {
 
     // Touch start event
     const touchstart = (e) => {
-      if (match.state === "action" || dices.draggingCount > 0 || actions.state === "mortgage") return;
+      if (this.match.state === "action" || this.dices.draggingCount > 0 || this.actions.state === "mortgage") return;
 
       const tileEl = e.target.closest(".tile");
       const tile = this.getTileFromElement(tileEl);
@@ -225,7 +244,7 @@ class Board {
     };
 
     // Create events
-    if (!isTouch) {
+    if (!this.cfg.touch) {
       document.addEventListener("mouseover", mouseover);
       document.addEventListener("mouseout", mouseout);
     }
@@ -239,22 +258,22 @@ class Board {
 
 
   showDeed(tile) {
-    screen.showOverlay();
-    deedDeck.showCard(tile);
+    this.screen.showOverlay();
+    this.deedDeck.showCard(tile);
     tile.element.classList.add("highlight");
   }
 
 
   hideDeed(tile) {
-    screen.hideOverlay();
-    deedDeck.hideCard(tile);
+    this.screen.hideOverlay();
+    this.deedDeck.hideCard(tile);
     tile.element.classList.remove("highlight");
   }
 
 
   highlightOwnedTiles() {
     this.tiles.forEach((tile) => {
-      if (tile.owner && localPlayer.name === tile.owner.name) {
+      if (tile.owner && this.match.localPlayer.name === tile.owner.name) {
         tile.element.classList.add("highlight");
 
         if (tile.mortgaged) {
@@ -268,7 +287,7 @@ class Board {
   
   unhighlightOwnedTiles() {
     this.tiles.forEach((tile) => {
-      if (tile.owner && localPlayer.name === tile.owner.name) {
+      if (tile.owner && this.match.localPlayer.name === tile.owner.name) {
         tile.element.classList.remove("highlight");
         
         const mortgageEl = tile.element.querySelector(".tile-mortgaged");
