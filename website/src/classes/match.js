@@ -42,8 +42,7 @@ class Match {
     this.setDoubles(numbers);
 
     const player = this.players[this.currentPlayerIndex];
-    // const number = this.getNumber(player, numbers);
-    const number = 1
+    const number = this.getNumber(player, numbers);
 
     // Handle movement
     this.handleJail(player);
@@ -223,5 +222,31 @@ class Match {
     actions.hideAuctionOptions();
     if (this.bidder) this.takeAction(2);
     else this.takeAction(0);
+  }
+
+
+  startMortgage() {
+    if (actions.state === "mortgage") return;
+
+    screen.showOverlay();
+    board.highlightOwnedTiles();
+    actions.createMortgageEvent();
+  }
+
+
+  endMortgage(click) {
+    screen.hideOverlay();
+    board.unhighlightOwnedTiles();
+    actions.removeMortgageEvent(click);
+  }
+
+
+  handleMortgage(tile) {
+    if (!tile || !tile.owner || localPlayer.name !== tile.owner.name) return;
+    
+    if (tile.mortgaged && tile.owner.money >= tile.unmortgageValue) {
+      tile.owner.unmortgage(tile);
+    }
+    else if (!tile.mortgaged) tile.owner.mortgage(tile);
   }
 }

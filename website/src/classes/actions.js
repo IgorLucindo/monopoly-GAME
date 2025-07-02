@@ -1,9 +1,12 @@
 class Actions {
   constructor() {
+    this.state = null;
+
     // Button click triggers turn control
     window._takeAction = (action) => match.takeAction(action);
     window._auction = () => match.startAuction();
     window._bid = () => localPlayer.takeBid();
+    window._mortgage = () => match.startMortgage();
   }
 
 
@@ -50,5 +53,32 @@ class Actions {
       <button onclick="_takeAction(1)">Buy</button>
       <button onclick="_auction()">Auction</button>
     `;
+  }
+
+
+  createMortgageEvent() {
+    this.state = "mortgage";
+    
+    // Click event
+    const click = (e) => {
+      const tileEl = e.target.closest(".tile");
+      const tile = board.getTileFromElement(tileEl);
+
+      match.handleMortgage(tile);
+      match.endMortgage(click);
+    };
+
+    // Create event
+    if (!isTouch) document.addEventListener("mousedown", click);
+    else document.addEventListener("touchstart", click);
+  }
+
+
+  removeMortgageEvent(click) {
+    this.state = null;
+
+    // Remove event
+    if (!isTouch) document.removeEventListener("mousedown", click);
+    else document.removeEventListener("touchstart", click);
   }
 }

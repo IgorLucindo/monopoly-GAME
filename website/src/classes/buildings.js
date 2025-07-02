@@ -243,6 +243,11 @@ class Buildings {
       document.removeEventListener("mousemove", mousemove);
       document.removeEventListener("mouseup", mouseup);
     }
+    else {
+      building.removeEventListener("touchstart", mousedown, { passive: true });
+      document.removeEventListener("touchmove", mousemove, { passive: true });
+      document.removeEventListener("touchend", mouseup);
+    }
 
     // Clean up the stored handlers
     delete building._sellHandlers;

@@ -37,7 +37,7 @@ class DeedDeck {
                 <p>With Hotel: <span>$${tile.rent[5]}</span></p>
                 <br>
                 <p>House Cost: <span>$${tile.buildCost} each</span></p>
-                <p>Mortgage Value: <span>$${tile.mortgageCost}</span></p>
+                <p>Mortgage Value: <span>$${tile.mortgageValue}</span></p>
                 <h6>If a player owns ALL the Lots of any Color-Group, the rent is Doubled on Unimproved Lots in that group.</h6>
               </div>
             </div>

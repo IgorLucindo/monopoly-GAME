@@ -95,21 +95,14 @@ class Player {
 
 
   mortgage(tile) {
-    if (tile.owner !== this || tile.mortgaged) return;
-
     tile.mortgaged = true;
-    this.money += value = Math.floor(tile.price / 2);
+    this.money += tile.mortgageValue;
   }
 
 
   unmortgage(tile) {
-    if (tile.owner !== this || !tile.mortgaged) return;
-
-    const cost = Math.floor(tile.price / 2 * 1.1);
-    if (this.money < cost) return;
-
     tile.mortgaged = false;
-    this.money -= cost;
+    this.money -= tile.unmortgageValue;
   }
 
 

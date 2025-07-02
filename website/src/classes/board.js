@@ -57,7 +57,8 @@ class Board {
         houses: 0,
         buildings: [],
         mortgaged: false,
-        mortgageCost: Math.floor(tileInfo.price / 2)
+        mortgageValue: Math.floor(tileInfo.price / 2),
+        unmortgageValue: Math.floor(tileInfo.price / 2 * 1.1),
       };
 
       // Register property tiles into their color group
@@ -95,6 +96,10 @@ class Board {
           <div class="tile-price" style="margin-top: auto;">$${tileInfo.price}</div>
           <div class="tile-players"></div>
           <div class="tile-timer"></div>
+          <div class="tile-mortgaged">
+            <h4>Mortgaged</h4>
+            <h5>Pay $${Math.floor(tileInfo.price / 2 * 1.1)} to unmortgage.</h5>
+          </div>
         </div>
       `;
     }
@@ -106,6 +111,10 @@ class Board {
           <div class="tile-price">$${tileInfo.price}</div>
           <div class="tile-players"></div>
           <div class="tile-timer"></div>
+          <div class="tile-mortgaged">
+            <h4>Mortgaged</h4>
+            <h5>Pay $${Math.floor(tileInfo.price / 2 * 1.1)} to unmortgage.</h5>
+          </div>
         </div>
       `;
     }
@@ -117,6 +126,10 @@ class Board {
           <div class="tile-price">$${tileInfo.price}</div>
           <div class="tile-players"></div>
           <div class="tile-timer"></div>
+          <div class="tile-mortgaged">
+            <h4>Mortgaged</h4>
+            <h5>Pay $${Math.floor(tileInfo.price / 2 * 1.1)} to unmortgage.</h5>
+          </div>
         </div>
       `;
     }
@@ -171,7 +184,7 @@ class Board {
 
     // Mouse over event
     const mouseover = (e) => {
-      if (match.state === "action" || dices.draggingCount > 0) return;
+      if (match.state === "action" || dices.draggingCount > 0 || actions.state === "mortgage") return;
 
       const tileEl = e.target.closest(".tile");
       const tile = this.getTileFromElement(tileEl);
@@ -183,7 +196,7 @@ class Board {
 
     // Touch start event
     const touchstart = (e) => {
-      if (match.state === "action" || dices.draggingCount > 0) return;
+      if (match.state === "action" || dices.draggingCount > 0 || actions.state === "mortgage") return;
 
       const tileEl = e.target.closest(".tile");
       const tile = this.getTileFromElement(tileEl);
@@ -236,5 +249,33 @@ class Board {
     screen.hideOverlay();
     deedDeck.hideCard(tile);
     tile.element.classList.remove("highlight");
+  }
+
+
+  highlightOwnedTiles() {
+    this.tiles.forEach((tile) => {
+      if (tile.owner && localPlayer.name === tile.owner.name) {
+        tile.element.classList.add("highlight");
+
+        if (tile.mortgaged) {
+          const mortgageEl = tile.element.querySelector(".tile-mortgaged");
+          mortgageEl.classList.add("visible");
+        }
+      }
+    });
+  }
+
+  
+  unhighlightOwnedTiles() {
+    this.tiles.forEach((tile) => {
+      if (tile.owner && localPlayer.name === tile.owner.name) {
+        tile.element.classList.remove("highlight");
+        
+        const mortgageEl = tile.element.querySelector(".tile-mortgaged");
+        if (mortgageEl.classList.contains("visible")) {
+          mortgageEl.classList.remove("visible");
+        }
+      }
+    });
   }
 }
