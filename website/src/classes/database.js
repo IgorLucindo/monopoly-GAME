@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { getFirestore, doc, collection, getDocs, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 
 export class Database {
@@ -23,23 +23,37 @@ export class Database {
   }
 
 
-  getDocument(collectionName, documentId) {
+  async getDocument(collectionName, documentId) {
     if (!this.db) {
       console.error("Firestore not initialized.");
       return null;
     }
     
     const docRef = doc(this.db, collectionName, documentId);
-    getDoc(docRef).then((docSnap) => {
-      if (docSnap.exists()) return docSnap.data();
-      else {
-        console.log(`No such document: ${documentId} in ${collectionName}`);
-        return null;
-      }
-    }).catch((error) => {
-      console.error(`Error getting document ${documentId} in ${collectionName}:`, error);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      return docSnap.data();
+    }
+    else {
+      console.log(`No such document: ${documentId} in ${collectionName}`);
       return null;
-    });
+    }
+  }
+
+
+  async getAllDocument(collectionName) {
+    if (!this.db) {
+      console.error("Firestore not initialized.");
+      return null;
+    }
+
+    const colRef = collection(this.db, collectionName);
+    const querySnapshot = await getDocs(colRef);
+
+    const docDatas = {};
+    querySnapshot.forEach((document) => {docDatas[document.id] = document.data();});
+    return docDatas;
   }
 
 

@@ -10,28 +10,26 @@
 </head>
 
 <body>
-  <div class="container">
-    <div class="tab-buttons">
-      <button class="tab-button active" onclick="showTab('host')">Host Room</button>
-      <button class="tab-button" onclick="showTab('join')">Join Room</button>
-    </div>
+  <div class="lobby-container">
+    <!-- Header of lobby container -->
+    <div class="header-container">
+      <input type="text" placeholder="Name" id="playerName"/>
 
-    <div id="host" class="tab-content active">
-      <h2>Host a Room</h2>
-      <input type="text" placeholder="Enter your name" id="hostName" />
-      <button onclick="hostRoom()">Create Room</button>
-    </div>
-
-    <div id="join" class="tab-content">
-      <h2>Join Available Room</h2>
-      <input type="text" placeholder="Enter your name" id="joinName" />
-      <div id="roomList">
-        <!-- Room list will be populated here -->
-        <p>No rooms available yet.</p>
+      <div class="create-room-wrapper">
+        <div class="create-room">
+          <button id="show-tab-btn" class="visible">Create Room</button>
+          <input type="text" placeholder="Room Name" id="roomName"/>
+          <input type="text" placeholder="Password" id="password"/>
+          <button onclick="_createRoom()">Create Room</button>
+        </div>
       </div>
     </div>
+
+    <!-- Rooms -->
+    <div class="rooms"></div>
   </div>
 
-  <script src="website/src/utils/lobbyUtils.js"></script>
+  <!-- Script -->
+  <script type="module" src="website/src/index.js"></script>
 </body>
 </html>

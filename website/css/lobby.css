@@ -1,62 +1,107 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f0f2f5;
   margin: 0;
   padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f0f2f5;
 }
 
-.container {
-  max-width: 600px;
-  margin: 50px auto;
-  background: #fff;
-  padding: 20px;
+.lobby-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  margin: 40px 10%;
+  background-color: white;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0,0,0,0.1);
 }
 
-.tab-buttons {
+.header-container, .rooms {
+  width: 88%;
+  padding: 2%;
+  border-radius: 6px;
+  background-color: #f0f2f5;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
+
+.header-container {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
+  align-items: center;
+  padding: 10px 2%;
+  margin-top: 20px;
 }
 
-.tab-button {
-  padding: 10px 20px;
-  cursor: pointer;
-  border: none;
-  background: #ddd;
-  border-radius: 6px;
-  transition: background 0.3s;
+.header-container > input {
+  width: 15%;
+  height: 2vh;
+  border-radius: 4px;
 }
 
-.tab-button.active {
-  background: #4285f4;
-  color: white;
+.create-room-wrapper {
+  position: relative;
+  width: 20%;
 }
 
-.tab-content {
+.create-room {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 100%;
+  padding: 0;
+  gap: 0;
+  border-radius: 5px;
+  background-color: #f0f2f5;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+  transform: translate(-50%, -50%);
+  transition: padding 0.6s ease, gap 0.6s ease;
+}
+
+.create-room.visible {
+  gap: 20px;
+  padding: 4%;
+  transform: translate(-50%, 0);
+}
+
+.create-room > button {
   display: none;
+  height: 3vh;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  color: white;
+  background-color: #28a745;
 }
 
-.tab-content.active {
+.create-room > button.visible {
   display: block;
 }
 
-input, button {
-  padding: 10px;
-  margin: 10px 0;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-button {
-  background-color: #28a745;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-button:hover {
+.create-room > button:hover {
   background-color: #218838;
+}
+
+.create-room > input {
+  display: none;
+  height: 2vh;
+  border-radius: 4px;
+}
+
+.create-room > input.visible {
+  display: block;
+}
+
+.rooms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2vw;
+  min-height: 50vh;
+  margin: 150px 0 20px 0;
+}
+
+
+.room {
+  height: 25vh;
+  background-color: white;
 }
