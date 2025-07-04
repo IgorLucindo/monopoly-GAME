@@ -1,9 +1,10 @@
-import { Player } from "./player.js";
+import { Player } from "../player.js";
 
 
 export class Match {
   constructor() {
     this.players = [];
+    this.gameData = {};
     this.localPlayer = null;
     this._currentPlayerIndex = 0;
     this.state = "dice";
@@ -28,10 +29,11 @@ export class Match {
   }
 
 
-  init(variables, names) {
+  init(variables) {
     this.getVariables(variables);
+    this.getGameData();
     this.showCardTime = this.dices.list[0].spinTime + 0.3;
-    this.addPlayers(variables, names);
+    this.addPlayers(variables);
   }
 
 
@@ -48,13 +50,22 @@ export class Match {
   }
 
 
-  addPlayers(variables, names) {
-    names.forEach((name) => {
+  getGameData() {
+    this.gameData = JSON.parse(localStorage.getItem('gameData'));
+  }
+
+
+  addPlayers(variables) {
+    const playerNames = this.gameData.roomData.players;
+
+    playerNames.forEach((name) => {
       const player = new Player(name);
+
       player.init(variables)
       this.players.push(player);
+
+      if (name === this.gameData.playerName) this.localPlayer = player;
     });
-    this.localPlayer = this.players[0];
   }
 
 

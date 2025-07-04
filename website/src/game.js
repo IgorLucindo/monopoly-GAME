@@ -8,7 +8,8 @@ import { Buildings } from "./classes/buildings.js";
 import { Actions } from "./classes/actions.js";
 import { Sidebar } from "./classes/sidebar.js";
 import { Timer } from "./classes/timer/timer.js";
-import { Match } from "./classes/match.js";
+import { Match } from "./classes/match/match.js";
+import { MatchServer } from "./classes/match/matchServer.js";
 import { Screen } from "./classes/screen.js";
 
 import { tileData } from "../data/tiles.js";
@@ -33,19 +34,20 @@ const houses = new Buildings(housesData);
 const hotels = new Buildings(hotelsData);
 const actions = new Actions();
 const match = new Match();
+const matchsv = new MatchServer();
 const sidebar = new Sidebar();
 const auctionTimer = new Timer(() => {match.endAuction();}, 30000);
 const screen = new Screen();
 
 
 const variables = {
-  cfg, debug, database, board, chanceDeck, communityDeck, dices,
-  deedDeck, houses, hotels, actions, match, sidebar, auctionTimer, screen
+  cfg, debug, database, board, chanceDeck, communityDeck, dices, deedDeck,
+  houses, hotels, actions, match, matchsv, sidebar, auctionTimer, screen
 }
-const playerNames = ["Alice", "Bob"];
 
 
 debug.init(variables);
+database.init();
 board.init(variables, tileData);
 chanceDeck.init(variables);
 communityDeck.init(variables);
@@ -54,7 +56,8 @@ deedDeck.init(variables);
 houses.init(variables);
 hotels.init(variables);
 actions.init(variables);
-match.init(variables, playerNames);
+match.init(variables);
+matchsv.init(variables);
 sidebar.init(variables);
 auctionTimer.init(variables);
 screen.init(variables);

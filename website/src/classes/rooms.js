@@ -1,4 +1,4 @@
-import { getCompleteDate } from "../utils/calculationUtils.js";
+import { getDate, getDayOfMonth } from "../utils/calculationUtils.js";
 
 
 export class Rooms {
@@ -29,12 +29,13 @@ export class Rooms {
 
   async keepUpdating() {
     await this.load();
+    this.deleteOldRooms();
     this.createEls();
     
     setInterval(async () => {
       await this.load();
       this.lobby.tryJoinGame();
-      this.updateduration();
+      this.updateDuration();
       this.createEls();
     }, this.loadTime * 1000);
   }
@@ -50,7 +51,16 @@ export class Rooms {
   }
 
 
-  updateduration() {
+  deleteOldRooms() {
+    const day = getDayOfMonth();
+
+    for (const roomName of Object.keys(this.roomMap)) {
+      if (day - this.roomMap[roomName].day > 1) this.delete(roomName);
+    }
+  }
+
+
+  updateDuration() {
     if (!this.isOwner) return;
 
     const roomName = this.joined;
@@ -66,6 +76,8 @@ export class Rooms {
     this.roomsEl.innerHTML = "";
     for (const roomName of Object.keys(this.roomMap)) {
       if (this.lobby.searchRoomName && !roomName.includes(this.lobby.searchRoomName)) continue;
+      else if (this.roomMap[roomName].startedGame) continue;
+      
       this.createEl(roomName, this.roomMap[roomName]);
     }
   }
@@ -117,7 +129,8 @@ export class Rooms {
 
 
   async create() {
-    const date = getCompleteDate();
+    const date = getDate();
+    const day = getDayOfMonth();
 
     let roomName = document.getElementById("roomName").value.trim();
     if (!roomName) roomName = `Room ${date}`;
@@ -133,6 +146,7 @@ export class Rooms {
       players: [this.lobby.playerName],
       password: password,
       duration: 0,
+      day: day,
       startedGame: false
     }
 

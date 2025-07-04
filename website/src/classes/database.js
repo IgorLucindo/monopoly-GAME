@@ -4,7 +4,12 @@ import { getFirestore, doc, collection, getDocs, getDoc, setDoc, updateDoc, dele
 
 export class Database {
   constructor() {
-    this.db = this.create();
+    this.db = null;
+  }
+
+  
+  init() {
+    this.create();
   }
   
 
@@ -19,7 +24,7 @@ export class Database {
       measurementId: "G-4C59ZGJ8RW"
     };
     const app = initializeApp(firebaseConfig);
-    return getFirestore(app);
+    this.db = getFirestore(app);
   }
 
 
@@ -62,6 +67,7 @@ export class Database {
       console.error("Firestore not initialized.");
       return;
     }
+
     const docRef = doc(this.db, collectionName, documentId);
     setDoc(docRef, data);
   }
@@ -72,6 +78,7 @@ export class Database {
       console.error("Firestore not initialized.");
       return;
     }
+
     const docRef = doc(this.db, collectionName, documentId);
     updateDoc(docRef, data);
   }
@@ -82,9 +89,8 @@ export class Database {
       console.error("Firestore not initialized.");
       return;
     }
+
     const docRef = doc(this.db, collectionName, documentId);
     deleteDoc(docRef);
   }
 }
-
-window.MyGlobalDatabaseClass = Database;

@@ -14,6 +14,6 @@ const rooms = new Rooms();
 
 const variables = { cfg, database, lobby, rooms }
 
-
+database.init();
 lobby.init(variables);
 rooms.init(variables);

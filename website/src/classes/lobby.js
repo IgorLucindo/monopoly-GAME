@@ -1,9 +1,9 @@
-import { getCompleteDate } from "../utils/calculationUtils.js";
+import { getDate } from "../utils/calculationUtils.js";
 
 
 export class Lobby {
   constructor() {
-    const date = getCompleteDate();
+    const date = getDate();
 
     this.createEl = document.querySelector(".create-wrapper");
     this.playerNameEl = document.getElementById("playerName");
@@ -50,7 +50,8 @@ export class Lobby {
 
     // Unload page event
     const unload = () => {
-      this.rooms.exit();
+      const roomData = this.rooms.roomMap[this.rooms.joined];
+      if (!roomData.startedGame) this.rooms.exit();
     };
     
     // Create events
@@ -91,14 +92,18 @@ export class Lobby {
     if (this.rooms.isOwner || !this.rooms.joined) return;
 
     const roomData = this.rooms.roomMap[this.rooms.joined];
-
-    if (!roomData.startedGame) return;
-
-    this.startGame();
+    if (roomData.startedGame) this.startGame();
   }
 
   
   startGame(){
+    const gameData = {
+      playerName: this.playerName,
+      roomName: this.rooms.joined,
+      roomData: this.rooms.roomMap[this.rooms.joined]
+    }
+
+    localStorage.setItem('gameData', JSON.stringify(gameData));
     window.location.href = "website/pages/game.html";
   }
 }
