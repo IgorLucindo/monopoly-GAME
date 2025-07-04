@@ -24,8 +24,11 @@ export class MatchServer {
   }
 
 
-  playDiceTurn(dicesData) {
-    if (!dicesData.length || this.match.myTurn) return;
+  playDiceTurn(data) {
+    const dicesData = data.dices;
+    const turnIndex = data.turnIndex;
+
+    if (!dicesData.length || turnIndex === this.match.currentPlayerIndex) return;
 
     const numbers = [];
 

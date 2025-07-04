@@ -112,7 +112,7 @@ export class Database {
         if (prevFieldData === data[fieldId]) return;
         prevFieldData = data[fieldId];
 
-        effect(data[fieldId]);
+        effect(data);
       }
     });
   }

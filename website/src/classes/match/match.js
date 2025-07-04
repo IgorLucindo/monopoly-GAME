@@ -88,7 +88,7 @@ export class Match {
     const tile = this.board.tiles[player.position];
 
     // Show action options
-    if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
+    if (this.myTurn && !tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
       setTimeout(() => {
         this.showingCard = true;
         this.screen.showOverlay();

@@ -9,7 +9,7 @@ export class Rooms {
     this.joined = null;
     this.isOwner = false;
 
-    this.minPlayers = 1;
+    this.minPlayers = 2;
     this.maxPlayers = 6;
     this.loadTime = 5;
     this.deleteTime = 300;
@@ -149,7 +149,8 @@ export class Rooms {
       duration: 0,
       day: day,
       startedGame: false,
-      dices: []
+      dices: [],
+      turnIndex: 0
     }
 
     // Exit previous room

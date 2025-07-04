@@ -95,7 +95,8 @@ export class Dices {
       // If is dragging all dices, play
       if (this.draggingCount === this.list.length) {
         this.match.playDiceTurn(numbers);
-        this.database.setField("rooms", this.match.gameData.roomName, {dices: dicesServer});
+        const serverData = { dices: dicesServer, turnIndex: this.match.currentPlayerIndex };
+        this.database.setField("rooms", this.match.gameData.roomName, serverData);
       }
 
       this.draggingCount = 0;
