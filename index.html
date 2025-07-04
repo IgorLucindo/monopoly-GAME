@@ -7,6 +7,7 @@
   <link rel="icon" href="website/assets/images/icons/logo.png" type="image/png">
   <title>Monopoly Game</title>
   <link rel="stylesheet" href="website/css/lobby.css"/>
+  <link rel="stylesheet" href="website/css/rooms.css"/>
 </head>
 
 <body>
@@ -15,14 +16,20 @@
     <div class="header-container">
       <input type="text" placeholder="Name" id="playerName"/>
 
-      <div class="create-room-wrapper">
-        <div class="create-room">
-          <button id="show-tab-btn" class="visible">Create Room</button>
-          <input type="text" placeholder="Room Name" id="roomName"/>
-          <input type="text" placeholder="Password" id="password"/>
-          <button onclick="_createRoom()">Create Room</button>
+      <input type="text" placeholder="Search Room" id="searchRoom"/>
+
+      <div class="create-container">
+        <button class="create-btn">Create Room</button>
+        <div class="create-wrapper"">
+          <div class="create">
+            <input type="text" placeholder="Room Name" id="roomName"/>
+            <input type="text" placeholder="Password" id="password"/>
+            <button class="create-btn" onclick="_createRoom()">Create Room</button>
+          </div>
         </div>
       </div>
+
+      <button class="create-btn" id="startGame" onclick="_createGame()">Start Game</button>
     </div>
 
     <!-- Rooms -->

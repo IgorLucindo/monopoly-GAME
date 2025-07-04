@@ -3,90 +3,102 @@ import { getCompleteDate } from "../utils/calculationUtils.js";
 
 export class Lobby {
   constructor() {
-    this.createRoomEl = document.querySelector(".create-room");
-    this.showTabBtn = document.getElementById("show-tab-btn");
-    this.roomsEl = document.querySelector(".rooms");
+    const date = getCompleteDate();
+
+    this.createEl = document.querySelector(".create-wrapper");
+    this.playerNameEl = document.getElementById("playerName");
+    this.searchEl = document.getElementById("searchRoom");
+
+    this.playerName = `Player ${date}`;
+    this.searchRoomName = null;
   }
 
 
   init(variables) {
     this.getVariables(variables);
-    this.createTabEvents();
-    this.loadRooms();
-    window._createRoom = () => this.createRoom();
+    this.createEvents();
+    window._createRoom = () => this.rooms.create();
+    window._joinRoom = (roomName) => this.rooms.join(roomName);
+    window._createGame = () => this.createGame();
   }
 
 
   getVariables(variables) {
     this.cfg = variables.cfg;
-    this.database = variables.database;
+    this.rooms = variables.rooms;
   }
 
 
-  createTabEvents() {
-    // Mouse down event
-    const mousedown = (e) => {
-      const el = e.target.closest(".create-room");
-      if (el !== this.createRoomEl) {
-        this.hideTab();
-        return;
-      }
-      this.showTab();
+  createEvents() {
+    // Show createEl event
+    const openCreateEl = (e) => {
+      const el = e.target.closest(".create-container");
+      if (el) this.showCreateEl();
+      else this.hideCreateEl();
+    };
+
+    // Get player name event
+    const getPlayerName = (e) => {
+      this.playerName = e.target.value.trim();
+    };
+
+    // Search room event
+    const searchRoom = (e) => {
+      this.searchRoomName = e.target.value.trim();
+      this.rooms.createEls();
+    };
+
+    // Unload page event
+    const unload = () => {
+      this.rooms.exit();
     };
     
     // Create events
-    if (!this.cfg.touch) document.addEventListener("mousedown", mousedown);
-    else document.addEventListener("touchstart", mousedown, { passive: true });
-  }
-
-
-  async loadRooms() {
-    const rooms = await this.database.getAllDocument("rooms");
-
-    for (const roomName of Object.keys(rooms)) {
-      this.createRoomTab(roomName, rooms[roomName]);
-    }
-  }
-
-
-  createRoomTab(roomName, roomData) {
-    const roomEl = document.createElement("div");
-    roomEl.classList.add("room");
-    roomEl.innerHTML = `
-      <div class="room-name">${roomName}</div>
-      <div class="room-players"></div>
-    `;
-    this.roomsEl.appendChild(roomEl);
+    this.playerNameEl.addEventListener("input", getPlayerName);
+    this.searchEl.addEventListener("input", searchRoom);
+    window.addEventListener("beforeunload", unload);
+    if (!this.cfg.touch) document.addEventListener("mousedown", openCreateEl);
+    else document.addEventListener("touchstart", openCreateEl, { passive: true });
   }
 
   
-  showTab() {
-    [...this.createRoomEl.children].forEach((el) => {el.classList.add("visible");});
-    this.createRoomEl.classList.add("visible");
-    this.showTabBtn.classList.remove("visible");
+  showCreateEl() {
+    this.createEl.classList.add("visible");
   }
 
 
-  hideTab() {
-    [...this.createRoomEl.children].forEach((el) => {el.classList.remove("visible");});
-    this.createRoomEl.classList.remove("visible");
-    this.showTabBtn.classList.add("visible");
+  hideCreateEl() {
+    this.createEl.classList.remove("visible");
   }
 
 
-  async createRoom() {
-    const date = getCompleteDate();
+  createGame() {
+    const roomData = this.rooms.roomMap[this.rooms.joined];
 
-    let roomName = document.getElementById("roomName").value.trim();
-    if (!roomName) roomName = `Room (${date})`;
-    const password = document.getElementById("password").value.trim();
-
-    const existingRoom = await this.database.getDocument("rooms", roomName);
-    if (existingRoom) {
-      alert("Room already exists");
+    if (!this.rooms.isOwner) {
+      alert("Need to be the creator of a room.");
       return;
     }
 
-    this.database.setDocument("rooms", roomName, {players: ["igor", "lucindo"], password: password});
-  };
+    roomData.startedGame = true;
+    this.rooms.database.setField("rooms", this.rooms.joined, { startedGame: true });
+
+    this.startGame();
+  }
+
+
+  tryJoinGame() {
+    if (this.rooms.isOwner || !this.rooms.joined) return;
+
+    const roomData = this.rooms.roomMap[this.rooms.joined];
+
+    if (!roomData.startedGame) return;
+
+    this.startGame();
+  }
+
+  
+  startGame(){
+    window.location.href = "website/pages/game.html";
+  }
 }

@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getFirestore, doc, collection, getDocs, getDoc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { getFirestore, doc, collection, getDocs, getDoc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 
 export class Database {
@@ -23,6 +23,21 @@ export class Database {
   }
 
 
+  async getCollection(collectionName) {
+    if (!this.db) {
+      console.error("Firestore not initialized.");
+      return null;
+    }
+
+    const colRef = collection(this.db, collectionName);
+    const querySnapshot = await getDocs(colRef);
+
+    const docDatas = {};
+    querySnapshot.forEach((document) => {docDatas[document.id] = document.data();});
+    return docDatas;
+  }
+
+
   async getDocument(collectionName, documentId) {
     if (!this.db) {
       console.error("Firestore not initialized.");
@@ -42,21 +57,6 @@ export class Database {
   }
 
 
-  async getAllDocument(collectionName) {
-    if (!this.db) {
-      console.error("Firestore not initialized.");
-      return null;
-    }
-
-    const colRef = collection(this.db, collectionName);
-    const querySnapshot = await getDocs(colRef);
-
-    const docDatas = {};
-    querySnapshot.forEach((document) => {docDatas[document.id] = document.data();});
-    return docDatas;
-  }
-
-
   setDocument(collectionName, documentId, data) {
     if (!this.db) {
       console.error("Firestore not initialized.");
@@ -64,6 +64,16 @@ export class Database {
     }
     const docRef = doc(this.db, collectionName, documentId);
     setDoc(docRef, data);
+  }
+
+
+  setField(collectionName, documentId, data) {
+    if (!this.db) {
+      console.error("Firestore not initialized.");
+      return;
+    }
+    const docRef = doc(this.db, collectionName, documentId);
+    updateDoc(docRef, data);
   }
 
 

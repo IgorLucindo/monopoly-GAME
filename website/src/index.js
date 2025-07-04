@@ -1,5 +1,6 @@
-import { Lobby } from "./classes/lobby.js";
 import { Database } from "./classes/database.js";
+import { Lobby } from "./classes/lobby.js";
+import { Rooms } from "./classes/rooms.js";
 
 
 const cfg = {
@@ -8,9 +9,11 @@ const cfg = {
 }
 const database = new Database();
 const lobby = new Lobby();
+const rooms = new Rooms();
 
 
-const variables = { cfg, database }
+const variables = { cfg, database, lobby, rooms }
 
 
 lobby.init(variables);
+rooms.init(variables);

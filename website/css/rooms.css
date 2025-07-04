@@ -1,0 +1,98 @@
+.rooms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2vw;
+  width: 90%;
+  min-height: 60vh;
+  margin: 6vh 0;
+}
+
+.room {
+  display: flex;
+  flex-direction: column;
+  height: 25vh;
+  border-radius: 2vh;
+  border: 0.35vh solid #333;
+  font-size: 1.3vh;
+  font-weight: bold;
+  letter-spacing: 0.2px;
+  background-color: #e9e9eb;
+  box-shadow: 0 0 6px rgba(0,0,0,0.15);
+}
+
+.room.joined {
+  background-color: #d4d4ea;
+}
+
+.room-name {
+  width: 50%;
+  padding: 2% 4%;
+  border-radius: 1vh 0;
+  font-size: 1.7vh;
+  color: white;
+  background-color: #444;
+}
+
+.room-players {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 3vh;
+  padding: 2.5vh 3vh;
+}
+
+.room-player {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 7vh;
+  border-radius: 1vh;
+  background-color: #f9f9fb;
+}
+
+.room-player > img {
+  width: 3.5vh;
+  transform: translateY(-20%);
+}
+
+.room-player > p {
+  position: absolute;
+  z-index: 1;
+  bottom: 8%;
+  margin: 0;
+  color: #444;
+}
+
+#join {
+  cursor: pointer;
+  color: white;
+  background-color: #28a745;
+}
+
+#join:hover {
+  background-color: #218838;
+}
+
+#join.disable {
+  display: none;
+}
+
+#join > img {
+  width: 45%;
+  transform: translateY(0);
+}
+
+/* in mobile */
+@media screen and (max-width: 768px) {
+  .rooms {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+  }
+
+  #join > img {
+    width: 65%;
+  }
+}
