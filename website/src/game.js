@@ -49,8 +49,6 @@ const variables = {
 debug.init(variables);
 database.init();
 board.init(variables, tileData);
-chanceDeck.init(variables);
-communityDeck.init(variables);
 dices.init(variables, 2);
 deedDeck.init(variables);
 houses.init(variables);
@@ -58,6 +56,8 @@ hotels.init(variables);
 actions.init(variables);
 match.init(variables);
 matchsv.init(variables);
+chanceDeck.init(variables);
+communityDeck.init(variables);
 sidebar.init(variables);
 auctionTimer.init(variables);
 screen.init(variables);

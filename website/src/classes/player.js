@@ -9,6 +9,7 @@ export class Player {
     this.exitJailCard = false;
     this.properties = [];
     this.token = null;
+    this.isCreator = false;
   }
 
 
@@ -30,10 +31,11 @@ export class Player {
   }
 
 
-  init(variables) {
+  init(variables, index) {
     this.getVariables(variables);
     this.createToken();
     this.renderPosition();
+    if (index === 0) this.isCreator = true;
   }
 
 

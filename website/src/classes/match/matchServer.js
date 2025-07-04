@@ -52,4 +52,12 @@ export class MatchServer {
     // Play
     this.match.playDiceTurn(numbers);
   }
+
+
+  sendAction(action) {
+    if (!this.match.myTurn) return;
+
+    const roomName = this.match.gameData.roomName;
+    this.database.setField("rooms", roomName, { action });
+  }
 }

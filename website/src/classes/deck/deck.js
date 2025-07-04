@@ -1,10 +1,10 @@
 export class Deck {
   constructor(deckData) {
-    this.original = deckData.cards;
+    this.type = deckData.type;
     this.cards = [...deckData.cards];
-    this.imgSrc = `../assets/images/icons/${deckData.type}.svg`;
     this.color = deckData.color;
     this.pos = deckData.pos;
+    this.imgSrc = `../assets/images/icons/${this.type}.svg`;
 
     this.index = 0;
     this.showCardDuration = 3;
@@ -19,7 +19,7 @@ export class Deck {
     this.pileEl = this.createPileElement();
     this.cardEl = this.createCardElement();
     
-    this.shuffle();
+    this.handleShuffle();
 
     this.debug.showCardOnClick(this);
   }
@@ -27,6 +27,7 @@ export class Deck {
 
   getVariables(variables) {
     this.cfg = variables.cfg;
+    this.database = variables.database;
     this.debug = variables.debug;
     this.board = variables.board;
     this.match = variables.match;
@@ -75,11 +76,37 @@ export class Deck {
   }
 
 
-  shuffle() {
-    for (let i = this.cards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+  handleShuffle() {
+    const roomName = this.match.gameData.roomName;
+    let cardsIdxs = [];
+
+    // If creator, set shuffle
+    if (this.match.localPlayer.isCreator) {
+      cardsIdxs = Array.from({ length: this.cards.length }, (_, i) => i);
+
+      for (let i = cardsIdxs.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i+1));
+        [cardsIdxs[i], cardsIdxs[j]] = [cardsIdxs[j], cardsIdxs[i]];
+      };
+      
+      this.database.setField("rooms", roomName, {[this.type]: cardsIdxs});
+      this.shuffle(cardsIdxs);
     }
+    // If not creator, get shuffle
+    else {
+      this.database.createFieldListener("rooms", roomName, this.type, (data) => {
+        this.shuffle(data[this.type]);
+      });
+    }
+  }
+
+
+  shuffle(cardsIdxs) {
+    let shuffledCards = [];
+    cardsIdxs.forEach((i) => {
+      shuffledCards.push(this.cards[i]);
+    });
+    this.cards = shuffledCards;
   }
 
   
@@ -92,13 +119,6 @@ export class Deck {
     setTimeout(() => {
       this.showCard(card);
     }, this.match.showCardDelay * 1000);
-  }
-
-
-  reset() {
-    this.cards = [...this.original];
-    this.index = 0;
-    this.shuffle();
   }
 
 

@@ -150,7 +150,10 @@ export class Rooms {
       day: day,
       startedGame: false,
       dices: [],
-      turnIndex: 0
+      turnIndex: 0,
+      chance: [],
+      community: [],
+      action: 0
     }
 
     // Exit previous room

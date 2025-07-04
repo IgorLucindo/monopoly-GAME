@@ -49,6 +49,7 @@ export class Match {
     this.sidebar = variables.sidebar;
     this.screen = variables.screen;
     this.auctionTimer = variables.auctionTimer;
+    this.matchsv = variables.matchsv;
   }
 
 
@@ -60,10 +61,10 @@ export class Match {
   addPlayers(variables) {
     const playerNames = this.gameData.roomData.players;
 
-    playerNames.forEach((name) => {
+    playerNames.forEach((name, index) => {
       const player = new Player(name);
 
-      player.init(variables)
+      player.init(variables, index);
       this.players.push(player);
 
       if (name === this.gameData.playerName) this.localPlayer = player;
@@ -124,6 +125,9 @@ export class Match {
 
     // End turn
     this.endTurn(player);
+
+    // Send action to 
+    this.matchsv.sendAction(action);
   }
 
 
