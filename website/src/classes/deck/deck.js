@@ -26,6 +26,7 @@ export class Deck {
 
 
   getVariables(variables) {
+    this.cfg = variables.cfg;
     this.debug = variables.debug;
     this.board = variables.board;
     this.match = variables.match;
@@ -111,8 +112,8 @@ export class Deck {
     void this.cardEl.offsetWidth;
 
     // Animate over center and flip
-    this.cardEl.style.left = isMobile ? "50%" : `${this.board.left + this.board.width/2}px`;
-    this.cardEl.style.top = isMobile ? "50%" : `${this.board.top + this.board.height/2}px`;
+    this.cardEl.style.left = this.cfg.mobile ? "50%" : `${this.board.left + this.board.width/2}px`;
+    this.cardEl.style.top = this.cfg.mobile ? "50%" : `${this.board.top + this.board.height/2}px`;
     this.cardEl.classList.add("visible");
 
     // Hide after delay

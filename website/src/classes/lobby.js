@@ -80,6 +80,10 @@ export class Lobby {
       alert("Need to be the creator of a room.");
       return;
     }
+    else if (roomData.players.length < this.rooms.minPlayers) {
+      alert("Need at least 2 players.");
+      return;
+    }
 
     roomData.startedGame = true;
     this.rooms.database.setField("rooms", this.rooms.joined, { startedGame: true });

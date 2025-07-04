@@ -52,7 +52,7 @@ export class Dice {
   createEvents() {
     // Mouse down event
     const mousedown = (e) => {
-      if (this.match.state !== "dice") return;
+      if (this.match.state !== "dice" || !this.match.myTurn) return;
 
       this.isDragging = true;
       this.dices.draggingCount += 1;
@@ -119,11 +119,6 @@ export class Dice {
   }
 
 
-  roll() {
-    this.number = Math.floor(Math.random() * 6) + 1;
-  }
-
-
   lift() {
     this.wrapper.classList.add("lift");
   }
@@ -154,6 +149,19 @@ export class Dice {
     // Untilt with transition
     this.el.style.transition = "transform 0.2s ease";
     this.el.style.transform = `rotateX(${rx}deg) rotateY(${ry}deg)`;
+  }
+
+
+  setRamdomNumber() {
+    this.number = Math.floor(Math.random() * 6) + 1;
+  }
+  
+
+  roll(index) {
+    this.rollToFace();
+    this.bounce();
+    this.twistVel(index);
+    this.startMotion();
   }
 
 

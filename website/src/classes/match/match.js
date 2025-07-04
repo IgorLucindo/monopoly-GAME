@@ -6,6 +6,7 @@ export class Match {
     this.players = [];
     this.gameData = {};
     this.localPlayer = null;
+    this.myTurn = false;
     this._currentPlayerIndex = 0;
     this.state = "dice";
     this.doubles = false;
@@ -32,8 +33,9 @@ export class Match {
   init(variables) {
     this.getVariables(variables);
     this.getGameData();
-    this.showCardTime = this.dices.list[0].spinTime + 0.3;
     this.addPlayers(variables);
+    this.showCardTime = this.dices.list[0].spinTime + 0.3;
+    this.myTurn = this.localPlayer.name === this.players[this.currentPlayerIndex].name;
   }
 
 
@@ -229,12 +231,11 @@ export class Match {
     if (this.extraTurn > 0) return;
 
     // Proceed to next player
-    if (player.money < 0) {
-      this.currentPlayerIndex %= this.players.length;
-    }
-    else {
-      this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
-    }
+    if (player.money < 0) this.currentPlayerIndex %= this.players.length;
+    else this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+
+    // Check if is turn of local player
+    this.myTurn = this.localPlayer.name === this.players[this.currentPlayerIndex].name;
   }
 
 

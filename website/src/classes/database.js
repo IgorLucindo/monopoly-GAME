@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-import { getFirestore, doc, collection, getDocs, getDoc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+import { getFirestore, onSnapshot, doc, collection, getDocs, getDoc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 
 export class Database {
@@ -92,5 +92,28 @@ export class Database {
 
     const docRef = doc(this.db, collectionName, documentId);
     deleteDoc(docRef);
+  }
+
+
+  createFieldListener(collectionName, documentId, fieldId, effect) {
+    if (!this.db) {
+      console.error("Firestore not initialized.");
+      return;
+    }
+
+    let prevFieldData = null;
+
+    const docRef = doc(this.db, collectionName, documentId);
+
+    onSnapshot(docRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data();
+        
+        if (prevFieldData === data[fieldId]) return;
+        prevFieldData = data[fieldId];
+
+        effect(data[fieldId]);
+      }
+    });
   }
 }

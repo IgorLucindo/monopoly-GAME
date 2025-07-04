@@ -22,8 +22,10 @@ export class Dices {
 
   getVariables(variables) {
     this.cfg = variables.cfg;
+    this.database = variables.database;
     this.board = variables.board;
     this.match = variables.match;
+    this.matchsv = variables.matchsv;
     this.screen = variables.screen;
   }
 
@@ -75,23 +77,27 @@ export class Dices {
 
       let index = 0;
       const numbers = [];
+      const dicesServer = [];
+
+      // Roll each dragging dice
       this.list.forEach((dice) => {
         if (!dice.isDragging) return;
-        dice.isDragging = false;
-        
-        dice.unlift();
 
-        // Roll face and begin animation
-        dice.roll();
+        dice.isDragging = false;
+        dice.unlift();
+        dice.setRamdomNumber();
+        dice.roll(index);
         numbers.push(dice.number);
-        dice.rollToFace();
-        dice.bounce();
-        dice.twistVel(index);
-        dice.startMotion();
+        dicesServer.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
         index += 1;
       });
 
-      if (this.draggingCount === this.list.length) this.match.playDiceTurn(numbers);
+      // If is dragging all dices, play
+      if (this.draggingCount === this.list.length) {
+        this.match.playDiceTurn(numbers);
+        this.database.setField("rooms", this.match.gameData.roomName, {dices: dicesServer});
+      }
+
       this.draggingCount = 0;
       this.prevDraggingCount = this.draggingCount;
     }
