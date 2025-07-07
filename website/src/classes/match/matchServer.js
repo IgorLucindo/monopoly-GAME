@@ -19,16 +19,23 @@ export class MatchServer {
   createEvents() {
     const roomName = this.match.gameData.roomName;
 
-    // Someone play dices event
-    this.database.createFieldListener("rooms", roomName, "dices", this.playDiceTurn.bind(this));
+    // Play dices event
+    this.database.createFieldListener("rooms", roomName, "dices", (data) => {
+      this.playDiceTurn(data);
+    });
+
+    // Take action event
+    this.database.createFieldListener("rooms", roomName, "action", (data) => {
+      this.takeAction(data);
+    });
   }
 
 
   playDiceTurn(data) {
     const dicesData = data.dices;
-    const turnIndex = data.turnIndex;
+    const turnIdx = data.turnIdx;
 
-    if (!dicesData.length || turnIndex === this.match.currentPlayerIndex) return;
+    if (!dicesData.length || this.match.localPlayer.name === this.match.players[turnIdx].name) return;
 
     const numbers = [];
 
@@ -54,10 +61,9 @@ export class MatchServer {
   }
 
 
-  sendAction(action) {
-    if (!this.match.myTurn) return;
-
-    const roomName = this.match.gameData.roomName;
-    this.database.setField("rooms", roomName, { action });
+  takeAction(data) {
+    const turnIdx = data.turnIdx;
+    if (this.match.localPlayer.name === this.match.players[turnIdx].name) return;
+    this.match.takeAction(data.action);
   }
 }

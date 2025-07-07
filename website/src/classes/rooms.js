@@ -11,7 +11,7 @@ export class Rooms {
 
     this.minPlayers = 2;
     this.maxPlayers = 6;
-    this.loadTime = 5;
+    this.loadTime = 1;
     this.deleteTime = 300;
   }
 
@@ -150,10 +150,10 @@ export class Rooms {
       day: day,
       startedGame: false,
       dices: [],
-      turnIndex: 0,
       chance: [],
       community: [],
-      action: 0
+      action: 0,
+      turnIdx: 0
     }
 
     // Exit previous room
@@ -173,6 +173,11 @@ export class Rooms {
   join(roomName) {
     // Exit previous room
     this.exit();
+
+    // If there is player with same name
+    if (this.roomMap[roomName].players.includes(this.lobby.playerName)) {
+      this.lobby.playerName += "_"
+    }
 
     // Join new room
     this.roomMap[roomName].players.push(this.lobby.playerName);

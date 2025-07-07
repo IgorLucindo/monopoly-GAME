@@ -89,8 +89,10 @@ export class Match {
     const tile = this.board.tiles[player.position];
 
     // Show action options
-    if (this.myTurn && !tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
+    if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
       setTimeout(() => {
+        if (!this.myTurn) return;
+
         this.showingCard = true;
         this.screen.showOverlay();
         this.deedDeck.showCard(tile);
@@ -104,6 +106,8 @@ export class Match {
 
   takeAction(action) {
     if (this.state === "dice") return;
+
+    console.log(this.currentPlayerIndex)
 
     const player = this.players[this.currentPlayerIndex];
     const tile = this.board.tiles[player.position];
@@ -125,9 +129,6 @@ export class Match {
 
     // End turn
     this.endTurn(player);
-
-    // Send action to 
-    this.matchsv.sendAction(action);
   }
 
 

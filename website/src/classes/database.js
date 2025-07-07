@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 import { getFirestore, onSnapshot, doc, collection, getDocs, getDoc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
+import { deepEquals } from "../utils/calculationUtils.js";
 
 export class Database {
   constructor() {
@@ -109,7 +109,10 @@ export class Database {
       if (docSnapshot.exists()) {
         const data = docSnapshot.data();
         
-        if (prevFieldData === data[fieldId]) return;
+        if (prevFieldData === null || deepEquals(prevFieldData, data[fieldId])) {
+          prevFieldData = data[fieldId];
+          return;
+        }
         prevFieldData = data[fieldId];
 
         effect(data);

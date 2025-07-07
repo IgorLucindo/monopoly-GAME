@@ -6,7 +6,7 @@ export class Actions {
 
   init(variables) {
     this.getVariables(variables);
-    window._takeAction = (action) => this.match.takeAction(action);
+    window._takeAction = (action) => this.takeAction(action);
     window._auction = () => this.match.startAuction();
     window._bid = () => this.match.localPlayer.takeBid();
     window._mortgage = () => this.match.startMortgage();
@@ -15,6 +15,7 @@ export class Actions {
 
   getVariables(variables) {
     this.cfg = variables.cfg;
+    this.database = variables.database;
     this.board = variables.board;
     this.deedDeck = variables.deedDeck;
     this.match = variables.match;
@@ -91,5 +92,12 @@ export class Actions {
     // Remove event
     if (!this.cfg.touch) document.removeEventListener("mousedown", click);
     else document.removeEventListener("touchstart", click);
+  }
+
+
+  takeAction(action) {
+    const roomName = this.match.gameData.roomName;
+    this.database.setField("rooms", roomName, { action });
+    this.match.takeAction(action);
   }
 }
