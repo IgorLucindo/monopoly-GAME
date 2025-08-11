@@ -77,7 +77,7 @@ export class Dices {
 
       let index = 0;
       const numbers = [];
-      const dicesServer = [];
+      const dicesServerData = [];
 
       // Roll each dragging dice
       this.list.forEach((dice) => {
@@ -86,17 +86,19 @@ export class Dices {
         dice.isDragging = false;
         dice.unlift();
         dice.setRamdomNumber();
-        dice.number = 1 + index; // debug
         dice.roll(index);
         numbers.push(dice.number);
-        dicesServer.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
+        dicesServerData.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
         index += 1;
       });
 
       // If is dragging all dices, play
       if (this.draggingCount === this.list.length) {
         this.match.playDiceTurn(numbers);
-        const serverData = { dices: dicesServer, turnIdx: this.match.currentPlayerIndex };
+        const serverData = {
+          dices: {value: dicesServerData, turn: this.match.turn},
+          player: this.match.localPlayer.name
+        };
         this.database.setField("rooms", this.match.gameData.roomName, serverData);
       }
 

@@ -96,8 +96,13 @@ export class Actions {
 
 
   takeAction(action) {
-    const roomName = this.match.gameData.roomName;
-    this.database.setField("rooms", roomName, { action });
     this.match.takeAction(action);
+
+    const roomName = this.match.gameData.roomName;
+    const serverData = {
+      action: {value: action, turn: this.match.turn},
+      player: this.match.localPlayer.name
+    };
+    this.database.setField("rooms", roomName, serverData);
   }
 }

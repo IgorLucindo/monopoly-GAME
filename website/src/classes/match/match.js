@@ -6,6 +6,7 @@ export class Match {
     this.players = [];
     this.gameData = {};
     this.localPlayer = null;
+    this.turn = 0;
     this.myTurn = false;
     this._currentPlayerIndex = 0;
     this.state = "dice";
@@ -106,8 +107,6 @@ export class Match {
 
   takeAction(action) {
     if (this.state === "dice") return;
-
-    console.log(this.currentPlayerIndex)
 
     const player = this.players[this.currentPlayerIndex];
     const tile = this.board.tiles[player.position];
@@ -238,6 +237,8 @@ export class Match {
     // Proceed to next player
     if (player.money < 0) this.currentPlayerIndex %= this.players.length;
     else this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+
+    this.turn++;
 
     // Check if is turn of local player
     this.myTurn = this.localPlayer.name === this.players[this.currentPlayerIndex].name;

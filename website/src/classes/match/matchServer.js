@@ -27,16 +27,15 @@ export class MatchServer {
     // Take action event
     this.database.createFieldListener("rooms", roomName, "action", (data) => {
       this.takeAction(data);
-    });
+    },
+  ()=>{console.log("no action")});
   }
 
 
   playDiceTurn(data) {
-    const dicesData = data.dices;
-    const turnIdx = data.turnIdx;
+    if (this.match.localPlayer.name === data.player) return;
 
-    if (!dicesData.length || this.match.localPlayer.name === this.match.players[turnIdx].name) return;
-
+    const dicesData = data.dices.value;
     const numbers = [];
 
     // Roll each dragging dice
@@ -62,8 +61,8 @@ export class MatchServer {
 
 
   takeAction(data) {
-    const turnIdx = data.turnIdx;
-    if (this.match.localPlayer.name === this.match.players[turnIdx].name) return;
-    this.match.takeAction(data.action);
+    if (this.match.localPlayer.name === data.player) return;
+
+    this.match.takeAction(data.action.value);
   }
 }

@@ -149,11 +149,10 @@ export class Rooms {
       duration: 0,
       day: day,
       startedGame: false,
-      dices: [],
+      dices: {},
       chance: [],
       community: [],
-      action: 0,
-      turnIdx: 0
+      action: {}
     }
 
     // Exit previous room
