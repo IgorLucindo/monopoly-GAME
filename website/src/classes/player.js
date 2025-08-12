@@ -9,7 +9,13 @@ export class Player {
     this.exitJailCard = false;
     this.properties = [];
     this.token = null;
+    this.tokenColor = null;
     this.isCreator = false;
+
+    this.colorMap = [
+      "#8b4513", "#add8e6", "#ff69b4", "#ffa500",
+      "#ff0000", "#f1d500", "#008000", "#00008b"
+    ]
   }
 
 
@@ -33,7 +39,7 @@ export class Player {
 
   init(variables, index) {
     this.getVariables(variables);
-    this.createToken();
+    this.createToken(index);
     this.renderPosition();
     if (index === 0) this.isCreator = true;
   }
@@ -48,11 +54,16 @@ export class Player {
   }
 
 
-  createToken() {
+  createToken(index) {
+    const color = this.colorMap[index];
     const token = document.createElement("div");
+
     token.classList.add("player-token");
     token.textContent = this.name.charAt(0);
+    token.style.setProperty("--color", color);
+
     this.token = token;
+    this.tokenColor = color;
   }
 
 

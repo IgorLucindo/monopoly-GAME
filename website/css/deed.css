@@ -11,6 +11,7 @@
   width: 330px;
   font-family: 'Libre Franklin', sans-serif;
   visibility: hidden;
+  pointer-events: none;
   transform: translate(-100%, -50%) scale(0.2) rotate(var(--rotation));
   transition: visibility var(--time) ease, transform var(--time) ease, left var(--time) ease, top var(--time) ease;
 }

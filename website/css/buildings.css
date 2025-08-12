@@ -5,6 +5,7 @@
   justify-content: space-around;
   height: 100%;
   margin-left: 3%;
+  gap: 1rem;
 }
 
 .buildings {
@@ -12,12 +13,18 @@
   width: 10vmin;
   height: 20%;
   padding: 16px;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: grab;
   user-select: none;
-  background-color: white;
-  border: 2px dashed  black;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+  background-color: #fafafa;
+  border: 2px solid #ddd;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.buildings:hover {
+  background-color: #f5f5f5;
+  border-color: #bbb;
 }
 
 .building {

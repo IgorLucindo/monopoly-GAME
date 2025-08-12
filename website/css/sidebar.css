@@ -1,55 +1,166 @@
 .sidebar {
-  width: 200px;
-  z-index: 10;
-  margin-left: auto;
-  user-select: none;
-  background-color: #bbb;
-}
-
-#player-list {
-  background-color: #ddd;
-}
-
-.player-container {
-  position: relative;
   display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 5px 0;
+  flex-direction: column;
+  width: 220px;
+  margin-left: auto;
+  border-radius: 1vh;
+  border: 0.35vh solid #333;
+  background-color: white;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  font-family: 'Roboto', sans-serif;
+  overflow: hidden;
 }
 
+/* Section headers */
+.sidebar h2 {
+  width: 90%;
+  padding: 0.5rem 0;
+  margin: 0 0 0.5vh 5%;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 0.3px;
+  color: white;
+  background-color: #333;
+  border-radius: 0.8vh;
+}
+
+/* Section containers */
+.player-info,
+.turn-info,
+.action-info {
+  padding: 0.6rem 0.8rem;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+/* Player list */
+#player-list {
+  padding: 0.5rem 0;
+}
+
+/* Player container */
+.player-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+.player-container:last-child {
+  border-bottom: none;
+}
+
+/* Player money animations */
 .player-money {
   text-align: right;
   transition: color 0.3s, transform 0.3s;
 }
 
 .player-money.increased {
-  color: green;
-  transform: scale(1.2);
+  color: #28a745;
+  transform: scale(1.05);
 }
 
 .player-money.decreased {
-  color: red;
-  transform: scale(1.2);
+  color: #dc3545;
+  transform: scale(1.05);
 }
 
-.turn-info {
+/* Turn info style */
+.turn-info h4 {
+  margin: 0.3rem 0;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* Buttons */
+#action-buttons {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0 10%;
 }
 
-.timer-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+#action-buttons button {
+  padding: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.1);
+  color: #333;
+  background-color: #fff;
+  transition: background 0.2s, transform 0.1s;
 }
 
+#action-buttons button:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-1px);
+}
 
-/* in mobile */
+/* Mobile */
 @media screen and (max-width: 768px) {
   .sidebar {
     margin-left: 0;
     margin-top: auto;
+    width: 100%;
+    height: auto;
+    flex-direction: row;
+    justify-content: space-around;
+    overflow-x: auto;
+    padding: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  /* Player-info, turn-info, action-info become cards */
+  .player-info,
+  .turn-info,
+  .action-info {
+    flex: 1;
+    min-width: 40vw;
+    border-radius: 0.8vh;
+    border: 0.25vh solid #333;
+    background-color: white;
+    padding: 0.5rem;
+  }
+
+  /* Section headers full width on mobile */
+  .sidebar h2 {
+    width: 100%;
+    margin: 0 0 0.5rem 0;
+    font-size: 0.9rem;
+    border-radius: 0.5vh;
+  }
+
+  /* Buttons bigger and full width on mobile */
+  #action-buttons button {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .turn-info h4 {
+    margin: 0.3rem 0;
+  }
+
+  /* Make the player list fit within card height */
+  .player-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #player-list {
+    flex: 1; /* Take up remaining space in card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; /* Spread players evenly */
+  }
+
+  /* Auto-scale player font size so they fit */
+  .player-container {
+    padding: 0.2rem 0;
+    font-size: clamp(0.6rem, 2.5vw, 0.85rem);
+  }
+
+  .player-money {
+    font-size: clamp(0.6rem, 2.5vw, 0.85rem);
   }
 }

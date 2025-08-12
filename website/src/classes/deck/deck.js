@@ -76,12 +76,13 @@ export class Deck {
   }
 
 
-  handleShuffle() {
+  async handleShuffle() {
     const roomName = this.match.gameData.roomName;
     let cardsIdxs = [];
 
-    // If creator, set shuffle
+    // Setting shuffle
     if (this.match.localPlayer.isCreator) {
+      // If creator
       cardsIdxs = Array.from({ length: this.cards.length }, (_, i) => i);
 
       for (let i = cardsIdxs.length - 1; i > 0; i--) {
@@ -90,14 +91,15 @@ export class Deck {
       };
       
       this.database.setField("rooms", roomName, {[this.type]: cardsIdxs});
-      this.shuffle(cardsIdxs);
     }
-    // If not creator, get shuffle
     else {
-      this.database.createFieldListener("rooms", roomName, this.type, (data) => {
-        this.shuffle(data[this.type]);
-      });
+      // If not creator
+      const docData = await this.database.getDocument("rooms", roomName);
+      cardsIdxs = docData[this.type];
     }
+
+    // Shuflle
+    this.shuffle(cardsIdxs);
   }
 
 

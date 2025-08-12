@@ -86,6 +86,7 @@ export class Dices {
         dice.isDragging = false;
         dice.unlift();
         dice.setRamdomNumber();
+        dice.number = 1; // debug
         dice.roll(index);
         numbers.push(dice.number);
         dicesServerData.push({ number: dice.number, pos: dice.pos, vel: dice.vel });

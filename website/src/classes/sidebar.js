@@ -27,7 +27,7 @@ export class Sidebar {
       const playerContainer = document.createElement("div");
       playerContainer.className = "player-container";
       playerContainer.innerHTML = `
-        <div class="player-token">${p.name.charAt(0)}</div>
+        <div class="player-token" style="--color: ${p.tokenColor}">${p.name.charAt(0)}</div>
         <span class="player-name">${p.name}</span>
         <span class="player-money">$${p.money}</span>
         <div class="message-wrapper">

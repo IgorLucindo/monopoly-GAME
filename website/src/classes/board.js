@@ -141,7 +141,7 @@ export class Board {
       tile.innerHTML = `
         <div class="tile-content">
           <div class="tile-label">${tileInfo.label}</div>
-          <img style="width: ${tileInfo.label === "Water Works" ? 90 : 65}%" src="../assets/images/tiles/${tileInfo.label}.svg">
+          <img style="width: ${tileInfo.label === "Water Works" ? 90 : 50}%" src="../assets/images/tiles/${tileInfo.label}.svg">
           <div class="tile-price">$${tileInfo.price}</div>
           <div class="tile-players"></div>
           <div class="tile-timer"></div>

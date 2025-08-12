@@ -10,7 +10,8 @@
 }
 
 .player-token {
+  --color: red;
   font-size: 12px;
   font-weight: bold;
-  color: red;
+  color: var(--color);
 }
