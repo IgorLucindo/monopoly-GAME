@@ -32,8 +32,8 @@ export class Board {
 
   init(variables, tileData) {
     this.getVariables(variables);
-    this.getRect();
     this.create(tileData);
+    this.getRect();
   }
 
 

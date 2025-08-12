@@ -42,7 +42,6 @@
   .tile:hover {
     background-color: #f5f5f5;
     transform: scale(1.02);
-    z-index: 5;
   }
 }
 

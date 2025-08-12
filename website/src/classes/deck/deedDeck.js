@@ -15,6 +15,7 @@ export class DeedDeck {
 
 
   getVariables(variables) {
+    this.cfg = variables.cfg;
     this.board = variables.board;
   }
 
@@ -116,9 +117,20 @@ export class DeedDeck {
 
       // Set position and rotation from tile
       const rect = tile.element.getBoundingClientRect();
-      card.style.setProperty('--top', `${rect.top + rect.height/4}px`);
-      card.style.setProperty('--left', `${rect.left + rect.width/4}px`);
+      let top, left;
+      if (this.board.cfg.mobile) {
+        top = rect.top + rect.height / 2;
+        left = rect.left + rect.width / 2;
+      }
+      else {
+        const boardRect = this.board.el.getBoundingClientRect();
+        top = rect.top - boardRect.top + rect.height / 2;
+        left = rect.left - boardRect.left + rect.width / 2;
+      }
+      card.style.setProperty('--top', `${top}px`);
+      card.style.setProperty('--left', `${left}px`);
       card.style.setProperty('--rotation', `${tile.rotation}deg`);
+
 
       this.el.appendChild(card);
       this.cards[tile.index] = card;

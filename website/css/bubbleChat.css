@@ -1,9 +1,7 @@
 .message-wrapper {
   position: absolute;
-  top: 0;
-  left: 0;
   visibility: hidden;
-  transform: translateX(calc(-100% - 12px));
+  transform: translate(calc(-100% - 1.5rem), -1vh);
 }
 
 .message-wrapper.visible {

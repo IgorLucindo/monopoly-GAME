@@ -1,6 +1,6 @@
-trade menu
+chat with preset messages (well played, wow, lucky, emotes) and input to write own message
 
-fix messages sender
+trade menu
 
 put monopoly icon in cards (guy with money, guy losing money)
 
@@ -13,6 +13,7 @@ sfx:
     lose money
     lose game
     win game
+    message (use ia voice)
     
 auto throw dice
 

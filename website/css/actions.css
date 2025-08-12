@@ -16,6 +16,7 @@
 }
 
 .deed-actions.visible {
+  pointer-events: all;
   transform: translate(-50%, 10px);
 }
 
