@@ -28,6 +28,7 @@
 /* Section containers */
 .player-info,
 .turn-info,
+.chat-info,
 .action-info {
   padding: 0.6rem 0.8rem;
   border-bottom: 1px solid rgba(0,0,0,0.1);
@@ -81,7 +82,16 @@
   padding: 0 10%;
 }
 
-#action-buttons button {
+#chat-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 0.4rem;
+  padding: 0 10%;
+}
+
+#action-buttons button,
+#chat-buttons button  {
   padding: 0.5rem;
   font-size: 0.85rem;
   cursor: pointer;
@@ -92,7 +102,8 @@
   transition: background 0.2s, transform 0.1s;
 }
 
-#action-buttons button:hover {
+#action-buttons button:hover,
+#chat-buttons button:hover {
   background-color: #f0f0f0;
   transform: translateY(-1px);
 }
@@ -114,6 +125,7 @@
   /* Player-info, turn-info, action-info become cards */
   .player-info,
   .turn-info,
+  .chat-info,
   .action-info {
     flex: 1;
     min-width: 40vw;
@@ -132,7 +144,8 @@
   }
 
   /* Buttons bigger and full width on mobile */
-  #action-buttons button {
+  #action-buttons button,
+  #chat-buttons button {
     font-size: 0.9rem;
     padding: 0.6rem;
   }
