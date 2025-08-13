@@ -6,6 +6,7 @@ export class Dices {
     this.list = [];
     this.draggingCount = 0;
     this.prevDraggingCount = 0;
+    this.failedRolls = 0;
     this.pos = {x: 0, y: 0};
 
     this.board = null;
@@ -26,6 +27,7 @@ export class Dices {
     this.board = variables.board;
     this.match = variables.match;
     this.matchsv = variables.matchsv;
+    this.sidebar = variables.sidebar;
     this.screen = variables.screen;
   }
 
@@ -89,17 +91,22 @@ export class Dices {
         dice.roll(index);
         numbers.push(dice.number);
         dicesServerData.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
-        index += 1;
+        index++;
       });
 
-      // If is dragging all dices, play
       if (this.draggingCount === this.list.length) {
+        // If is dragging all dices, play
         this.match.playDiceTurn(numbers);
         const serverData = {
           dices: {value: dicesServerData, turn: this.match.turn},
           player: this.match.localPlayer.name
         };
         this.database.setField("rooms", this.match.gameData.roomName, serverData);
+      }
+      else {
+        // If not dragging all dices
+        this.failedRolls++;
+        if (this.failedRolls == 3) this.sidebar.chat(this.match.localPlayer.name, "I should roll all dices at once!")
       }
 
       this.draggingCount = 0;
