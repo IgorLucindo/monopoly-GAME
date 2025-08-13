@@ -13,6 +13,8 @@ export class MatchServer {
     this.database = variables.database;
     this.board = variables.board;
     this.deedDeck = variables.deedDeck;
+    this.houses = variables.houses;
+    this.hotels = variables.hotels;
     this.actions = variables.actions;
     this.match = variables.match;
     this.dices = variables.dices;
@@ -52,6 +54,16 @@ export class MatchServer {
     // Take bid event
     this.database.createFieldListener("rooms", roomName, "bid", (data) => {
       this.receiveTakeBid(data);
+    });
+
+    // Build event
+    this.database.createFieldListener("rooms", roomName, "build", (data) => {
+      this.receiveBuild(data);
+    });
+
+    // Sell event
+    this.database.createFieldListener("rooms", roomName, "sell", (data) => {
+      this.receiveSell(data);
     });
   }
 
@@ -151,5 +163,28 @@ export class MatchServer {
 
     const player = this.match.players.find(p => p.name === data.player);
     player.takeBid(data.bid.value);
+  }
+
+
+  receiveBuild(data) {
+    if (this.match.localPlayer.name === data.player) return;
+
+    const tile = this.board.tiles[data.build.tileIdx];
+    const buildings = data.build.buildingType === "house" ? this.houses : this.hotels;
+    const building = buildings.allList[data.build.buildingIdx];
+
+    buildings.build(tile, building, data.build.pos);
+  }
+
+
+  receiveSell(data) {
+    if (this.match.localPlayer.name === data.player) return;
+
+    const tile = this.board.tiles[data.sell.tileIdx];
+    const buildings = data.sell.buildingType === "house" ? this.houses : this.hotels;
+    const building = buildings.allList[data.sell.buildingIdx];
+
+    buildings.unLiftBuilding(building);
+    buildings.sell(tile, building);
   }
 }

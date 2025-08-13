@@ -4,8 +4,9 @@ export class Buildings {
     this.number = buildingData.number;
     this.imgSrc = buildingData.imgSrc;
     this.buildingSize = this.type === "house" ? 2.5 : 3.5; // Size in vmin
-
+    
     this.list = [];
+    this.allList = [];
     this.el = null;
     this.buildingEl = null;
     this.sellingEl = null;
@@ -22,6 +23,7 @@ export class Buildings {
 
   getVariables(variables) {
     this.cfg = variables.cfg;
+    this.database = variables.database;
     this.board = variables.board;
     this.houses = variables.houses;
     this.match = variables.match;
@@ -45,9 +47,11 @@ export class Buildings {
       // Set width via CSS variable
       building.style.setProperty('--width', `${this.buildingSize}vmin`);
       building.src = this.imgSrc;
+      building._index = i;
 
       // Append element
       this.list.push(building);
+      this.allList.push(building);
       this.el.appendChild(building);
 
       // Reposition buildings
@@ -112,31 +116,18 @@ export class Buildings {
 
       // Get closest tile
       const point = this.cfg.touch ? e.changedTouches[0] : e;
-      const tileEl = document.elementFromPoint(point.clientX, point.clientY).closest(".tile");
+      const pos = {x: point.clientX, y: point.clientY};
+      const tileEl = document.elementFromPoint(pos.x, pos.y).closest(".tile");
       const tile = this.board.getTileFromElement(tileEl);
 
-      // check if can build
       if (this.isBuildable(tile)) {
-        tile.owner.build(tile);
-        if (this.type === "hotel") {
-          while (tile.buildings.length > 0) {
-            const b = tile.buildings.pop();
-            this.houses.unLiftBuilding(b);
-            this.houses.list.push(b);
-            this.houses.el.appendChild(b);
-            this.houses.setInitialBuildingPosition(b, this.houses.list.length - 1);
-            this.houses.removeSellEvent(b);
-          }
-        }
-        this.list.pop();
-        tile.buildings.push(building);
-        this.board.el.appendChild(building);
-
-        const point = this.cfg.touch ? e.changedTouches[0] : e;
-        this.moveBuilding(building, point.clientX, point.clientY);
-        
-        // Create event for selling
-        this.createSellEvent(tile, building);
+        this.build(tile, building, pos);
+        const roomName = this.match.gameData.roomName;
+        const serverData = {
+          build: {tileIdx: tile.index, buildingIdx: building._index, buildingType: this.type, pos},
+          player: this.match.localPlayer.name
+        };
+        this.database.setField("rooms", roomName, serverData);
       }
     }
 
@@ -192,33 +183,22 @@ export class Buildings {
 
       this.sellingEl = null;
 
-      // Sell if drag to buildings container
       if (closestEl === this.el && this.isSellable(tile)) {
-        tile.owner.sell(tile);
-        this.list.push(building);
-        tile.buildings.pop();
-        this.el.appendChild(building);
-        this.setInitialBuildingPosition(building, this.list.length-1);
-        this.removeSellEvent(building);
-
-        // If hotel, move houses back to houses container
-        if (this.type === "hotel") {
-          for (let i = 0; i < 4 && this.houses.list.length > 0; i++) {
-            const b = this.houses.list.pop();
-            tile.buildings.push(b);
-            this.board.el.appendChild(b);
-            this.createSellEvent(tile, b);
-          };
-          this.resetBuildingsPosInTile(tile);
-
-          const numOfSell = 4 - this.houses.list.length;
-          for (let i = 0; i < numOfSell; i++) tile.owner.sell(tile);
-        }
+        // Sell if drag to buildings container
+        this.sell(tile, building);
+        const roomName = this.match.gameData.roomName;
+        const serverData = {
+          sell: {tileIdx: tile.index, buildingIdx: building._index, buildingType: this.type},
+          player: this.match.localPlayer.name
+        };
+        this.database.setField("rooms", roomName, serverData);
       }
-      // Go back to tile if outside
-      else if (newTile !== tile) this.moveBuilding(building, building._pos.x, building._pos.y); 
-      // Move if inside own tile
+      else if (newTile !== tile) {
+        // Go back to tile if outside
+        this.moveBuilding(building, building._pos.x, building._pos.y);
+      }
       else {
+        // Move if inside own tile
         const point = this.cfg.touch ? e.changedTouches[0] : e;
         this.moveBuilding(building, point.clientX, point.clientY);
       }
@@ -237,6 +217,52 @@ export class Buildings {
       building.addEventListener("touchstart", mousedown, { passive: true });
       document.addEventListener("touchmove", mousemove, { passive: true });
       document.addEventListener("touchend", mouseup);
+    }
+  }
+
+
+  build(tile, building, pos) {
+    tile.owner.build(tile);
+
+    // If hotel, remove all other houses
+    if (this.type === "hotel") {
+      while (tile.buildings.length > 0) {
+        const b = tile.buildings.pop();
+        this.houses.unLiftBuilding(b);
+        this.houses.list.push(b);
+        this.houses.el.appendChild(b);
+        this.houses.setInitialBuildingPosition(b, this.houses.list.length - 1);
+        this.houses.removeSellEvent(b);
+      }
+    }
+    this.list.pop();
+    tile.buildings.push(building);
+    this.board.el.appendChild(building);
+    this.moveBuilding(building, pos.x, pos.y);
+    this.createSellEvent(tile, building);
+  }
+
+
+  sell(tile, building) {
+    tile.owner.sell(tile);
+    this.list.push(building);
+    tile.buildings.pop();
+    this.el.appendChild(building);
+    this.setInitialBuildingPosition(building, this.list.length-1);
+    this.removeSellEvent(building);
+
+    // If hotel, move houses back to houses container
+    if (this.type === "hotel") {
+      for (let i = 0; i < 4 && this.houses.list.length > 0; i++) {
+        const b = this.houses.list.pop();
+        tile.buildings.push(b);
+        this.board.el.appendChild(b);
+        this.createSellEvent(tile, b);
+      };
+      this.resetBuildingsPosInTile(tile);
+
+      const numOfSell = 4 - this.houses.list.length;
+      for (let i = 0; i < numOfSell; i++) tile.owner.sell(tile);
     }
   }
 
