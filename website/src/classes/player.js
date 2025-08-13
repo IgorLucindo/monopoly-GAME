@@ -144,21 +144,16 @@ export class Player {
   }
 
 
-  takeBid() {
-    const currentPlayer = this.match.players[this.match.currentPlayerIndex];
-    const tile = this.board.tiles[currentPlayer.position];
-    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
-    const inputValue = deedActions.querySelector("input[name='quantity']").value;
-
-    if (!inputValue || isNaN(inputValue) || inputValue <= this.match.bid) {
+  takeBid(amount) {
+    if (!amount || isNaN(amount) || amount <= this.match.bid) {
       alert("Not a valid bid amount.");
       return;
     }
 
-    this.match.bid = inputValue;
+    this.match.bid = amount;
     this.match.bidder = this;
 
-    this.sidebar.chat(this.name, `I bid $${inputValue}.`);
+    this.sidebar.chat(this.name, `I bid $${amount}.`);
 
     this.auctionTimer.restart();
   }

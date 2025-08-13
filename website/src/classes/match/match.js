@@ -12,6 +12,7 @@ export class Match {
     this.state = "dice";
     this.doubles = false;
     this.extraTurn = 0;
+    this.auctionCount = 0;
     this.showingCard = false;
     this.showCardTime = 0;
 
@@ -41,6 +42,7 @@ export class Match {
 
 
   getVariables(variables) {
+    this.database = variables.database;
     this.dices = variables.dices;
     this.chanceDeck = variables.chanceDeck;
     this.communityDeck = variables.communityDeck;
@@ -256,6 +258,8 @@ export class Match {
 
     this.auctionTimer.start();
     this.actions.showAuctionOptions();
+
+    this.auctionCount++;
   }
 
 
@@ -284,10 +288,24 @@ export class Match {
 
   handleMortgage(tile) {
     if (!tile || !tile.owner || this.localPlayer.name !== tile.owner.name) return;
+
+    const roomName = this.gameData.roomName;
+    const serverData = {
+      mortgage: {tileIdx: tile.index, value: true},
+      player: this.localPlayer.name
+    };
     
     if (tile.mortgaged && tile.owner.money >= tile.unmortgageValue) {
+      // Unmortgage
       tile.owner.unmortgage(tile);
+      serverData.mortgage.value = false;
+      this.database.setField("rooms", roomName, serverData);
     }
-    else if (!tile.mortgaged) tile.owner.mortgage(tile);
+    else if (!tile.mortgaged) {
+      // Mortgage
+      tile.owner.mortgage(tile);
+      serverData.mortgage.value = true;
+      this.database.setField("rooms", roomName, serverData);
+    }
   }
 }

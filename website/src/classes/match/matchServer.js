@@ -11,9 +11,13 @@ export class MatchServer {
 
   getVariables(variables){
     this.database = variables.database;
+    this.board = variables.board;
+    this.deedDeck = variables.deedDeck;
+    this.actions = variables.actions;
     this.match = variables.match;
     this.dices = variables.dices;
     this.sidebar = variables.sidebar;
+    this.screen = variables.screen;
   }
 
 
@@ -33,6 +37,21 @@ export class MatchServer {
     // Chat event
     this.database.createFieldListener("rooms", roomName, "chat", (data) => {
       this.receiveChat(data);
+    });
+
+    // Mortgage event
+    this.database.createFieldListener("rooms", roomName, "mortgage", (data) => {
+      this.receiveMortgage(data);
+    });
+
+    // Start auction event
+    this.database.createFieldListener("rooms", roomName, "auction", (data) => {
+      this.receiveStartAuction(data);
+    });
+
+    // Take bid event
+    this.database.createFieldListener("rooms", roomName, "bid", (data) => {
+      this.receiveTakeBid(data);
     });
   }
 
@@ -89,5 +108,48 @@ export class MatchServer {
     if (this.match.localPlayer.name === data.player) return;
 
     this.sidebar.chat(data.player, data.chat.message);
+  }
+
+
+  receiveMortgage(data) {
+    if (this.match.localPlayer.name === data.player) return;
+
+    const tile = this.board.tiles[data.mortgage.tileIdx];
+    if (data.mortgage.value) tile.owner.mortgage(tile);
+    else tile.owner.unmortgage(tile);
+  }
+
+
+  startAuction() {
+    this.match.startAuction();
+
+    const roomName = this.match.gameData.roomName;
+    const serverData = {
+      auction: {auctionCount: this.match.auctionCount},
+      player: this.match.localPlayer.name
+    };
+    this.database.setField("rooms", roomName, serverData);
+  }
+
+
+  receiveStartAuction(data) {
+    if (this.match.localPlayer.name === data.player) return;
+
+    const currentPlayer = this.match.players[this.match.currentPlayerIndex];
+    const tile = this.board.tiles[currentPlayer.position];
+
+    this.match.showingCard = true;
+    this.screen.showOverlay();
+    this.deedDeck.showCard(tile);
+    this.actions.showDeedOptions(tile);
+    this.match.startAuction();
+  }
+
+
+  receiveTakeBid(data) {
+    if (this.match.localPlayer.name === data.player) return;
+
+    const player = this.match.players.find(p => p.name === data.player);
+    player.takeBid(data.bid.value);
   }
 }

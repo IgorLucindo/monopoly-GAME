@@ -153,7 +153,9 @@ export class Rooms {
       chance: [],
       community: [],
       action: {},
-      chat: {}
+      bid: {},
+      chat: {},
+      mortgage: {}
     }
 
     // Exit previous room

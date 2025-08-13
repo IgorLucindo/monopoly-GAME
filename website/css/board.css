@@ -33,6 +33,7 @@
 }
 
 .tile.highlight {
+  z-index: 10;
   outline: 1px solid #000;
   transform: scale(1.1);
 }

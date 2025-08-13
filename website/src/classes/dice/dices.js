@@ -88,6 +88,7 @@ export class Dices {
         dice.isDragging = false;
         dice.unlift();
         dice.setRamdomNumber();
+        dice.number = index+1 //debug
         dice.roll(index);
         numbers.push(dice.number);
         dicesServerData.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
@@ -106,7 +107,7 @@ export class Dices {
       else {
         // If not dragging all dices
         this.failedRolls++;
-        if (this.failedRolls == 3) this.sidebar.chat(this.match.localPlayer.name, "I should roll all dices at once!")
+        if (this.failedRolls == 3) this.sidebar.chat(this.match.localPlayer.name, "I should roll all dices at once!");
       }
 
       this.draggingCount = 0;

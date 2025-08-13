@@ -7,8 +7,8 @@ export class Actions {
   init(variables) {
     this.getVariables(variables);
     window._takeAction = (action) => this.takeAction(action);
-    window._auction = () => this.match.startAuction();
-    window._bid = () => this.match.localPlayer.takeBid();
+    window._auction = () => this.matchsv.startAuction();
+    window._bid = () => this.takeBid();
     window._mortgage = () => this.match.startMortgage();
     window._chat = (message) => this.matchsv.chat(message);
   }
@@ -103,6 +103,23 @@ export class Actions {
     const roomName = this.match.gameData.roomName;
     const serverData = {
       action: {value: action, turn: this.match.turn},
+      player: this.match.localPlayer.name
+    };
+    this.database.setField("rooms", roomName, serverData);
+  }
+
+
+  takeBid() {
+    const currentPlayer = this.match.players[this.match.currentPlayerIndex];
+    const tile = this.board.tiles[currentPlayer.position];
+    const deedActions = this.deedDeck.cards[tile.index].querySelector(".deed-actions");
+    const inputValue = deedActions.querySelector("input[name='quantity']").value;
+    
+    this.match.localPlayer.takeBid(inputValue);
+
+    const roomName = this.match.gameData.roomName;
+    const serverData = {
+      bid: {value: this.match.bid, auctionCount: this.match.auctionCount},
       player: this.match.localPlayer.name
     };
     this.database.setField("rooms", roomName, serverData);
