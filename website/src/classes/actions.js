@@ -10,7 +10,7 @@ export class Actions {
     window._auction = () => this.match.startAuction();
     window._bid = () => this.match.localPlayer.takeBid();
     window._mortgage = () => this.match.startMortgage();
-    window._chat = (message) => this.sidebar.chat(this.match.localPlayer, message);
+    window._chat = (message) => this.matchsv.chat(message);
   }
 
 
@@ -20,7 +20,7 @@ export class Actions {
     this.board = variables.board;
     this.deedDeck = variables.deedDeck;
     this.match = variables.match;
-    this.sidebar = variables.sidebar;
+    this.matchsv = variables.matchsv;
   }
 
 

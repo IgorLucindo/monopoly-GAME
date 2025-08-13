@@ -13,6 +13,7 @@ export class MatchServer {
     this.database = variables.database;
     this.match = variables.match;
     this.dices = variables.dices;
+    this.sidebar = variables.sidebar;
   }
 
 
@@ -21,18 +22,22 @@ export class MatchServer {
 
     // Play dices event
     this.database.createFieldListener("rooms", roomName, "dices", (data) => {
-      this.playDiceTurn(data);
+      this.receivePlayDiceTurn(data);
     });
 
     // Take action event
     this.database.createFieldListener("rooms", roomName, "action", (data) => {
-      this.takeAction(data);
-    },
-  ()=>{console.log("no action")});
+      this.receiveTakeAction(data);
+    });
+
+    // Chat event
+    this.database.createFieldListener("rooms", roomName, "chat", (data) => {
+      this.receiveChat(data);
+    });
   }
 
 
-  playDiceTurn(data) {
+  receivePlayDiceTurn(data) {
     if (this.match.localPlayer.name === data.player) return;
 
     const dicesData = data.dices.value;
@@ -60,9 +65,29 @@ export class MatchServer {
   }
 
 
-  takeAction(data) {
+  receiveTakeAction(data) {
     if (this.match.localPlayer.name === data.player) return;
 
     this.match.takeAction(data.action.value);
+  }
+
+
+  chat(message) {
+    const playerName = this.match.localPlayer.name;
+    this.sidebar.chat(playerName, message);
+
+    const roomName = this.match.gameData.roomName;
+    const serverData = {
+      chat: {message, messageCount: this.sidebar.messageCount},
+      player: playerName
+    };
+    this.database.setField("rooms", roomName, serverData);
+  }
+
+
+  receiveChat(data) {
+    if (this.match.localPlayer.name === data.player) return;
+
+    this.sidebar.chat(data.player, data.chat.message);
   }
 }

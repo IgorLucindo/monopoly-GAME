@@ -2,24 +2,31 @@ export class Sidebar {
   constructor() {
     this.playerList = document.getElementById("player-list");
     this.playerTurn = document.getElementById("player-turn");
+    this.chatInput = document.getElementById("chat-input");
 
+    this.messageCount = 0;
     this.playerContainers = {};
+    this.messageTimeout = null;
+
     this.chatBubbleTime = 3;
   }
 
 
   init(variables) {
     this.getVariables(variables);
-    this.create();
+    this.createPlayerList();
+    this.createEvents();
+    this.updateTurn();
   }
 
 
   getVariables(variables) {
     this.match = variables.match;
+    this.matchsv = variables.matchsv;
   }
 
 
-  create() {
+  createPlayerList() {
     this.playerList.innerHTML = "";
 
     this.match.players.forEach((p) => {
@@ -39,8 +46,20 @@ export class Sidebar {
       this.playerContainers[p.name] = playerContainer;
       this.playerList.appendChild(playerContainer);
     });
+  }
 
-    this.updateTurn();
+  createEvents() {
+    // Chat input event
+    this.chatInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        const message = this.chatInput.value.trim();
+        if (message) {
+          this.matchsv.chat(message);
+          this.chatInput.value = "";
+        };
+      }
+    });
   }
 
 
@@ -75,17 +94,24 @@ export class Sidebar {
   }
 
 
-  chat(player, message) {
-    const playerContainer = this.playerContainers[player.name];
+  chat(playerName, message) {
+    const playerContainer = this.playerContainers[playerName];
     const messageWrapper = playerContainer.querySelector(".message-wrapper");
     const messageElement = messageWrapper.querySelector(".message");
 
     messageElement.textContent = message;
     messageWrapper.classList.add("visible");
 
-    setTimeout(() => {
+    // Reset timeout
+    if (this.messageTimeout) clearTimeout(this.messageTimeout);
+
+    // start timeout
+    this.messageTimeout = setTimeout(() => {
       messageWrapper.classList.remove("visible");
+      this.messageTimeout = null;
     }, this.chatBubbleTime * 1000);
+
+    this.messageCount++;
   }
 
 

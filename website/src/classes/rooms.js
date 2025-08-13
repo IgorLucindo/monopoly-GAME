@@ -152,7 +152,8 @@ export class Rooms {
       dices: {},
       chance: [],
       community: [],
-      action: {}
+      action: {},
+      chat: {}
     }
 
     // Exit previous room

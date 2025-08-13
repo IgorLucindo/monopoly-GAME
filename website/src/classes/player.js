@@ -158,7 +158,7 @@ export class Player {
     this.match.bid = inputValue;
     this.match.bidder = this;
 
-    this.sidebar.chat(this, `I bid $${inputValue}.`);
+    this.sidebar.chat(this.name, `I bid $${inputValue}.`);
 
     this.auctionTimer.restart();
   }
