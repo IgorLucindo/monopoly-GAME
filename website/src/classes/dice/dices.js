@@ -68,8 +68,10 @@ export class Dices {
 
         dice.updateMovement(e, index);
         dice.tilt();
+        dice.shakeSound();
         index += 1;
       });
+
       this.prevDraggingCount = this.draggingCount;
     }
 
@@ -90,12 +92,13 @@ export class Dices {
         dice.unlift();
         dice.setRamdomNumber();
         dice.roll(index);
-        this.sounds.play("dice");
         numbers.push(dice.number);
         dicesServerData.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
         index++;
       });
 
+      this.sounds.play("roll_dice");
+      
       if (this.draggingCount === this.list.length) {
         // If is dragging all dices, play
         this.match.playDiceTurn(numbers);

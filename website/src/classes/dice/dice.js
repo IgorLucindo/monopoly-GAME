@@ -46,6 +46,7 @@ export class Dice {
     this.dices = variables.dices;
     this.match = variables.match;
     this.screen = variables.screen;
+    this.sounds = variables.sounds;
   }
 
 
@@ -59,6 +60,7 @@ export class Dice {
       this.lift();
       this.updateMovement(e);
       this.screen.grab();
+      this.sounds.play("pickup_dice");
       this.dices.prevDraggingCount = this.dices.draggingCount;
     }
 
@@ -250,7 +252,14 @@ export class Dice {
 
       requestAnimationFrame(animate);
     };
-
+    
     animate();
+  }
+
+
+  shakeSound() {
+    const speed = Math.sqrt(this.vel.x**2 + this.vel.y**2);
+
+    if (speed > 9) this.sounds.play("shake_dice");
   }
 }

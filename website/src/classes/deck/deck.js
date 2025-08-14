@@ -31,6 +31,7 @@ export class Deck {
     this.debug = variables.debug;
     this.board = variables.board;
     this.match = variables.match;
+    this.sounds = variables.sounds;
   }
 
 
@@ -137,12 +138,14 @@ export class Deck {
     this.cardEl.style.left = this.cfg.mobile ? "50%" : `${this.board.left + this.board.width/2}px`;
     this.cardEl.style.top = this.cfg.mobile ? "50%" : `${this.board.top + this.board.height/2}px`;
     this.cardEl.classList.add("visible");
+    this.sounds.play("flip_card");
 
     // Hide after delay
     setTimeout(() => {
       this.cardEl.style.top = this.pos.top;
       this.cardEl.style.left = this.pos.left;
       this.cardEl.classList.remove("visible");
+      this.sounds.play("flip_card");
     }, this.showCardDuration * 1000);
   }
 }

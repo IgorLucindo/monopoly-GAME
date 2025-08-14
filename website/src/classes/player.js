@@ -11,6 +11,7 @@ export class Player {
     this.token = null;
     this.tokenColor = null;
     this.isCreator = false;
+    this.updateMoneyDelay = 0.5;
 
     this.colorMap = [
       "#8b4513", "#add8e6", "#ff69b4", "#ffa500",
@@ -22,7 +23,13 @@ export class Player {
   // Defining setter and getter
   set money(value) {
     this._money = value;
+
     this.sidebar.update(this);
+    setTimeout(() => {
+      if (value < this.prevMoney) this.sounds.play("lose_money");
+      else this.sounds.play("gain_money");
+    }, this.updateMoneyDelay * 1000);
+
     this.prevMoney = value;
   }
   get money() {
@@ -51,6 +58,7 @@ export class Player {
     this.match = variables.match;
     this.sidebar = variables.sidebar;
     this.auctionTimer = variables.auctionTimer;
+    this.sounds = variables.sounds;
   }
 
 

@@ -89,9 +89,10 @@ export class MatchServer {
       dice.wrapper.style.transition = null;
       dice.unlift();
       dice.roll(index);
-      this.sounds.play("dice");
       numbers.push(dice.number);
     });
+
+    this.sounds.play("roll_dice");
 
     // Play
     this.match.playDiceTurn(numbers);
