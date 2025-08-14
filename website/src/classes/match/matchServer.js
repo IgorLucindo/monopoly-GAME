@@ -20,6 +20,7 @@ export class MatchServer {
     this.dices = variables.dices;
     this.sidebar = variables.sidebar;
     this.screen = variables.screen;
+    this.sounds = variables.sounds;
   }
 
 
@@ -88,6 +89,7 @@ export class MatchServer {
       dice.wrapper.style.transition = null;
       dice.unlift();
       dice.roll(index);
+      this.sounds.play("dice");
       numbers.push(dice.number);
     });
 
