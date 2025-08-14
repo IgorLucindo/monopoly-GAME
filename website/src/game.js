@@ -11,12 +11,14 @@ import { Timer } from "./classes/timer/timer.js";
 import { Match } from "./classes/match/match.js";
 import { MatchServer } from "./classes/match/matchServer.js";
 import { Screen } from "./classes/screen.js";
+import { Sounds } from "./classes/sounds.js";
 
 import { tileData } from "../data/tiles.js";
 import { chanceDeckData } from "../data/chanceDeck.js";
 import { communityDeckData } from "../data/communityDeck.js";
 import { housesData } from "../data/houses.js";
 import { hotelsData } from "../data/hotels.js";
+import { soundsData } from "../data/sounds.js";
 
 
 const cfg = {
@@ -38,11 +40,13 @@ const matchsv = new MatchServer();
 const sidebar = new Sidebar();
 const auctionTimer = new Timer(() => {match.endAuction();}, 30000);
 const screen = new Screen();
+const sounds = new Sounds(soundsData);
 
 
 const variables = {
-  cfg, debug, database, board, chanceDeck, communityDeck, dices, deedDeck,
-  houses, hotels, actions, match, matchsv, sidebar, auctionTimer, screen
+  cfg, debug, database, board, chanceDeck, communityDeck,
+  dices, deedDeck, houses, hotels, actions, match, matchsv,
+  sidebar, auctionTimer, screen, sounds
 }
 
 

@@ -29,6 +29,7 @@ export class Dices {
     this.matchsv = variables.matchsv;
     this.sidebar = variables.sidebar;
     this.screen = variables.screen;
+    this.sounds = variables.sounds;
   }
 
 
@@ -88,8 +89,8 @@ export class Dices {
         dice.isDragging = false;
         dice.unlift();
         dice.setRamdomNumber();
-        dice.number = index+1 //debug
         dice.roll(index);
+        this.sounds.play("dice");
         numbers.push(dice.number);
         dicesServerData.push({ number: dice.number, pos: dice.pos, vel: dice.vel });
         index++;
