@@ -11,7 +11,6 @@ export class Player {
     this.token = null;
     this.tokenColor = null;
     this.isCreator = false;
-    this.updateMoneyDelay = 0.5;
 
     this.colorMap = [
       "#8b4513", "#add8e6", "#ff69b4", "#ffa500",
@@ -24,11 +23,11 @@ export class Player {
   set money(value) {
     this._money = value;
 
-    this.sidebar.update(this);
-    setTimeout(() => {
-      if (value < this.prevMoney) this.sounds.play("lose_money");
-      else this.sounds.play("gain_money");
-    }, this.updateMoneyDelay * 1000);
+    this.sidebar.updatePlayerStatus(this);
+    
+    const delay = 300;
+    if (value < this.prevMoney) this.sounds.play("lose_money", delay);
+    else this.sounds.play("gain_money", delay);
 
     this.prevMoney = value;
   }

@@ -8,7 +8,7 @@ export class Sounds {
   }
 
 
-  play(soundName) {
-    this.audios[soundName].play();
+  play(soundName, delay=0) {
+    setTimeout(() => this.audios[soundName].play(), delay);
   }
 }

@@ -1,7 +1,7 @@
 .message-wrapper {
   position: absolute;
   visibility: hidden;
-  transform: translate(calc(-100% - 1.5rem), -1vh);
+  transform: translate(calc(-100% - 1.5rem), -100%);
 }
 
 .message-wrapper.visible {
@@ -39,4 +39,11 @@
   border-top: 8px solid transparent;
   border-bottom: 8px solid transparent;
   transform: translate(100%, -50%);
+}
+
+/* Mobile */
+@media screen and (max-width: 768px) {
+  .message-wrapper {
+    transform: translate(0, -100%);
+  }
 }
