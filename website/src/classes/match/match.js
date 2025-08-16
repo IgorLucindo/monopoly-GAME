@@ -55,7 +55,7 @@ export class Match {
 
 
   getGameData() {
-    this.gameData = JSON.parse(localStorage.getItem('gameData'));
+    this.gameData = JSON.parse(sessionStorage.getItem('gameData'));
   }
 
 

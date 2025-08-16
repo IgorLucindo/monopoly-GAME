@@ -107,7 +107,7 @@ export class Lobby {
       roomData: this.rooms.roomMap[this.rooms.joined]
     }
 
-    localStorage.setItem('gameData', JSON.stringify(gameData));
+    sessionStorage.setItem('gameData', JSON.stringify(gameData));
     window.location.href = "website/pages/game.html";
   }
 }
