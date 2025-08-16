@@ -18,6 +18,7 @@ export class Dices {
     this.createDices(variables, n);
     this.setInitialPos();
     this.createEvents();
+    this.spinTime = this.list[0].spinTime;
   }
 
 
@@ -100,8 +101,10 @@ export class Dices {
       this.sounds.play("roll_dice");
       
       if (this.draggingCount === this.list.length) {
-        // If is dragging all dices, play
-        this.match.playDiceTurn(numbers);
+        // If is dragging all dices, wait for dice roll to play
+        // setTimeout(() => {
+          this.match.playDiceTurn(numbers);
+        // }, this.spinTime * 1000);
         const serverData = {
           dices: {value: dicesServerData, turn: this.match.turn},
           player: this.match.localPlayer.name

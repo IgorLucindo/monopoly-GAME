@@ -14,7 +14,6 @@ export class Match {
     this.extraTurn = 0;
     this.auctionCount = 0;
     this.showingCard = false;
-    this.showCardTime = 0;
 
     this.smallBlind = 10;
     this.bid = this.smallBlind - 1;
@@ -36,7 +35,6 @@ export class Match {
     this.getVariables(variables);
     this.getGameData();
     this.addPlayers(variables);
-    this.showCardTime = this.dices.list[0].spinTime + 0.3;
     this.myTurn = this.localPlayer.name === this.players[this.currentPlayerIndex].name;
   }
 
@@ -85,25 +83,28 @@ export class Match {
     const number = this.getNumber(player, numbers);
 
     // Handle movement
+    this.moveTime = player.tokenSpeed * number;
     this.handleJail(player);
     player.move(number);
     this.checkPassGO(player);
 
     const tile = this.board.tiles[player.position];
 
-    // Show action options
-    if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
-      setTimeout(() => {
+    // Wait for token to move
+    setTimeout(() => {
+      if (!tile.owner && ["property", "railroad", "utility"].includes(tile.type)) {
         if (!this.myTurn) return;
-
+        // Show deed
         this.showingCard = true;
         this.screen.showOverlay();
         this.deedDeck.showCard(tile);
         this.actions.showDeedOptions(tile);
-      }, this.showCardTime * 1000);
-    }
-    // Otherwise pass turn
-    else this.takeAction(0);
+      }
+      else {
+        // Pass turn
+        this.takeAction(0);
+      }
+    }, this.moveTime * 1000);
   }
 
 

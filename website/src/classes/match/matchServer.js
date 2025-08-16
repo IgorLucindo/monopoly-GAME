@@ -94,8 +94,10 @@ export class MatchServer {
 
     this.sounds.play("roll_dice");
 
-    // Play
-    this.match.playDiceTurn(numbers);
+    // Wait for dice roll to play
+    setTimeout(() => {
+      this.match.playDiceTurn(numbers);
+    }, this.dices.spinTime * 1000);
   }
 
 

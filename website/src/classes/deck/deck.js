@@ -115,6 +115,8 @@ export class Deck {
   
   drawCard(player) {
     const card = this.cards[this.index];
+
+    // Play card
     card.effect(player);
     this.index = (this.index + 1) % this.cards.length;
 

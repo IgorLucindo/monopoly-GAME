@@ -1,16 +1,17 @@
 export class Player {
   constructor(name) {
     this.name = name;
-    this._position = 0;
-    this.prevPosition = 0;
     this._money = 1500;
     this.prevMoney = this.money;
+    this._position = 0;
+    this.prevPosition = 0;
     this.turnsArrested = 0;
-    this.exitJailCard = false;
     this.properties = [];
     this.token = null;
     this.tokenColor = null;
+    this.tokenSpeed = 0.3;
     this.isCreator = false;
+    this.exitJailCard = false;
 
     this.colorMap = [
       "#8b4513", "#add8e6", "#ff69b4", "#ffa500",
@@ -66,7 +67,6 @@ export class Player {
     const token = document.createElement("div");
 
     token.classList.add("player-token");
-    token.textContent = this.name.charAt(0);
     token.style.setProperty("--color", color);
 
     this.token = token;
@@ -82,8 +82,40 @@ export class Player {
 
 
   renderPosition() {
+    const oldRect = this.token.getBoundingClientRect();
     const tilePlayersEl = this.board.tiles[this.position].element.querySelector(".tile-players");
+
+    // Append the token to the new position but keep it invisible
     tilePlayersEl.appendChild(this.token);
+    const newRect = this.token.getBoundingClientRect();
+
+    this.renderClone(oldRect, newRect);
+  }
+
+  renderClone(oldRect, newRect) {
+    if (!this.match.moveTime) return;
+    
+    this.token.style.visibility = "hidden";
+
+    // Create a clone to animate
+    const clone = this.token.cloneNode(true);
+    document.body.appendChild(clone);
+    clone.classList.add("token-clone");
+    clone.style.visibility = "visible";
+    clone.style.setProperty("--moveTime", this.match.moveTime + "s");
+
+    // Animate
+    clone.style.left = oldRect.left + "px";
+    clone.style.top = oldRect.top + "px";
+    void clone.offsetWidth;
+    clone.style.left = newRect.left + "px";
+    clone.style.top = newRect.top + "px";
+
+    // When animation finishes, remove clone and show real token
+    clone.addEventListener("transitionend", () => {
+      clone.remove();
+      this.token.style.visibility = null;
+    }, { once: true });
   }
 
 

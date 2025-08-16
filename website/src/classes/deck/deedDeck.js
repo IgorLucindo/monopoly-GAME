@@ -17,6 +17,7 @@ export class DeedDeck {
   getVariables(variables) {
     this.cfg = variables.cfg;
     this.board = variables.board;
+    this.match = variables.match;
   }
 
 
@@ -153,7 +154,7 @@ export class DeedDeck {
       OwnerSpan.innerHTML = tile.owner.name;
       setTimeout(() => {
         deedOwner.classList.add("visible");
-      }, (this.animationTime+0.1) * 1000)
+      }, (this.animationTime + 0.1) * 1000)
     }
   }
 

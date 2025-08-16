@@ -36,7 +36,7 @@ export class Sidebar {
       playerWrapperContainer.className = "player-wrapper-container";
       playerWrapperContainer.innerHTML = `
         <div class="player-container">
-          <div class="player-token" style="--color: ${p.tokenColor}">${p.name.charAt(0)}</div>
+          <div class="player-token" style="--color: ${p.tokenColor}"></div>
           <span class="player-name">${p.name}</span>
           <span class="player-money">$${p.money}</span>
         </div>

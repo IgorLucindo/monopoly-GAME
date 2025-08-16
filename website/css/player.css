@@ -11,7 +11,16 @@
 
 .player-token {
   --color: red;
+  width: 1.2vw;
+  height: 1.2vw;
+  border-radius: 100%;
   font-size: 12px;
   font-weight: bold;
-  color: var(--color);
+  background-color: var(--color);
+}
+
+.token-clone {
+  --moveTime: 0s;
+  position: absolute;
+  transition: all var(--moveTime) ease;
 }
