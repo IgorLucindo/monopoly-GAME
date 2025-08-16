@@ -83,7 +83,7 @@ export class Match {
     const number = this.getNumber(player, numbers);
 
     // Handle movement
-    this.moveTime = player.tokenSpeed * number;
+    this.moveTime = player.tokenStepTime * number;
     this.handleJail(player);
     player.move(number);
     this.checkPassGO(player);
@@ -171,7 +171,6 @@ export class Match {
 
   checkPassGO(player) {
     if (!player.turnsArrested && player.position - player.prevPosition < 0) player.money += 200;
-    player.prevPosition = player.position; 
   }
 
 

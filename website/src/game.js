@@ -65,3 +65,4 @@ communityDeck.init(variables);
 sidebar.init(variables);
 auctionTimer.init(variables);
 screen.init(variables);
+sounds.init();

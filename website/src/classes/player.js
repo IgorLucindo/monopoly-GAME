@@ -9,7 +9,7 @@ export class Player {
     this.properties = [];
     this.token = null;
     this.tokenColor = null;
-    this.tokenSpeed = 0.3;
+    this.tokenStepTime = 0.25;
     this.isCreator = false;
     this.exitJailCard = false;
 
@@ -36,6 +36,7 @@ export class Player {
     return this._money;
   }
   set position(value) {
+    this.prevPosition = this._position; 
     this._position = value;
     this.renderPosition();
   }
@@ -47,7 +48,7 @@ export class Player {
   init(variables, index) {
     this.getVariables(variables);
     this.createToken(index);
-    this.renderPosition();
+    this.renderFixedPosition();
     if (index === 0) this.isCreator = true;
   }
 
@@ -81,41 +82,55 @@ export class Player {
   }
 
 
-  renderPosition() {
-    const oldRect = this.token.getBoundingClientRect();
+  renderFixedPosition() {
     const tilePlayersEl = this.board.tiles[this.position].element.querySelector(".tile-players");
-
-    // Append the token to the new position but keep it invisible
     tilePlayersEl.appendChild(this.token);
-    const newRect = this.token.getBoundingClientRect();
-
-    this.renderClone(oldRect, newRect);
   }
 
-  renderClone(oldRect, newRect) {
-    if (!this.match.moveTime) return;
-    
+
+  async renderPosition() {
+    let currRect = this.token.getBoundingClientRect();
+    let currPosition = this.prevPosition;
+
+    while (currPosition !== this.position) {
+      currPosition = (currPosition + 1) % this.board.numOfTiles;
+      currRect = await this.animateTokenStep(currRect, currPosition);
+    }
+  }
+
+
+  async animateTokenStep(currRect, currPosition) {
+    const tilePlayersEl = this.board.tiles[currPosition].element.querySelector(".tile-players");
+    tilePlayersEl.appendChild(this.token);
+    const nextRect = this.token.getBoundingClientRect();
+
     this.token.style.visibility = "hidden";
 
-    // Create a clone to animate
+    // Create a clone for animation
     const clone = this.token.cloneNode(true);
     document.body.appendChild(clone);
     clone.classList.add("token-clone");
     clone.style.visibility = "visible";
-    clone.style.setProperty("--moveTime", this.match.moveTime + "s");
+    clone.style.setProperty("--moveTime", this.tokenStepTime + "s");
 
     // Animate
-    clone.style.left = oldRect.left + "px";
-    clone.style.top = oldRect.top + "px";
+    clone.style.left = currRect.left + "px";
+    clone.style.top = currRect.top + "px";
     void clone.offsetWidth;
-    clone.style.left = newRect.left + "px";
-    clone.style.top = newRect.top + "px";
+    clone.style.left = nextRect.left + "px";
+    clone.style.top = nextRect.top + "px";
 
-    // When animation finishes, remove clone and show real token
-    clone.addEventListener("transitionend", () => {
-      clone.remove();
-      this.token.style.visibility = null;
-    }, { once: true });
+    // Play sound
+    this.sounds.play("token_step");
+
+    // Return a promise that resolves after transition ends
+    return new Promise(resolve => {
+      clone.addEventListener("transitionend", () => {
+        clone.remove();
+        this.token.style.visibility = null;
+        resolve(nextRect);
+      }, { once: true });
+    });
   }
 
 

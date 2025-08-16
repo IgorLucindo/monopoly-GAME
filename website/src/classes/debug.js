@@ -11,6 +11,17 @@ export class Debug {
 
   getVariables(variables) {
     this.board = variables.board;
+    this.dices = variables.dices;
+    this.match = variables.match;
+  }
+
+
+  play(numbers) {
+    if (!this.active) return;
+
+    setTimeout(() => {
+      this.match.playDiceTurn(numbers);
+    }, this.dices.spinTime * 1000);
   }
 
 

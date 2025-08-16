@@ -1,7 +1,17 @@
 export class Sounds {
   constructor(soundsData) {
+    this.data = soundsData;
     this.audios = {}
-    for (const [k, v] of Object.entries(soundsData)) {
+  }
+
+
+  init() {
+    this.createAudios();
+  }
+
+  
+  createAudios() {
+    for (const [k, v] of Object.entries(this.data)) {
       this.audios[k] = new Audio(v.path);
       this.audios[k].volume = v.volume;
     }

@@ -102,9 +102,9 @@ export class Dices {
       
       if (this.draggingCount === this.list.length) {
         // If is dragging all dices, wait for dice roll to play
-        // setTimeout(() => {
+        setTimeout(() => {
           this.match.playDiceTurn(numbers);
-        // }, this.spinTime * 1000);
+        }, this.spinTime * 1000);
         const serverData = {
           dices: {value: dicesServerData, turn: this.match.turn},
           player: this.match.localPlayer.name
