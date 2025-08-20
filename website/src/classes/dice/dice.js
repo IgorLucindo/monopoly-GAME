@@ -79,6 +79,7 @@ export class Dice {
       this.isDragging = true;
       this.dices.draggingCount += 1;
       this.lift();
+      this.sounds.play("pickup_dice");
     }
 
     // Create events

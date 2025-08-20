@@ -20,6 +20,7 @@ export const chanceDeckData = {
       text: "Advance to Boardwalk.",
       effect: (player) => {
         player.position = 39;
+        player.checkPayRent();
       }
     },
     {

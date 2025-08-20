@@ -174,6 +174,15 @@ export class Player {
   }
 
 
+  checkPayRent() {
+    const tile = this.board.tiles[this.position];
+
+    if (tile.owner && tile.owner !== this) return;
+    
+    this.payRent(tile);
+  }
+
+
   mortgage(tile) {
     tile.mortgaged = true;
     this.money += tile.mortgageValue;
